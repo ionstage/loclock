@@ -26,6 +26,10 @@
     return element;
   }
 
+  function supportsTouch() {
+    return (document && 'createTouch' in document) || false;
+  }
+
   function isSVGEnabled() {
     return !!(document.createElementNS &&
               document.createElementNS(NS, 'svg').createSVGRect);
@@ -432,6 +436,9 @@
     },
     open: function() {
       this.element.parentNode.style.display = 'inline-block';
+      if (supportsTouch() && this.scroll) {
+        this.scroll.refresh();
+      }
     },
     close: function() {
       this.element.parentNode.style.display = 'none';
@@ -460,6 +467,15 @@
       element.onclick = this.element.onclick;
       this.element.onclick = null;
       this.element = element;
+      if (supportsTouch()) {
+        if (this.scroll) {
+          this.scroll.destroy();
+          this.scroll = null;
+        }
+        this.scroll = new IScroll(element.parentNode, {
+          click: true
+        });
+      }
     },
     update: function() {
       var i, len, selected_items = this.current_selected_items, item;
@@ -591,6 +607,10 @@
   };
 
   window.onmousemove = function(event) {
+    event.preventDefault();
+  };
+
+  window.ontouchmove = function(event) {
     event.preventDefault();
   };
 })(this);
