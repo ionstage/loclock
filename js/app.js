@@ -92,9 +92,8 @@
     board.appendChild(createCircle({cx: x, cy: y, r: r,
                     'stroke-width': (r / 30).toFixed(1),
                     'class': 'board-circle'}));
-    board.appendChild(createCircle({cx: x, cy: y, r: r / 10,
-                    'stroke-width': (r / 70).toFixed(1),
-                    'class': 'board-circle'}));
+    board.appendChild(createCircle({cx: x, cy: y, r: (r / 45).toFixed(1),
+                    'fill': 'black'}));
     for (i = 0; i < 24; i += 1) {
       text = (i % 3 === 0) ? String((i - 6 >= 0) ? i - 6 : i + 18) : '・';
       fontSize = (text === '・') ? r / 12 : r / 4.5;
