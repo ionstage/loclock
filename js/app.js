@@ -600,21 +600,4 @@
   window.onmousemove = function(event) {
     event.preventDefault();
   };
-
-  window.ontouchmove = function(event) {
-    var target = event.target;
-    var flag = true;
-    while (target && target.getAttribute) {
-      var id = target.getAttribute('id');
-      if (target.className === 'list-item' || id === 'list-container') {
-        flag = false;
-        break;
-      }
-      target = target.parentNode;
-    }
-    if (flag) {
-      event.preventDefault();
-    }
-  };
-
 })(this);
