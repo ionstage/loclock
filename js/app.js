@@ -66,12 +66,6 @@
     return Math.floor(new Date().getTime() / 1000);
   }
 
-  function keys(o) {
-    var array = [], key;
-    for (key in o) { array.push(key); }
-    return array;
-  }
-
   function createCircle(o) {
     return attr(document.createElementNS(NS, 'circle'), o);
   }
@@ -402,7 +396,7 @@
     timelist.isDataLoaded = true;
     updateClock();
     $('clock').style.opacity = 1;
-    list_view.setList(keys(data));
+    list_view.setList(Object.keys(data));
     list_view.selected = timelist.selected;
     list_view.update();
   }
