@@ -307,7 +307,6 @@
   }
 
   function updateClock() {
-    window.scrollTo(0, 0);
     var listWidth = $('list-container').clientWidth,
       borderWidth = $('border-container').clientWidth,
       width = window.innerWidth - listWidth - borderWidth - 20,
