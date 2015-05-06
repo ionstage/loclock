@@ -1,4 +1,7 @@
-(function() {
+(function(global) {
+  var window = global.window;
+  var document = global.document;
+
   var NS = 'http://www.w3.org/2000/svg';
   var DOMAIN = 'org.ionstage.loclock';
   var DEFAULT_LOCATION = 'America/New_York,Europe/London,Asia/Tokyo';
@@ -614,4 +617,4 @@
     }
   };
 
-}());
+})(this);
