@@ -497,6 +497,7 @@
         document.body.style.cursor = 'default';
         event.currentTarget.style.opacity = 1;
       };
+      element.ontouchstart = element.onmouseover;
     },
     open: function() {
       $('border-text').innerHTML = '&lt;';
