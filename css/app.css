@@ -1,14 +1,28 @@
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
 html, body {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  -webkit-text-size-adjust: none;
+  -webkit-text-size-adjust: 100%;
   -webkit-touch-callout: none;
-  -webkit-user-select: none;
 }
 
 body {
   margin: 0;
   overflow: hidden;
+  position: fixed;
   vertical-align: text-bottom;
+}
+
+.unselectable {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
 }
 
 #list-container {
@@ -16,10 +30,13 @@ body {
   color: lightgray;
   display: none;
   float: left;
+  font-family: Helvetica;
+  line-height: 26px;
   overflow-y: auto;
+  padding: 0px 8px;
   vertical-align: text-bottom;
   white-space: nowrap;
-  width: 150px;
+  width: 168px;
 }
 
 .list-item {
@@ -34,7 +51,7 @@ body {
 #border-container {
   display: inline-block;
   float: left;
-  font-family: monospace;
+  font-family: Courier;
   font-size: 26px;
   vertical-align: text-bottom;
   visibility: hidden;
@@ -66,26 +83,26 @@ body {
 
 .board-circle {
   fill: none;
-  stroke: #000000;
+  stroke: black;
 }
 
 .board-text {
   cursor: default;
   dominant-baseline: central;
-  font-family: serif;
+  font-family: Helvetica;
   text-anchor: middle;
   white-space: nowrap;
 }
 
 .point-circle {
-  fill: #ffffff;
-  stroke: #000000;
+  fill: white;
+  stroke: black;
 }
 
 .point-text {
   cursor: default;
   dominant-baseline: central;
-  font-family: serif;
+  font-family: Helvetica;
   text-anchor: middle;
   white-space: nowrap;
 }

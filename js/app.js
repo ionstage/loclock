@@ -1,4 +1,7 @@
-(function() {
+(function(global) {
+  var window = global.window;
+  var document = global.document;
+
   var NS = 'http://www.w3.org/2000/svg';
   var DOMAIN = 'org.ionstage.loclock';
   var DEFAULT_LOCATION = 'America/New_York,Europe/London,Asia/Tokyo';
@@ -21,6 +24,10 @@
       element.setAttribute(key, o[key]);
     }
     return element;
+  }
+
+  function supportsTouch() {
+    return (document && 'createTouch' in document) || false;
   }
 
   function isSVGEnabled() {
@@ -63,12 +70,6 @@
     return Math.floor(new Date().getTime() / 1000);
   }
 
-  function keys(o) {
-    var array = [], key;
-    for (key in o) { array.push(key); }
-    return array;
-  }
-
   function createCircle(o) {
     return attr(document.createElementNS(NS, 'circle'), o);
   }
@@ -95,9 +96,8 @@
     board.appendChild(createCircle({cx: x, cy: y, r: r,
                     'stroke-width': (r / 30).toFixed(1),
                     'class': 'board-circle'}));
-    board.appendChild(createCircle({cx: x, cy: y, r: r / 10,
-                    'stroke-width': (r / 70).toFixed(1),
-                    'class': 'board-circle'}));
+    board.appendChild(createCircle({cx: x, cy: y, r: (r / 45).toFixed(1),
+                    'fill': 'black'}));
     for (i = 0; i < 24; i += 1) {
       text = (i % 3 === 0) ? String((i - 6 >= 0) ? i - 6 : i + 18) : '・';
       fontSize = (text === '・') ? r / 12 : r / 4.5;
@@ -310,7 +310,6 @@
   }
 
   function updateClock() {
-    window.scrollTo(0, 0);
     var listWidth = $('list-container').clientWidth,
       borderWidth = $('border-container').clientWidth,
       width = window.innerWidth - listWidth - borderWidth - 20,
@@ -399,7 +398,7 @@
     timelist.isDataLoaded = true;
     updateClock();
     $('clock').style.opacity = 1;
-    list_view.setList(keys(data));
+    list_view.setList(Object.keys(data));
     list_view.selected = timelist.selected;
     list_view.update();
   }
@@ -437,6 +436,9 @@
     },
     open: function() {
       this.element.parentNode.style.display = 'inline-block';
+      if (supportsTouch() && this.scroll) {
+        this.scroll.refresh();
+      }
     },
     close: function() {
       this.element.parentNode.style.display = 'none';
@@ -465,6 +467,15 @@
       element.onclick = this.element.onclick;
       this.element.onclick = null;
       this.element = element;
+      if (supportsTouch()) {
+        if (this.scroll) {
+          this.scroll.destroy();
+          this.scroll = null;
+        }
+        this.scroll = new IScroll(element.parentNode, {
+          click: true
+        });
+      }
     },
     update: function() {
       var i, len, selected_items = this.current_selected_items, item;
@@ -501,6 +512,7 @@
         document.body.style.cursor = 'default';
         event.currentTarget.style.opacity = 1;
       };
+      element.ontouchstart = element.onmouseover;
     },
     open: function() {
       $('border-text').innerHTML = '&lt;';
@@ -599,19 +611,6 @@
   };
 
   window.ontouchmove = function(event) {
-    var target = event.target;
-    var flag = true;
-    while (target && target.getAttribute) {
-      var id = target.getAttribute('id');
-      if (target.className === 'list-item' || id === 'list-container') {
-        flag = false;
-        break;
-      }
-      target = target.parentNode;
-    }
-    if (flag) {
-      event.preventDefault();
-    }
+    event.preventDefault();
   };
-
-}());
+})(this);
