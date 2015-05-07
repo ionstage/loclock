@@ -483,11 +483,16 @@
           fadeScrollbars: true
         });
         var self = this;
+        var timer = null;
         this.scroll.on('scrollStart', function() {
+          if (timer) {
+            clearTimeout(timer);
+            timer = null;
+          }
           self.clickable = false;
         });
         this.scroll.on('scrollEnd', function() {
-          setTimeout(function() {
+          timer = setTimeout(function() {
             self.clickable = true;
           }, 300);
         });
