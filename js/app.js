@@ -429,13 +429,19 @@
     init: function(element) {
       var self = this;
       self.element = element;
+      self.scrolling = false;
       self.clickable = true;
       element.onclick = function(event) {
         event.preventDefault();
-        if (!self.clickable) {
+        if (self.scrolling || !self.clickable) {
+          self.scrolling = false;
+          self.clickable = true;
           return;
         }
         self.onclick(event);
+      };
+      element.parentNode.ontouchstart = function() {
+        self.clickable = !self.scrolling;
       };
     },
     open: function() {
@@ -483,18 +489,11 @@
           fadeScrollbars: true
         });
         var self = this;
-        var timer = null;
         this.scroll.on('scrollStart', function() {
-          if (timer) {
-            clearTimeout(timer);
-            timer = null;
-          }
-          self.clickable = false;
+          self.scrolling = true;
         });
         this.scroll.on('scrollEnd', function() {
-          timer = setTimeout(function() {
-            self.clickable = true;
-          }, 300);
+          self.scrolling = false;
         });
       }
     },
