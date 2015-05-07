@@ -615,10 +615,6 @@
   };
 
   window.onresize = function() {
-    var height = window.innerHeight;
-    $('list-container').style.height = height + 'px';
-    $('border-container').style.height = height + 'px';
-    $('border').style.height = height + 'px';
     updateClock();
   };
 
