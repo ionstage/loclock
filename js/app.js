@@ -429,8 +429,12 @@
     init: function(element) {
       var self = this;
       self.element = element;
+      self.clickable = true;
       element.onclick = function(event) {
         event.preventDefault();
+        if (!self.clickable) {
+          return;
+        }
         self.onclick(event);
       };
     },
@@ -474,6 +478,15 @@
         }
         this.scroll = new IScroll(element.parentNode, {
           click: true
+        });
+        var self = this;
+        this.scroll.on('scrollStart', function() {
+          self.clickable = false;
+        });
+        this.scroll.on('scrollEnd', function() {
+          setTimeout(function() {
+            self.clickable = true;
+          }, 300);
         });
       }
     },
