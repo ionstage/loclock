@@ -477,7 +477,10 @@
           this.scroll = null;
         }
         this.scroll = new IScroll(element.parentNode, {
-          click: true
+          click: true,
+          scrollbars: true,
+          shrinkScrollbars: 'scale',
+          fadeScrollbars: true
         });
         var self = this;
         this.scroll.on('scrollStart', function() {
