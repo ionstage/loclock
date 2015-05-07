@@ -554,10 +554,8 @@
     },
     updateBoard: function() {
       var new_board = createBoard(this.x, this.y, this.r);
-      this.hide();
       this.element.replaceChild(new_board, this.board_element);
       adjustBoard(new_board);
-      this.show();
       this.board_element = new_board;
     },
     updatePoint: function() {
@@ -568,9 +566,7 @@
                       this.width, this.height);
       showPointText(new_point);
       this.point_element = new_point;
-    },
-    hide: function() { this.element.style.visibility = 'hidden'; },
-    show: function() { this.element.style.visibility = 'visible'; }
+    }
   };
 
   window.onload = function() {
