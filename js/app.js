@@ -169,18 +169,6 @@
     });
   }
 
-  function hidePointText(point) {
-    forEachTextElement(point, function(element) {
-      attr(element, {style: 'visibility: hidden;'});
-    });
-  }
-
-  function showPointText(point) {
-    forEachTextElement(point, function(element) {
-      attr(element, {style: 'visibility: visible;'});
-    });
-  }
-
   function isBBoxOverlayed(bb0, bb1) {
     if (((bb0.x < bb1.x && bb0.x + bb0.width > bb1.x) ||
           (bb0.x > bb1.x && bb1.x + bb1.width > bb0.x)) &&
@@ -560,11 +548,9 @@
     },
     updatePoint: function() {
       var new_point = createPoint(this.x, this.y, this.r, this.timelist);
-      hidePointText(new_point);
       this.element.replaceChild(new_point, this.point_element);
       adjustPointText(new_point, this.x, this.y, this.r,
                       this.width, this.height);
-      showPointText(new_point);
       this.point_element = new_point;
     },
     open: function() {
