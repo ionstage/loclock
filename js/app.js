@@ -304,24 +304,9 @@
     updateClock();
   }
 
-  function updateClockContainer(width, height) {
-    attr($('clock-container'),
-         {style: 'width:' + width + 'px;height:' + height + 'px;'});
-  }
-
   function updateClock() {
-    var listWidth = $('list-container').clientWidth,
-      borderWidth = $('border-container').clientWidth,
-      width = window.innerWidth - listWidth - borderWidth - 20,
-      height = window.innerHeight;
-    updateClockContainer(width, height);
-    clock_view.x = width / 2, clock_view.y = height / 2,
-    clock_view.r = Math.min(width, height) / 2 * 0.6,
-    clock_view.width = width, clock_view.height = height;
     if (timelist.isDataLoaded) {
-      clock_view.update();
-    } else {
-      clock_view.updateBoard();
+      clock_view.updatePoint();
     }
   }
 
@@ -366,9 +351,11 @@
     if (isOpen) {
       list_view.open();
       border_view.open();
+      clock_view.open();
     } else {
       list_view.close();
       border_view.close();
+      clock_view.close();
     }
     updateClock();
   }
@@ -545,16 +532,18 @@
 
   var clock_view = {
     init: function(element, timelist) {
+      var width = 720, height = 720;
       this.element = element;
       this.timelist = timelist;
       this.board_element = document.createElementNS(NS, 'g');
       this.point_element = document.createElementNS(NS, 'g');
       this.element.appendChild(this.board_element);
       this.element.appendChild(this.point_element);
-    },
-    update: function() {
-      this.updateBoard();
-      this.updatePoint();
+      this.x = width / 2;
+      this.y = height / 2,
+      this.r = Math.min(width, height) / 2 * 0.6,
+      this.width = width;
+      this.height = height;
     },
     updateBoard: function() {
       var new_board = createBoard(this.x, this.y, this.r);
@@ -570,6 +559,12 @@
                       this.width, this.height);
       showPointText(new_point);
       this.point_element = new_point;
+    },
+    open: function() {
+      this.element.parentNode.setAttribute('class', 'open');
+    },
+    close: function() {
+      this.element.parentNode.setAttribute('class', 'close');
     }
   };
 
@@ -610,6 +605,7 @@
     border_view.onclick();
     setClockTimer();
     loadTimezone();
+    clock_view.updateBoard();
     window.onresize();
     $('border-container').style.visibility = 'visible';
   };

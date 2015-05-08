@@ -16,6 +16,7 @@ body {
   overflow: hidden;
   position: fixed;
   vertical-align: text-bottom;
+  width: 100%;
 }
 
 .unselectable {
@@ -79,11 +80,23 @@ body {
 #clock-container {
   display: inline-block;
   float: left;
+  height: 100%;
   overflow: hidden;
+  position: absolute;
+}
+
+#clock-container.open {
+  width: calc(100% - 200px);
+}
+
+#clock-container.close {
+  width: calc(100% - 32px);
 }
 
 #clock {
+  height: 100%;
   vertical-align: text-bottom;
+  width: 100%;
 }
 
 .board-circle {
