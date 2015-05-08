@@ -118,6 +118,14 @@ body {
   width: 100%;
 }
 
+#clock.loading {
+  opacity: 0.3;
+}
+
+#clock.loaded {
+  opacity: 1;
+}
+
 .board-circle {
   fill: none;
   stroke: black;

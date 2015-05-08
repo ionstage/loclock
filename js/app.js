@@ -379,7 +379,7 @@
     clock_view.timelist = timelist.get();
     timelist.isDataLoaded = true;
     updateClock();
-    $('clock').style.opacity = 1;
+    clock_view.state('loaded');
     list_view.setList(Object.keys(data));
     list_view.selected = timelist.selected;
     list_view.update();
@@ -565,6 +565,9 @@
     },
     close: function() {
       this.element.parentNode.setAttribute('class', 'close');
+    },
+    state: function(value) {
+      this.element.setAttribute('class', value);
     }
   };
 
@@ -576,7 +579,7 @@
 
   window.onload = function() {
     clock_view.init($('clock'), timelist.get());
-    $('clock').style.opacity = 0.3;
+    clock_view.state('loading');
     var hash = getHashText();
     if (hash) {
       selectTimezone(hash.split(','));
