@@ -54,8 +54,15 @@
     script.parentNode.insertBefore(new_script, script);
   }
 
-  function getHashText(path) {
-    return path.split('#')[1];
+  function getHashText() {
+    var text = location.href.split('#')[1];
+    if (!text)
+      return '';
+    return Base64.decode(text);
+  }
+
+  function setHashText(text) {
+    location.href = '#' + Base64.encodeURI(text);
   }
 
   function getCache(key) {
@@ -356,7 +363,7 @@
           clock_view.timelist = timelist.get();
           updateClock();
         }
-        var hash = getHashText(location.href);
+        var hash = getHashText();
         if (hash !== currentHash) {
           selectTimezone(hash.split(','));
           currentHash = hash;
@@ -570,11 +577,11 @@
   window.onload = function() {
     clock_view.init($('clock'), timelist.get());
     $('clock').style.opacity = 0.3;
-    var hash = getHashText(location.href);
+    var hash = getHashText();
     if (hash) {
       selectTimezone(hash.split(','));
     } else {
-      location.href = '#' + DEFAULT_LOCATION;
+      setHashText(DEFAULT_LOCATION);
     }
     list_view.init($('list'));
     list_view.onclick = function(event) {
@@ -587,7 +594,7 @@
         }
       }
       (!isAlreadySelected) && list.push(key);
-      location.href = '#' + list.join(',');
+      setHashText(list.join(','));
     };
     border_view.init($('border'));
     border_view.onclick = (function() {
