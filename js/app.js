@@ -619,9 +619,5 @@
     window.ontouchmove = function(event) {
       event.preventDefault();
     };
-  } else {
-    window.onmousemove = function(event) {
-      event.preventDefault();
-    };
   }
 })(this);
