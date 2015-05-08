@@ -54,8 +54,15 @@
     script.parentNode.insertBefore(new_script, script);
   }
 
-  function getHashText(path) {
-    return path.split('#')[1];
+  function getHashText() {
+    var text = location.href.split('#')[1];
+    if (!text)
+      return '';
+    return Base64.decode(text);
+  }
+
+  function setHashText(text) {
+    location.replace('#' + Base64.encodeURI(text));
   }
 
   function getCache(key) {
@@ -166,18 +173,6 @@
       if (element.nodeName === 'text') {
         method(element);
       }
-    });
-  }
-
-  function hidePointText(point) {
-    forEachTextElement(point, function(element) {
-      attr(element, {style: 'visibility: hidden;'});
-    });
-  }
-
-  function showPointText(point) {
-    forEachTextElement(point, function(element) {
-      attr(element, {style: 'visibility: visible;'});
     });
   }
 
@@ -304,24 +299,9 @@
     updateClock();
   }
 
-  function updateClockContainer(width, height) {
-    attr($('clock-container'),
-         {style: 'width:' + width + 'px;height:' + height + 'px;'});
-  }
-
   function updateClock() {
-    var listWidth = $('list-container').clientWidth,
-      borderWidth = $('border-container').clientWidth,
-      width = window.innerWidth - listWidth - borderWidth - 20,
-      height = window.innerHeight;
-    updateClockContainer(width, height);
-    clock_view.x = width / 2, clock_view.y = height / 2,
-    clock_view.r = Math.min(width, height) / 2 * 0.6,
-    clock_view.width = width, clock_view.height = height;
     if (timelist.isDataLoaded) {
-      clock_view.update();
-    } else {
-      clock_view.updateBoard();
+      clock_view.updatePoint();
     }
   }
 
@@ -366,9 +346,11 @@
     if (isOpen) {
       list_view.open();
       border_view.open();
+      clock_view.open();
     } else {
       list_view.close();
       border_view.close();
+      clock_view.close();
     }
     updateClock();
   }
@@ -381,7 +363,7 @@
           clock_view.timelist = timelist.get();
           updateClock();
         }
-        var hash = getHashText(location.href);
+        var hash = getHashText();
         if (hash !== currentHash) {
           selectTimezone(hash.split(','));
           currentHash = hash;
@@ -397,7 +379,7 @@
     clock_view.timelist = timelist.get();
     timelist.isDataLoaded = true;
     updateClock();
-    $('clock').style.opacity = 1;
+    clock_view.state('loaded');
     list_view.setList(Object.keys(data));
     list_view.selected = timelist.selected;
     list_view.update();
@@ -429,19 +411,32 @@
     init: function(element) {
       var self = this;
       self.element = element;
+      self.scrolling = false;
+      self.clickable = true;
       element.onclick = function(event) {
         event.preventDefault();
+        if (self.scrolling || !self.clickable) {
+          self.scrolling = false;
+          self.clickable = true;
+          return;
+        }
         self.onclick(event);
       };
+      element.parentNode.ontouchstart = function() {
+        self.clickable = !self.scrolling;
+      };
+      if (supportsTouch()) {
+        element.parentNode.style.overflowY = 'hidden';
+      }
     },
     open: function() {
-      this.element.parentNode.style.display = 'inline-block';
+      this.element.parentNode.setAttribute('class', 'open');
       if (supportsTouch() && this.scroll) {
         this.scroll.refresh();
       }
     },
     close: function() {
-      this.element.parentNode.style.display = 'none';
+      this.element.parentNode.setAttribute('class', 'close');
     },
     setList: function(list) {
       var element = document.createElement('div'),
@@ -473,7 +468,17 @@
           this.scroll = null;
         }
         this.scroll = new IScroll(element.parentNode, {
-          click: true
+          click: true,
+          scrollbars: true,
+          shrinkScrollbars: 'scale',
+          fadeScrollbars: true
+        });
+        var self = this;
+        this.scroll.on('scrollStart', function() {
+          self.scrolling = true;
+        });
+        this.scroll.on('scrollEnd', function() {
+          self.scrolling = false;
         });
       }
     },
@@ -501,74 +506,88 @@
       var self = this;
       self.element = element;
       element.onclick = function(event) {
-        self.element.onmouseout(event);
+        if (!supportsTouch()) {
+          self.element.onmouseout(event);
+        }
         self.onclick(event);
       };
-      element.onmouseover = function(event) {
-        document.body.style.cursor = 'pointer';
-        event.currentTarget.style.opacity = 0.6;
-      };
-      element.onmouseout = function(event) {
-        document.body.style.cursor = 'default';
-        event.currentTarget.style.opacity = 1;
-      };
-      element.ontouchstart = element.onmouseover;
+      if (supportsTouch()) {
+        element.ontouchmove = function(event) {
+          event.stopPropagation();
+        };
+      } else {
+        element.onmouseover = function(event) {
+          document.body.style.cursor = 'pointer';
+          event.currentTarget.style.opacity = 0.6;
+        };
+        element.onmouseout = function(event) {
+          document.body.style.cursor = 'default';
+          event.currentTarget.style.opacity = 1;
+        };
+      }
     },
     open: function() {
-      $('border-text').innerHTML = '&lt;';
+      this.element.setAttribute('class', 'open');
     },
     close: function() {
-      $('border-text').innerHTML = '&gt;';
+      this.element.setAttribute('class', 'close');
     },
     onclick: function() { }
   };
 
   var clock_view = {
     init: function(element, timelist) {
+      var width = 720, height = 720;
       this.element = element;
       this.timelist = timelist;
       this.board_element = document.createElementNS(NS, 'g');
       this.point_element = document.createElementNS(NS, 'g');
       this.element.appendChild(this.board_element);
       this.element.appendChild(this.point_element);
-    },
-    update: function() {
-      this.updateBoard();
-      this.updatePoint();
+      this.x = width / 2;
+      this.y = height / 2,
+      this.r = Math.min(width, height) / 2 * 0.6,
+      this.width = width;
+      this.height = height;
     },
     updateBoard: function() {
       var new_board = createBoard(this.x, this.y, this.r);
-      this.hide();
       this.element.replaceChild(new_board, this.board_element);
       adjustBoard(new_board);
-      this.show();
       this.board_element = new_board;
     },
     updatePoint: function() {
       var new_point = createPoint(this.x, this.y, this.r, this.timelist);
-      hidePointText(new_point);
       this.element.replaceChild(new_point, this.point_element);
       adjustPointText(new_point, this.x, this.y, this.r,
                       this.width, this.height);
-      showPointText(new_point);
       this.point_element = new_point;
     },
-    hide: function() { this.element.style.visibility = 'hidden'; },
-    show: function() { this.element.style.visibility = 'visible'; }
+    open: function() {
+      this.element.parentNode.setAttribute('class', 'open');
+    },
+    close: function() {
+      this.element.parentNode.setAttribute('class', 'close');
+    },
+    state: function(value) {
+      this.element.setAttribute('class', value);
+    }
   };
 
+  if (!isSVGEnabled()) {
+    document.body.style.display = 'none';
+    alert("Sorry, your browser doesn't support this application.");
+    return;
+  }
+
   window.onload = function() {
-    if (!isSVGEnabled()) {
-      alert("Sorry, your browser doesn't support this application.");
-      return;
-    }
     clock_view.init($('clock'), timelist.get());
-    $('clock').style.opacity = 0.3;
-    var hash = getHashText(location.href);
+    clock_view.state('loading');
+    var hash = getHashText();
     if (hash) {
       selectTimezone(hash.split(','));
     } else {
-      location.href = '#' + DEFAULT_LOCATION;
+      setHashText(DEFAULT_LOCATION);
     }
     list_view.init($('list'));
     list_view.onclick = function(event) {
@@ -581,7 +600,7 @@
         }
       }
       (!isAlreadySelected) && list.push(key);
-      location.href = '#' + list.join(',');
+      setHashText(list.join(','));
     };
     border_view.init($('border'));
     border_view.onclick = (function() {
@@ -594,23 +613,17 @@
     border_view.onclick();
     setClockTimer();
     loadTimezone();
+    clock_view.updateBoard();
     window.onresize();
-    $('border-container').style.visibility = 'visible';
   };
 
   window.onresize = function() {
-    var height = window.innerHeight;
-    $('list-container').style.height = height + 'px';
-    $('border-container').style.height = height + 'px';
-    $('border').style.height = height + 'px';
     updateClock();
   };
 
-  window.onmousemove = function(event) {
-    event.preventDefault();
-  };
-
-  window.ontouchmove = function(event) {
-    event.preventDefault();
-  };
+  if (supportsTouch()) {
+    window.ontouchmove = function(event) {
+      event.preventDefault();
+    };
+  }
 })(this);
