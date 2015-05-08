@@ -575,11 +575,13 @@
     }
   };
 
+  if (!isSVGEnabled()) {
+    document.body.style.display = 'none';
+    alert("Sorry, your browser doesn't support this application.");
+    return;
+  }
+
   window.onload = function() {
-    if (!isSVGEnabled()) {
-      alert("Sorry, your browser doesn't support this application.");
-      return;
-    }
     clock_view.init($('clock'), timelist.get());
     $('clock').style.opacity = 0.3;
     var hash = getHashText(location.href);
@@ -614,7 +616,6 @@
     loadTimezone();
     clock_view.updateBoard();
     window.onresize();
-    $('border-container').style.visibility = 'visible';
   };
 
   window.onresize = function() {
