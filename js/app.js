@@ -432,13 +432,13 @@
       };
     },
     open: function() {
-      this.element.parentNode.style.display = 'inline-block';
+      this.element.parentNode.setAttribute('class', 'open');
       if (supportsTouch() && this.scroll) {
         this.scroll.refresh();
       }
     },
     close: function() {
-      this.element.parentNode.style.display = 'none';
+      this.element.parentNode.setAttribute('class', 'close');
     },
     setList: function(list) {
       var element = document.createElement('div'),
@@ -522,10 +522,10 @@
       element.ontouchstart = element.onmouseover;
     },
     open: function() {
-      $('border-text').innerHTML = '&lt;';
+      this.element.setAttribute('class', 'open');
     },
     close: function() {
-      $('border-text').innerHTML = '&gt;';
+      this.element.setAttribute('class', 'close');
     },
     onclick: function() { }
   };

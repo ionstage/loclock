@@ -43,6 +43,14 @@ body {
   width: 168px;
 }
 
+#list-container.open {
+  display: inline-block;
+}
+
+#list-container.close {
+  display: none;
+}
+
 .list-item {
   cursor: pointer;
 }
@@ -75,6 +83,14 @@ body {
 #border-text-container {
   display: table-cell;
   vertical-align: middle;
+}
+
+#border.open #border-text:before {
+  content: "<";
+}
+
+#border.close #border-text:before {
+  content: ">";
 }
 
 #clock-container {
