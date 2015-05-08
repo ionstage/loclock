@@ -508,18 +508,25 @@
       var self = this;
       self.element = element;
       element.onclick = function(event) {
-        self.element.onmouseout(event);
+        if (!supportsTouch()) {
+          self.element.onmouseout(event);
+        }
         self.onclick(event);
       };
-      element.onmouseover = function(event) {
-        document.body.style.cursor = 'pointer';
-        event.currentTarget.style.opacity = 0.6;
-      };
-      element.onmouseout = function(event) {
-        document.body.style.cursor = 'default';
-        event.currentTarget.style.opacity = 1;
-      };
-      element.ontouchstart = element.onmouseover;
+      if (supportsTouch()) {
+        element.ontouchmove = function(event) {
+          event.stopPropagation();
+        };
+      } else {
+        element.onmouseover = function(event) {
+          document.body.style.cursor = 'pointer';
+          event.currentTarget.style.opacity = 0.6;
+        };
+        element.onmouseout = function(event) {
+          document.body.style.cursor = 'default';
+          event.currentTarget.style.opacity = 1;
+        };
+      }
     },
     open: function() {
       this.element.setAttribute('class', 'open');
@@ -614,11 +621,13 @@
     updateClock();
   };
 
-  window.onmousemove = function(event) {
-    event.preventDefault();
-  };
-
-  window.ontouchmove = function(event) {
-    event.preventDefault();
-  };
+  if (supportsTouch()) {
+    window.ontouchmove = function(event) {
+      event.preventDefault();
+    };
+  } else {
+    window.onmousemove = function(event) {
+      event.preventDefault();
+    };
+  }
 })(this);

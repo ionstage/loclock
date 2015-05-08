@@ -80,6 +80,10 @@ body {
   width: 100%;
 }
 
+#border:active {
+  opacity: 0.6;
+}
+
 #border-text-container {
   display: table-cell;
   vertical-align: middle;
