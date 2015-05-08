@@ -28,7 +28,6 @@ body {
 }
 
 #list-container {
-  -webkit-overflow-scrolling: touch;
   color: lightgray;
   display: none;
   float: left;

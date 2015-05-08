@@ -425,6 +425,9 @@
       element.parentNode.ontouchstart = function() {
         self.clickable = !self.scrolling;
       };
+      if (supportsTouch()) {
+        element.parentNode.style.overflowY = 'hidden';
+      }
     },
     open: function() {
       this.element.parentNode.setAttribute('class', 'open');
