@@ -62,7 +62,7 @@
   }
 
   function setHashText(text) {
-    location.href = '#' + Base64.encodeURI(text);
+    location.replace('#' + Base64.encodeURI(text));
   }
 
   function getCache(key) {
