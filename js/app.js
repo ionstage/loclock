@@ -500,7 +500,18 @@
       }
       this.current_selected_items = selected_items;
     },
-    onclick: function() { }
+    onclick: function(event) {
+      var key = attr(event.target, 'data-key'),
+          list = timelist.selected, i, isAlreadySelected = false;
+      for (i = list.length - 1; i >= 0; i -= 1) {
+        if (list[i] === key) {
+          isAlreadySelected = true;
+          list.splice(i, 1);
+        }
+      }
+      (!isAlreadySelected) && list.push(key);
+      setHashText(list.join(','));
+    }
   };
 
   var border_view = {
@@ -534,7 +545,13 @@
     close: function() {
       this.element.setAttribute('class', 'close');
     },
-    onclick: function() { }
+    onclick: (function() {
+      var isOpen = false;
+      return function() {
+        listToggle(isOpen);
+        isOpen = !isOpen;
+      };
+    })()
   };
 
   var clock_view = {
@@ -582,7 +599,7 @@
     return;
   }
 
-  window.onload = function() {
+  document.addEventListener('DOMContentLoaded', function() {
     clock_view.init($('clock'), timelist.get());
     clock_view.state('loading');
     var hash = getHashText();
@@ -592,40 +609,21 @@
       setHashText(DEFAULT_LOCATION);
     }
     list_view.init($('list'));
-    list_view.onclick = function(event) {
-      var key = attr(event.target, 'data-key'),
-          list = timelist.selected, i, isAlreadySelected = false;
-      for (i = list.length - 1; i >= 0; i -= 1) {
-        if (list[i] === key) {
-          isAlreadySelected = true;
-          list.splice(i, 1);
-        }
-      }
-      (!isAlreadySelected) && list.push(key);
-      setHashText(list.join(','));
-    };
     border_view.init($('border'));
-    border_view.onclick = (function() {
-      var isOpen = false;
-      return function() {
-        listToggle(isOpen);
-        isOpen = !isOpen;
-      };
-    }());
     border_view.onclick();
     setClockTimer();
     loadTimezone();
     clock_view.updateBoard();
-    window.onresize();
-  };
-
-  window.onresize = function() {
     updateClock();
-  };
+  });
+
+  window.addEventListener('resize', function() {
+    updateClock();
+  });
 
   if (supportsTouch()) {
-    window.ontouchmove = function(event) {
+    window.addEventListener('touchmove', function(event) {
       event.preventDefault();
-    };
+    });
   }
 })(this);
