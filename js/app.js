@@ -70,7 +70,9 @@
   }
 
   function setCache(key, value) {
-    localStorage[DOMAIN + '.' + key] = value;
+    try {
+      localStorage[DOMAIN + '.' + key] = value;
+    } catch (e) { /* do nothing */ }
   }
 
   function getCurrentTime() {
