@@ -5,8 +5,8 @@
   var NS = 'http://www.w3.org/2000/svg';
   var DOMAIN = 'org.ionstage.loclock';
   var DEFAULT_LOCATION = 'America/New_York,Europe/London,Asia/Tokyo';
-  var MOMENT_SCRIPT_URL = 'http://cdn.jsdelivr.net/momentjs/2.9.0/moment.min.js';
-  var MOMENT_TIMEZONE_SCRIPT_URL = 'http://cdn.jsdelivr.net/momentjs.timezone/0.3.0/moment-timezone-with-data.min.js';
+  var MOMENT_SCRIPT_URL = '//cdn.jsdelivr.net/momentjs/2.9.0/moment.min.js';
+  var MOMENT_TIMEZONE_SCRIPT_URL = '//cdn.jsdelivr.net/momentjs.timezone/0.3.0/moment-timezone-with-data.min.js';
   var TIMEZONE_NAMES = ['Europe/Andorra', 'Asia/Dubai', 'Asia/Kabul', 'America/Antigua', 'America/Anguilla', 'Europe/Tirane', 'Asia/Yerevan', 'Africa/Luanda', 'Antarctica/McMurdo', 'Antarctica/Rothera', 'Antarctica/Palmer', 'Antarctica/Mawson', 'Antarctica/Davis', 'Antarctica/Casey', 'Antarctica/Vostok', 'Antarctica/DumontDUrville', 'Antarctica/Syowa', 'America/Argentina/Buenos_Aires', 'America/Argentina/Cordoba', 'America/Argentina/Salta', 'America/Argentina/Jujuy', 'America/Argentina/Tucuman', 'America/Argentina/Catamarca', 'America/Argentina/La_Rioja', 'America/Argentina/San_Juan', 'America/Argentina/Mendoza', 'America/Argentina/San_Luis', 'America/Argentina/Rio_Gallegos', 'America/Argentina/Ushuaia', 'Pacific/Pago_Pago', 'Europe/Vienna', 'Australia/Lord_Howe', 'Antarctica/Macquarie', 'Australia/Hobart', 'Australia/Currie', 'Australia/Melbourne', 'Australia/Sydney', 'Australia/Broken_Hill', 'Australia/Brisbane', 'Australia/Lindeman', 'Australia/Adelaide', 'Australia/Darwin', 'Australia/Perth', 'Australia/Eucla', 'America/Aruba', 'Europe/Mariehamn', 'Asia/Baku', 'Europe/Sarajevo', 'America/Barbados', 'Asia/Dhaka', 'Europe/Brussels', 'Africa/Ouagadougou', 'Europe/Sofia', 'Asia/Bahrain', 'Africa/Bujumbura', 'Africa/Porto-Novo', 'America/St_Barthelemy', 'Atlantic/Bermuda', 'Asia/Brunei', 'America/La_Paz', 'America/Kralendijk', 'America/Noronha', 'America/Belem', 'America/Fortaleza', 'America/Recife', 'America/Araguaina', 'America/Maceio', 'America/Bahia', 'America/Sao_Paulo', 'America/Campo_Grande', 'America/Cuiaba', 'America/Santarem', 'America/Porto_Velho', 'America/Boa_Vista', 'America/Manaus', 'America/Eirunepe', 'America/Rio_Branco', 'America/Nassau', 'Asia/Thimphu', 'Africa/Gaborone', 'Europe/Minsk', 'America/Belize', 'America/St_Johns', 'America/Halifax', 'America/Glace_Bay', 'America/Moncton', 'America/Goose_Bay', 'America/Blanc-Sablon', 'America/Toronto', 'America/Nipigon', 'America/Thunder_Bay', 'America/Iqaluit', 'America/Pangnirtung', 'America/Resolute', 'America/Atikokan', 'America/Rankin_Inlet', 'America/Winnipeg', 'America/Rainy_River', 'America/Regina', 'America/Swift_Current', 'America/Edmonton', 'America/Cambridge_Bay', 'America/Yellowknife', 'America/Inuvik', 'America/Creston', 'America/Dawson_Creek', 'America/Vancouver', 'America/Whitehorse', 'America/Dawson', 'Indian/Cocos', 'Africa/Kinshasa', 'Africa/Lubumbashi', 'Africa/Bangui', 'Africa/Brazzaville', 'Europe/Zurich', 'Africa/Abidjan', 'Pacific/Rarotonga', 'America/Santiago', 'Pacific/Easter', 'Africa/Douala', 'Asia/Shanghai', 'Asia/Harbin', 'Asia/Chongqing', 'Asia/Urumqi', 'Asia/Kashgar', 'America/Bogota', 'America/Costa_Rica', 'America/Havana', 'Atlantic/Cape_Verde', 'America/Curacao', 'Indian/Christmas', 'Asia/Nicosia', 'Europe/Prague', 'Europe/Berlin', 'Europe/Busingen', 'Africa/Djibouti', 'Europe/Copenhagen', 'America/Dominica', 'America/Santo_Domingo', 'Africa/Algiers', 'America/Guayaquil', 'Pacific/Galapagos', 'Europe/Tallinn', 'Africa/Cairo', 'Africa/El_Aaiun', 'Africa/Asmara', 'Europe/Madrid', 'Africa/Ceuta', 'Atlantic/Canary', 'Africa/Addis_Ababa', 'Europe/Helsinki', 'Pacific/Fiji', 'Atlantic/Stanley', 'Pacific/Chuuk', 'Pacific/Pohnpei', 'Pacific/Kosrae', 'Atlantic/Faroe', 'Europe/Paris', 'Africa/Libreville', 'Europe/London', 'America/Grenada', 'Asia/Tbilisi', 'America/Cayenne', 'Europe/Guernsey', 'Africa/Accra', 'Europe/Gibraltar', 'America/Godthab', 'America/Danmarkshavn', 'America/Scoresbysund', 'America/Thule', 'Africa/Banjul', 'Africa/Conakry', 'America/Guadeloupe', 'Africa/Malabo', 'Europe/Athens', 'Atlantic/South_Georgia', 'America/Guatemala', 'Pacific/Guam', 'Africa/Bissau', 'America/Guyana', 'Asia/Hong_Kong', 'America/Tegucigalpa', 'Europe/Zagreb', 'America/Port-au-Prince', 'Europe/Budapest', 'Asia/Jakarta', 'Asia/Pontianak', 'Asia/Makassar', 'Asia/Jayapura', 'Europe/Dublin', 'Asia/Jerusalem', 'Europe/Isle_of_Man', 'Asia/Kolkata', 'Indian/Chagos', 'Asia/Baghdad', 'Asia/Tehran', 'Atlantic/Reykjavik', 'Europe/Rome', 'Europe/Jersey', 'America/Jamaica', 'Asia/Amman', 'Asia/Tokyo', 'Africa/Nairobi', 'Asia/Bishkek', 'Asia/Phnom_Penh', 'Pacific/Tarawa', 'Pacific/Enderbury', 'Pacific/Kiritimati', 'Indian/Comoro', 'America/St_Kitts', 'Asia/Pyongyang', 'Asia/Seoul', 'Asia/Kuwait', 'America/Cayman', 'Asia/Almaty', 'Asia/Qyzylorda', 'Asia/Aqtobe', 'Asia/Aqtau', 'Asia/Oral', 'Asia/Vientiane', 'Asia/Beirut', 'America/St_Lucia', 'Europe/Vaduz', 'Asia/Colombo', 'Africa/Monrovia', 'Africa/Maseru', 'Europe/Vilnius', 'Europe/Luxembourg', 'Europe/Riga', 'Africa/Tripoli', 'Africa/Casablanca', 'Europe/Monaco', 'Europe/Chisinau', 'Europe/Podgorica', 'America/Marigot', 'Indian/Antananarivo', 'Pacific/Majuro', 'Pacific/Kwajalein', 'Europe/Skopje', 'Africa/Bamako', 'Asia/Rangoon', 'Asia/Ulaanbaatar', 'Asia/Hovd', 'Asia/Choibalsan', 'Asia/Macau', 'Pacific/Saipan', 'America/Martinique', 'Africa/Nouakchott', 'America/Montserrat', 'Europe/Malta', 'Indian/Mauritius', 'Indian/Maldives', 'Africa/Blantyre', 'America/Mexico_City', 'America/Cancun', 'America/Merida', 'America/Monterrey', 'America/Matamoros', 'America/Mazatlan', 'America/Chihuahua', 'America/Ojinaga', 'America/Hermosillo', 'America/Tijuana', 'America/Santa_Isabel', 'America/Bahia_Banderas', 'Asia/Kuala_Lumpur', 'Asia/Kuching', 'Africa/Maputo', 'Africa/Windhoek', 'Pacific/Noumea', 'Africa/Niamey', 'Pacific/Norfolk', 'Africa/Lagos', 'America/Managua', 'Europe/Amsterdam', 'Europe/Oslo', 'Asia/Kathmandu', 'Pacific/Nauru', 'Pacific/Niue', 'Pacific/Auckland', 'Pacific/Chatham', 'Asia/Muscat', 'America/Panama', 'America/Lima', 'Pacific/Tahiti', 'Pacific/Marquesas', 'Pacific/Gambier', 'Pacific/Port_Moresby', 'Asia/Manila', 'Asia/Karachi', 'Europe/Warsaw', 'America/Miquelon', 'Pacific/Pitcairn', 'America/Puerto_Rico', 'Asia/Gaza', 'Asia/Hebron', 'Europe/Lisbon', 'Atlantic/Madeira', 'Atlantic/Azores', 'Pacific/Palau', 'America/Asuncion', 'Asia/Qatar', 'Indian/Reunion', 'Europe/Bucharest', 'Europe/Belgrade', 'Europe/Kaliningrad', 'Europe/Moscow', 'Europe/Volgograd', 'Europe/Samara', 'Asia/Yekaterinburg', 'Asia/Omsk', 'Asia/Novosibirsk', 'Asia/Novokuznetsk', 'Asia/Krasnoyarsk', 'Asia/Irkutsk', 'Asia/Yakutsk', 'Asia/Khandyga', 'Asia/Vladivostok', 'Asia/Sakhalin', 'Asia/Ust-Nera', 'Asia/Magadan', 'Asia/Kamchatka', 'Asia/Anadyr', 'Africa/Kigali', 'Asia/Riyadh', 'Pacific/Guadalcanal', 'Indian/Mahe', 'Africa/Khartoum', 'Europe/Stockholm', 'Asia/Singapore', 'Atlantic/St_Helena', 'Europe/Ljubljana', 'Arctic/Longyearbyen', 'Europe/Bratislava', 'Africa/Freetown', 'Europe/San_Marino', 'Africa/Dakar', 'Africa/Mogadishu', 'America/Paramaribo', 'Africa/Juba', 'Africa/Sao_Tome', 'America/El_Salvador', 'America/Lower_Princes', 'Asia/Damascus', 'Africa/Mbabane', 'America/Grand_Turk', 'Africa/Ndjamena', 'Indian/Kerguelen', 'Africa/Lome', 'Asia/Bangkok', 'Asia/Dushanbe', 'Pacific/Fakaofo', 'Asia/Dili', 'Asia/Ashgabat', 'Africa/Tunis', 'Pacific/Tongatapu', 'Europe/Istanbul', 'America/Port_of_Spain', 'Pacific/Funafuti', 'Asia/Taipei', 'Africa/Dar_es_Salaam', 'Europe/Kiev', 'Europe/Uzhgorod', 'Europe/Zaporozhye', 'Europe/Simferopol', 'Africa/Kampala', 'Pacific/Johnston', 'Pacific/Midway', 'Pacific/Wake', 'America/New_York', 'America/Detroit', 'America/Kentucky/Louisville', 'America/Kentucky/Monticello', 'America/Indiana/Indianapolis', 'America/Indiana/Vincennes', 'America/Indiana/Winamac', 'America/Indiana/Marengo', 'America/Indiana/Petersburg', 'America/Indiana/Vevay', 'America/Chicago', 'America/Indiana/Tell_City', 'America/Indiana/Knox', 'America/Menominee', 'America/North_Dakota/Center', 'America/North_Dakota/New_Salem', 'America/North_Dakota/Beulah', 'America/Denver', 'America/Boise', 'America/Phoenix', 'America/Los_Angeles', 'America/Anchorage', 'America/Juneau', 'America/Sitka', 'America/Yakutat', 'America/Nome', 'America/Adak', 'America/Metlakatla', 'Pacific/Honolulu', 'America/Montevideo', 'Asia/Samarkand', 'Asia/Tashkent', 'Europe/Vatican', 'America/St_Vincent', 'America/Caracas', 'America/Tortola', 'America/St_Thomas', 'Asia/Ho_Chi_Minh', 'Pacific/Efate', 'Pacific/Wallis', 'Pacific/Apia', 'Asia/Aden', 'Indian/Mayotte', 'Africa/Johannesburg', 'Africa/Lusaka', 'Africa/Harare'];
   var KEY_TIMEZONE_LAST_LOADTIME = 'timezone-last-load-time';
   var KEY_TIMEZONE_DATA = 'timezone-data';
@@ -70,7 +70,9 @@
   }
 
   function setCache(key, value) {
-    localStorage[DOMAIN + '.' + key] = value;
+    try {
+      localStorage[DOMAIN + '.' + key] = value;
+    } catch (e) { /* do nothing */ }
   }
 
   function getCurrentTime() {
@@ -102,7 +104,7 @@
         text, fontSize, rate, time, dif_x, dif_y;
     board.appendChild(createCircle({cx: x, cy: y, r: r,
                     'stroke-width': (r / 30).toFixed(1),
-                    'class': 'board-circle'}));
+                    'class': 'circle'}));
     board.appendChild(createCircle({cx: x, cy: y, r: (r / 45).toFixed(1),
                     'fill': 'black'}));
     for (i = 0; i < 24; i += 1) {
@@ -114,7 +116,7 @@
       board.appendChild(createText(text, {x: (x + dif_x).toFixed(1),
                         y: (y + dif_y).toFixed(1),
                         'font-size': fontSize.toFixed(),
-                        'class': 'board-text'}));
+                        'class': 'text'}));
       deg += dif;
     }
     return board;
@@ -144,7 +146,7 @@
                       cy: (y + r * Math.sin(deg)).toFixed(1),
                       r: (r / 20).toFixed(1),
                       'stroke-width': (r / 90).toFixed(1),
-                      'class': 'point-circle'}));
+                      'class': 'circle'}));
       textPoint = {x: x + r * Math.cos(deg), y: y + r * Math.sin(deg)};
       text = textList[time.getTime()];
       if (text) {
@@ -152,7 +154,7 @@
       } else {
         text = createText(name, {x: textPoint.x, y: textPoint.y,
                      'font-size': fontSize,
-                     'class': 'point-text'});
+                     'class': 'text'});
         point.appendChild(text);
         textList[time.getTime()] = text;
         text.deg = deg;
@@ -296,7 +298,6 @@
     clock_view.timelist = timelist.get();
     list_view.selected = timelist.selected;
     list_view.update();
-    updateClock();
   }
 
   function updateClock() {
@@ -330,12 +331,16 @@
     var timezone_data = getCache(KEY_TIMEZONE_DATA);
     var last_load_time = getCache(KEY_TIMEZONE_LAST_LOADTIME);
     if (!timezone_data) {
+      clock_view.state('loading');
       loadTimezoneData(function(data) {
         onTimezoneLoad(data);
         setTimezoneData(data);
+        updateClock();
+        clock_view.state('loaded');
       });
     } else {
       setTimezoneData(JSON.parse(timezone_data));
+      updateClock();
       if (getCurrentTime() - last_load_time > 43200) {
         loadTimezoneData(onTimezoneLoad);
       }
@@ -344,15 +349,12 @@
 
   function listToggle(isOpen) {
     if (isOpen) {
-      list_view.open();
-      border_view.open();
+      side_panel_view.open();
       clock_view.open();
     } else {
-      list_view.close();
-      border_view.close();
+      side_panel_view.close();
       clock_view.close();
     }
-    updateClock();
   }
 
   function setClockTimer() {
@@ -367,6 +369,7 @@
         if (hash !== currentHash) {
           selectTimezone(hash.split(','));
           currentHash = hash;
+          updateClock();
         }
         count += 1;
       };
@@ -378,8 +381,6 @@
     timelist.data = data;
     clock_view.timelist = timelist.get();
     timelist.isDataLoaded = true;
-    updateClock();
-    clock_view.state('loaded');
     list_view.setList(Object.keys(data));
     list_view.selected = timelist.selected;
     list_view.update();
@@ -404,6 +405,18 @@
     isDataLoaded: false
   };
 
+  var side_panel_view = {
+    init: function(element) {
+      this.element = element;
+    },
+    open: function() {
+      this.element.setAttribute('class', 'open');
+    },
+    close: function() {
+      this.element.setAttribute('class', 'close');
+    }
+  };
+
   var list_view = {
     items: {},
     selected: [],
@@ -413,7 +426,7 @@
       self.element = element;
       self.scrolling = false;
       self.clickable = true;
-      element.onclick = function(event) {
+      element.parentNode.onclick = function(event) {
         event.preventDefault();
         if (self.scrolling || !self.clickable) {
           self.scrolling = false;
@@ -428,15 +441,6 @@
       if (supportsTouch()) {
         element.parentNode.style.overflowY = 'hidden';
       }
-    },
-    open: function() {
-      this.element.parentNode.setAttribute('class', 'open');
-      if (supportsTouch() && this.scroll) {
-        this.scroll.refresh();
-      }
-    },
-    close: function() {
-      this.element.parentNode.setAttribute('class', 'close');
     },
     setList: function(list) {
       var element = document.createElement('div'),
@@ -459,8 +463,6 @@
         this.items[key] = item;
       }
       this.element.parentNode.replaceChild(element, this.element);
-      element.onclick = this.element.onclick;
-      this.element.onclick = null;
       this.element = element;
       if (supportsTouch()) {
         if (this.scroll) {
@@ -492,13 +494,24 @@
       for (i = 0, len = this.selected.length; i < len; i += 1) {
         item = this.items[this.selected[i]];
         if (item) {
-          attr(item, {'class': 'list-selected'});
+          attr(item, {'class': 'list-item list-selected'});
           selected_items.push(item);
         }
       }
       this.current_selected_items = selected_items;
     },
-    onclick: function() { }
+    onclick: function(event) {
+      var key = attr(event.target, 'data-key'),
+          list = timelist.selected, i, isAlreadySelected = false;
+      for (i = list.length - 1; i >= 0; i -= 1) {
+        if (list[i] === key) {
+          isAlreadySelected = true;
+          list.splice(i, 1);
+        }
+      }
+      (!isAlreadySelected) && list.push(key);
+      setHashText(list.join(','));
+    }
   };
 
   var border_view = {
@@ -526,13 +539,13 @@
         };
       }
     },
-    open: function() {
-      this.element.setAttribute('class', 'open');
-    },
-    close: function() {
-      this.element.setAttribute('class', 'close');
-    },
-    onclick: function() { }
+    onclick: (function() {
+      var isOpen = false;
+      return function() {
+        isOpen = !isOpen;
+        listToggle(isOpen);
+      };
+    })()
   };
 
   var clock_view = {
@@ -580,50 +593,26 @@
     return;
   }
 
-  window.onload = function() {
+  document.addEventListener('DOMContentLoaded', function() {
     clock_view.init($('clock'), timelist.get());
-    clock_view.state('loading');
     var hash = getHashText();
     if (hash) {
       selectTimezone(hash.split(','));
     } else {
       setHashText(DEFAULT_LOCATION);
     }
+    side_panel_view.init($('side-panel'));
     list_view.init($('list'));
-    list_view.onclick = function(event) {
-      var key = attr(event.target, 'data-key'),
-          list = timelist.selected, i, isAlreadySelected = false;
-      for (i = list.length - 1; i >= 0; i -= 1) {
-        if (list[i] === key) {
-          isAlreadySelected = true;
-          list.splice(i, 1);
-        }
-      }
-      (!isAlreadySelected) && list.push(key);
-      setHashText(list.join(','));
-    };
     border_view.init($('border'));
-    border_view.onclick = (function() {
-      var isOpen = false;
-      return function() {
-        listToggle(isOpen);
-        isOpen = !isOpen;
-      };
-    }());
-    border_view.onclick();
     setClockTimer();
     loadTimezone();
     clock_view.updateBoard();
-    window.onresize();
-  };
-
-  window.onresize = function() {
     updateClock();
-  };
+  });
 
   if (supportsTouch()) {
-    window.ontouchmove = function(event) {
+    window.addEventListener('touchmove', function(event) {
       event.preventDefault();
-    };
+    });
   }
 })(this);

@@ -15,7 +15,6 @@ body {
   margin: 0;
   overflow: hidden;
   position: fixed;
-  vertical-align: text-bottom;
   width: 100%;
 }
 
@@ -27,9 +26,24 @@ body {
   user-select: none;
 }
 
+#side-panel {
+  -webkit-transition: left 0.3s;
+  -o-transition: left 0.3s;
+  height: 100%;
+  position: absolute;
+  transition: left 0.3s;
+}
+
+#side-panel.open {
+  left: 0px;
+}
+
+#side-panel.close {
+  left: -168px;
+}
+
 #list-container {
   color: lightgray;
-  display: none;
   float: left;
   font-family: Helvetica;
   height: 100%;
@@ -42,31 +56,19 @@ body {
   width: 168px;
 }
 
-#list-container.open {
-  display: inline-block;
-}
-
-#list-container.close {
-  display: none;
-}
-
 .list-item {
   cursor: pointer;
 }
 
 .list-selected {
   color: black;
-  cursor: pointer;
 }
 
 #border-container {
-  display: inline-block;
   float: left;
   font-family: Courier;
   font-size: 26px;
   height: 100%;
-  vertical-align: text-bottom;
-  white-space: nowrap;
   width: 32px;
 }
 
@@ -74,7 +76,6 @@ body {
   background-color: lightgray;
   display: table;
   height: 100%;
-  text-align: center;
   width: 100%;
 }
 
@@ -84,36 +85,41 @@ body {
 
 #border-text-container {
   display: table-cell;
+  text-align: center;
   vertical-align: middle;
 }
 
-#border.open #border-text:before {
+#side-panel.open #border-text:before {
   content: "<";
 }
 
-#border.close #border-text:before {
+#side-panel.close #border-text:before {
   content: ">";
 }
 
 #clock-container {
-  display: inline-block;
-  float: left;
+  -webkit-transition: margin-left 0.3s, width 0.3s;
+  -o-transition: margin-left 0.3s, width 0.3s;
   height: 100%;
   overflow: hidden;
   position: absolute;
+  transition: margin-left 0.3s, width 0.3s;
 }
 
 #clock-container.open {
+  margin-left: 200px;
   width: calc(100% - 200px);
 }
 
 #clock-container.close {
+  margin-left: 32px;
   width: calc(100% - 32px);
 }
 
 #clock {
+  cursor: default;
+  font-family: Helvetica;
   height: 100%;
-  vertical-align: text-bottom;
   width: 100%;
 }
 
@@ -122,31 +128,18 @@ body {
 }
 
 #clock.loaded {
+  -webkit-transition: opacity 0.5s;
+  -o-transition: opacity 0.5s;
   opacity: 1;
+  transition: opacity 0.5s;
 }
 
-.board-circle {
-  fill: none;
-  stroke: black;
-}
-
-.board-text {
-  cursor: default;
+#clock .text {
   dominant-baseline: central;
-  font-family: Helvetica;
   text-anchor: middle;
-  white-space: nowrap;
 }
 
-.point-circle {
+#clock .circle {
   fill: white;
   stroke: black;
-}
-
-.point-text {
-  cursor: default;
-  dominant-baseline: central;
-  font-family: Helvetica;
-  text-anchor: middle;
-  white-space: nowrap;
 }
