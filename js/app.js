@@ -332,9 +332,11 @@
     var timezone_data = getCache(KEY_TIMEZONE_DATA);
     var last_load_time = getCache(KEY_TIMEZONE_LAST_LOADTIME);
     if (!timezone_data) {
+      clock_view.state('loading');
       loadTimezoneData(function(data) {
         onTimezoneLoad(data);
         setTimezoneData(data);
+        clock_view.state('loaded');
       });
     } else {
       setTimezoneData(JSON.parse(timezone_data));
@@ -381,7 +383,6 @@
     clock_view.timelist = timelist.get();
     timelist.isDataLoaded = true;
     updateClock();
-    clock_view.state('loaded');
     list_view.setList(Object.keys(data));
     list_view.selected = timelist.selected;
     list_view.update();
@@ -601,7 +602,6 @@
 
   document.addEventListener('DOMContentLoaded', function() {
     clock_view.init($('clock'), timelist.get());
-    clock_view.state('loading');
     var hash = getHashText();
     if (hash) {
       selectTimezone(hash.split(','));

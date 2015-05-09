@@ -122,7 +122,10 @@ body {
 }
 
 #clock.loaded {
+  -webkit-transition: opacity 0.5s;
+  -o-transition: opacity 0.5s;
   opacity: 1;
+  transition: opacity 0.5s;
 }
 
 .board-circle {
