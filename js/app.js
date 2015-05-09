@@ -426,7 +426,7 @@
       self.element = element;
       self.scrolling = false;
       self.clickable = true;
-      element.onclick = function(event) {
+      element.parentNode.onclick = function(event) {
         event.preventDefault();
         if (self.scrolling || !self.clickable) {
           self.scrolling = false;
@@ -463,8 +463,6 @@
         this.items[key] = item;
       }
       this.element.parentNode.replaceChild(element, this.element);
-      element.onclick = this.element.onclick;
-      this.element.onclick = null;
       this.element = element;
       if (supportsTouch()) {
         if (this.scroll) {
