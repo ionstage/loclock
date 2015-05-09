@@ -15,7 +15,6 @@ body {
   margin: 0;
   overflow: hidden;
   position: fixed;
-  vertical-align: text-bottom;
   width: 100%;
 }
 
@@ -61,7 +60,6 @@ body {
 
 .list-selected {
   color: black;
-  cursor: pointer;
 }
 
 #border-container {
@@ -69,8 +67,6 @@ body {
   font-family: Courier;
   font-size: 26px;
   height: 100%;
-  vertical-align: text-bottom;
-  white-space: nowrap;
   width: 32px;
 }
 
@@ -78,7 +74,6 @@ body {
   background-color: lightgray;
   display: table;
   height: 100%;
-  text-align: center;
   width: 100%;
 }
 
@@ -88,6 +83,7 @@ body {
 
 #border-text-container {
   display: table-cell;
+  text-align: center;
   vertical-align: middle;
 }
 
@@ -116,8 +112,9 @@ body {
 }
 
 #clock {
+  cursor: default;
+  font-family: Helvetica;
   height: 100%;
-  vertical-align: text-bottom;
   width: 100%;
 }
 
@@ -132,28 +129,12 @@ body {
   transition: opacity 0.5s;
 }
 
-.board-circle {
-  fill: none;
-  stroke: black;
-}
-
-.board-text {
-  cursor: default;
+#clock .text {
   dominant-baseline: central;
-  font-family: Helvetica;
   text-anchor: middle;
-  white-space: nowrap;
 }
 
-.point-circle {
+#clock .circle {
   fill: white;
   stroke: black;
-}
-
-.point-text {
-  cursor: default;
-  dominant-baseline: central;
-  font-family: Helvetica;
-  text-anchor: middle;
-  white-space: nowrap;
 }

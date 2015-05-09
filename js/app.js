@@ -104,7 +104,7 @@
         text, fontSize, rate, time, dif_x, dif_y;
     board.appendChild(createCircle({cx: x, cy: y, r: r,
                     'stroke-width': (r / 30).toFixed(1),
-                    'class': 'board-circle'}));
+                    'class': 'circle'}));
     board.appendChild(createCircle({cx: x, cy: y, r: (r / 45).toFixed(1),
                     'fill': 'black'}));
     for (i = 0; i < 24; i += 1) {
@@ -116,7 +116,7 @@
       board.appendChild(createText(text, {x: (x + dif_x).toFixed(1),
                         y: (y + dif_y).toFixed(1),
                         'font-size': fontSize.toFixed(),
-                        'class': 'board-text'}));
+                        'class': 'text'}));
       deg += dif;
     }
     return board;
@@ -146,7 +146,7 @@
                       cy: (y + r * Math.sin(deg)).toFixed(1),
                       r: (r / 20).toFixed(1),
                       'stroke-width': (r / 90).toFixed(1),
-                      'class': 'point-circle'}));
+                      'class': 'circle'}));
       textPoint = {x: x + r * Math.cos(deg), y: y + r * Math.sin(deg)};
       text = textList[time.getTime()];
       if (text) {
@@ -154,7 +154,7 @@
       } else {
         text = createText(name, {x: textPoint.x, y: textPoint.y,
                      'font-size': fontSize,
-                     'class': 'point-text'});
+                     'class': 'text'});
         point.appendChild(text);
         textList[time.getTime()] = text;
         text.deg = deg;
@@ -496,7 +496,7 @@
       for (i = 0, len = this.selected.length; i < len; i += 1) {
         item = this.items[this.selected[i]];
         if (item) {
-          attr(item, {'class': 'list-selected'});
+          attr(item, {'class': 'list-item list-selected'});
           selected_items.push(item);
         }
       }
