@@ -348,12 +348,10 @@
 
   function listToggle(isOpen) {
     if (isOpen) {
-      list_view.open();
-      border_view.open();
+      side_panel_view.open();
       clock_view.open();
     } else {
-      list_view.close();
-      border_view.close();
+      side_panel_view.close();
       clock_view.close();
     }
     updateClock();
@@ -407,6 +405,18 @@
     isDataLoaded: false
   };
 
+  var side_panel_view = {
+    init: function(element) {
+      this.element = element;
+    },
+    open: function() {
+      this.element.setAttribute('class', 'open');
+    },
+    close: function() {
+      this.element.setAttribute('class', 'close');
+    }
+  };
+
   var list_view = {
     items: {},
     selected: [],
@@ -431,15 +441,6 @@
       if (supportsTouch()) {
         element.parentNode.style.overflowY = 'hidden';
       }
-    },
-    open: function() {
-      this.element.parentNode.setAttribute('class', 'open');
-      if (supportsTouch() && this.scroll) {
-        this.scroll.refresh();
-      }
-    },
-    close: function() {
-      this.element.parentNode.setAttribute('class', 'close');
     },
     setList: function(list) {
       var element = document.createElement('div'),
@@ -540,12 +541,6 @@
         };
       }
     },
-    open: function() {
-      this.element.setAttribute('class', 'open');
-    },
-    close: function() {
-      this.element.setAttribute('class', 'close');
-    },
     onclick: (function() {
       var isOpen = false;
       return function() {
@@ -608,6 +603,7 @@
     } else {
       setHashText(DEFAULT_LOCATION);
     }
+    side_panel_view.init($('side-panel'));
     list_view.init($('list'));
     border_view.init($('border'));
     border_view.onclick();
