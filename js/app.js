@@ -298,7 +298,6 @@
     clock_view.timelist = timelist.get();
     list_view.selected = timelist.selected;
     list_view.update();
-    updateClock();
   }
 
   function updateClock() {
@@ -336,10 +335,12 @@
       loadTimezoneData(function(data) {
         onTimezoneLoad(data);
         setTimezoneData(data);
+        updateClock();
         clock_view.state('loaded');
       });
     } else {
       setTimezoneData(JSON.parse(timezone_data));
+      updateClock();
       if (getCurrentTime() - last_load_time > 43200) {
         loadTimezoneData(onTimezoneLoad);
       }
@@ -354,7 +355,6 @@
       side_panel_view.close();
       clock_view.close();
     }
-    updateClock();
   }
 
   function setClockTimer() {
@@ -369,6 +369,7 @@
         if (hash !== currentHash) {
           selectTimezone(hash.split(','));
           currentHash = hash;
+          updateClock();
         }
         count += 1;
       };
@@ -380,7 +381,6 @@
     timelist.data = data;
     clock_view.timelist = timelist.get();
     timelist.isDataLoaded = true;
-    updateClock();
     list_view.setList(Object.keys(data));
     list_view.selected = timelist.selected;
     list_view.update();
@@ -607,10 +607,6 @@
     setClockTimer();
     loadTimezone();
     clock_view.updateBoard();
-    updateClock();
-  });
-
-  window.addEventListener('resize', function() {
     updateClock();
   });
 
