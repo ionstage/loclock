@@ -27,9 +27,11 @@ body {
 }
 
 #side-panel {
-  left: -168px;
+  -webkit-transition: left 0.3s;
+  -o-transition: left 0.3s;
   height: 100%;
   position: absolute;
+  transition: left 0.3s;
 }
 
 #side-panel.open {
@@ -96,9 +98,12 @@ body {
 }
 
 #clock-container {
+  -webkit-transition: margin-left 0.3s, width 0.3s;
+  -o-transition: margin-left 0.3s, width 0.3s;
   height: 100%;
   overflow: hidden;
   position: absolute;
+  transition: margin-left 0.3s, width 0.3s;
 }
 
 #clock-container.open {

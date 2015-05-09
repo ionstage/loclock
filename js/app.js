@@ -544,8 +544,8 @@
     onclick: (function() {
       var isOpen = false;
       return function() {
-        listToggle(isOpen);
         isOpen = !isOpen;
+        listToggle(isOpen);
       };
     })()
   };
@@ -606,7 +606,6 @@
     side_panel_view.init($('side-panel'));
     list_view.init($('list'));
     border_view.init($('border'));
-    border_view.onclick();
     setClockTimer();
     loadTimezone();
     clock_view.updateBoard();
