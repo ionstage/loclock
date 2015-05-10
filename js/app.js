@@ -12,6 +12,10 @@
   var KEY_TIMEZONE_DATA = 'timezone-data';
   var KEY_CURRENT_LOCATION = 'Current_Location';
 
+  var supportsTouch = 'createTouch' in document;
+  var supportsSVG = !!(document.createElementNS &&
+                    document.createElementNS(NS, 'svg').createSVGRect);
+
   function $(id) {
     return document.getElementById(id);
   }
@@ -24,15 +28,6 @@
       element.setAttribute(key, o[key]);
     }
     return element;
-  }
-
-  function supportsTouch() {
-    return (document && 'createTouch' in document) || false;
-  }
-
-  function isSVGEnabled() {
-    return !!(document.createElementNS &&
-              document.createElementNS(NS, 'svg').createSVGRect);
   }
 
   function loadScript(path, callback) {
@@ -438,7 +433,7 @@
       element.parentNode.ontouchstart = function() {
         self.clickable = !self.scrolling;
       };
-      if (supportsTouch()) {
+      if (supportsTouch) {
         element.parentNode.style.overflowY = 'hidden';
       }
     },
@@ -464,7 +459,7 @@
       }
       this.element.parentNode.replaceChild(element, this.element);
       this.element = element;
-      if (supportsTouch()) {
+      if (supportsTouch) {
         if (this.scroll) {
           this.scroll.destroy();
           this.scroll = null;
@@ -519,12 +514,12 @@
       var self = this;
       self.element = element;
       element.onclick = function(event) {
-        if (!supportsTouch()) {
+        if (!supportsTouch) {
           self.element.onmouseout(event);
         }
         self.onclick(event);
       };
-      if (supportsTouch()) {
+      if (supportsTouch) {
         element.ontouchmove = function(event) {
           event.stopPropagation();
         };
@@ -587,7 +582,7 @@
     }
   };
 
-  if (!isSVGEnabled()) {
+  if (!supportsSVG) {
     document.body.style.display = 'none';
     alert("Sorry, your browser doesn't support this application.");
     return;
@@ -610,7 +605,7 @@
     updateClock();
   });
 
-  if (supportsTouch()) {
+  if (supportsTouch) {
     window.addEventListener('touchmove', function(event) {
       event.preventDefault();
     });
