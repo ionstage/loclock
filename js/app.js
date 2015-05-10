@@ -296,7 +296,7 @@
   }
 
   function updateClock() {
-    if (timelist.isDataLoaded) {
+    if (timelist.data) {
       clock_view.updatePoint();
     }
   }
@@ -375,7 +375,6 @@
     data[KEY_CURRENT_LOCATION] = new Date().getTimezoneOffset() * (-60);
     timelist.data = data;
     clock_view.timelist = timelist.get();
-    timelist.isDataLoaded = true;
     list_view.setList(Object.keys(data));
     list_view.selected = timelist.selected;
     list_view.update();
@@ -396,8 +395,7 @@
         }
       }
       return getTimelist(selected_timezone);
-    },
-    isDataLoaded: false
+    }
   };
 
   var side_panel_view = {
