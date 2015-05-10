@@ -125,7 +125,7 @@
     forEachTextElement(board, function(element) {
       if (typeof element.getBBox === 'function') {
         var textBBox = element.getBBox(),
-          dy = Number(attr(element, 'y')) - (textBBox.y + textBBox.height / 2);
+          dy = +attr(element, 'y') - (textBBox.y + textBBox.height / 2);
         attr(element, 'dy', dy);
       }
     });
@@ -193,24 +193,24 @@
         (bb.x < width && bb.x + bb.width > width && (pattern = 2)) ||
         (bb.y < 0 && bb.y + bb.height > 0 && (pattern = 3)) ||
         (bb.y < height && bb.y + bb.height > height && (pattern = 4))) {
-      attr(element, 'font-size', Number(attr(element, 'font-size')) / 1.5);
+      attr(element, 'font-size', +attr(element, 'font-size') / 1.5);
       newbb = element.getBBox();
       switch (pattern) {
         case 1:
           value = bb.x + bb.width - (newbb.x + newbb.width);
-          attr(element, 'x', Number(attr(element, 'x')) + value);
+          attr(element, 'x', +attr(element, 'x') + value);
           break;
         case 2:
           value = newbb.x - bb.x;
-          attr(element, 'x', Number(attr(element, 'x')) - value);
+          attr(element, 'x', +attr(element, 'x') - value);
           break;
         case 3:
           value = bb.y + bb.height - (newbb.y + newbb.height);
-          attr(element, 'y', Number(attr(element, 'y')) + value);
+          attr(element, 'y', +attr(element, 'y') + value);
           break;
         case 4:
           value = newbb.y - bb.y;
-          attr(element, 'y', Number(attr(element, 'y')) - value);
+          attr(element, 'y', +attr(element, 'y') - value);
           break;
         default:
       }
@@ -226,8 +226,8 @@
         i, j, len, item, el, bb0, bb1, dy, elements = [];
     forEachTextElement(point, function(element) {
       if (typeof element.getBBox === 'function') {
-        var textBBox = element.getBBox(), deg = Number(element.deg),
-          dy = Number(attr(element, 'y')) - (textBBox.y + textBBox.height / 2),
+        var textBBox = element.getBBox(), deg = +element.deg,
+          dy = +attr(element, 'y') - (textBBox.y + textBBox.height / 2),
           property = {x: x + (r + textBBox.width / 2 + r / 8) * Math.cos(deg),
                 y: y + (r + textBBox.height / 2 + r / 8) * Math.sin(deg),
                 dy: dy};
@@ -250,7 +250,7 @@
         bb0 = item[1];
         bb1 = upper_elements[j][1];
         if (isBBoxOverlayed(bb0, bb1)) {
-          dy = Number(attr(el, 'dy')) - ((bb0.y + bb0.height) - bb1.y);
+          dy = +attr(el, 'dy') - ((bb0.y + bb0.height) - bb1.y);
           attr(el, 'dy', dy);
         }
       }
@@ -266,7 +266,7 @@
         bb0 = item[1];
         bb1 = down_elements[j][1];
         if (isBBoxOverlayed(bb0, bb1)) {
-          dy = Number(attr(el, 'dy')) + ((bb1.y + bb1.height) - bb0.y);
+          dy = +attr(el, 'dy') + ((bb1.y + bb1.height) - bb0.y);
           attr(el, 'dy', dy);
         }
       }
