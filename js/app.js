@@ -20,12 +20,16 @@
     return document.getElementById(id);
   }
 
-  function attr(element, o) {
-    if (typeof o === 'string') {
+  function attr(element, o, value) {
+    if (typeof value === 'undefined' && typeof o === 'string') {
       return element.getAttribute(o);
     }
-    for (var key in o) {
-      element.setAttribute(key, o[key]);
+    if (typeof o === 'string') {
+      element.setAttribute(o, value);
+    } else {
+      for (var key in o) {
+        element.setAttribute(key, o[key]);
+      }
     }
     return element;
   }
@@ -122,7 +126,7 @@
       if (typeof element.getBBox === 'function') {
         var textBBox = element.getBBox(),
           dy = Number(attr(element, 'y')) - (textBBox.y + textBBox.height / 2);
-        attr(element, {dy: dy});
+        attr(element, 'dy', dy);
       }
     });
   }
@@ -189,24 +193,24 @@
         (bb.x < width && bb.x + bb.width > width && (pattern = 2)) ||
         (bb.y < 0 && bb.y + bb.height > 0 && (pattern = 3)) ||
         (bb.y < height && bb.y + bb.height > height && (pattern = 4))) {
-      attr(element, {'font-size': Number(attr(element, 'font-size')) / 1.5});
+      attr(element, 'font-size', Number(attr(element, 'font-size')) / 1.5);
       newbb = element.getBBox();
       switch (pattern) {
         case 1:
           value = bb.x + bb.width - (newbb.x + newbb.width);
-          attr(element, {x: Number(attr(element, 'x')) + value});
+          attr(element, 'x', Number(attr(element, 'x')) + value);
           break;
         case 2:
           value = newbb.x - bb.x;
-          attr(element, {x: Number(attr(element, 'x')) - value});
+          attr(element, 'x', Number(attr(element, 'x')) - value);
           break;
         case 3:
           value = bb.y + bb.height - (newbb.y + newbb.height);
-          attr(element, {y: Number(attr(element, 'y')) + value});
+          attr(element, 'y', Number(attr(element, 'y')) + value);
           break;
         case 4:
           value = newbb.y - bb.y;
-          attr(element, {y: Number(attr(element, 'y')) - value});
+          attr(element, 'y', Number(attr(element, 'y')) - value);
           break;
         default:
       }
@@ -247,7 +251,7 @@
         bb1 = upper_elements[j][1];
         if (isBBoxOverlayed(bb0, bb1)) {
           dy = Number(attr(el, 'dy')) - ((bb0.y + bb0.height) - bb1.y);
-          attr(el, {dy: dy});
+          attr(el, 'dy', dy);
         }
       }
       elements.push([el, el.getBBox()]);
@@ -263,7 +267,7 @@
         bb1 = down_elements[j][1];
         if (isBBoxOverlayed(bb0, bb1)) {
           dy = Number(attr(el, 'dy')) + ((bb1.y + bb1.height) - bb0.y);
-          attr(el, {dy: dy});
+          attr(el, 'dy', dy);
         }
       }
       elements.push([el, el.getBBox()]);
@@ -403,10 +407,10 @@
       this.element = element;
     },
     open: function() {
-      this.element.setAttribute('class', 'open');
+      attr(this.element, 'class', 'open');
     },
     close: function() {
-      this.element.setAttribute('class', 'close');
+      attr(this.element, 'class', 'close');
     }
   };
 
@@ -481,13 +485,13 @@
       var i, len, selected_items = this.current_selected_items, item;
       for (i = 0, len = selected_items.length; i < len; i += 1) {
         item = selected_items[i];
-        attr(item, {'class': 'list-item'});
+        attr(item, 'class', 'list-item');
       }
       selected_items = [];
       for (i = 0, len = this.selected.length; i < len; i += 1) {
         item = this.items[this.selected[i]];
         if (item) {
-          attr(item, {'class': 'list-item list-selected'});
+          attr(item, 'class', 'list-item list-selected');
           selected_items.push(item);
         }
       }
@@ -570,13 +574,13 @@
       this.point_element = new_point;
     },
     open: function() {
-      this.element.parentNode.setAttribute('class', 'open');
+      attr(this.element.parentNode, 'class', 'open');
     },
     close: function() {
-      this.element.parentNode.setAttribute('class', 'close');
+      attr(this.element.parentNode, 'class', 'close');
     },
     state: function(value) {
-      this.element.setAttribute('class', value);
+      attr(this.element, 'class', value);
     }
   };
 
