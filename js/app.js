@@ -25,13 +25,21 @@
       return element.getAttribute(o);
     }
     if (typeof o === 'string') {
-      element.setAttribute(o, value);
+      if (value === null) {
+        element.removeAttribute(o);
+      } else {
+        element.setAttribute(o, value);
+      }
     } else {
       for (var key in o) {
         element.setAttribute(key, o[key]);
       }
     }
     return element;
+  }
+
+  function changeCursor(value) {
+    document.body.style.cursor = value;
   }
 
   function loadScript(path, callback) {
@@ -436,7 +444,7 @@
         self.clickable = !self.scrolling;
       };
       if (supportsTouch) {
-        element.parentNode.style.overflowY = 'hidden';
+        attr(element.parentNode, 'class', 'unscrollable');
       }
     },
     setList: function(list) {
@@ -527,12 +535,12 @@
         };
       } else {
         element.onmouseover = function(event) {
-          document.body.style.cursor = 'pointer';
-          event.currentTarget.style.opacity = 0.6;
+          changeCursor('pointer');
+          attr(event.currentTarget, 'class', 'hover');
         };
         element.onmouseout = function(event) {
-          document.body.style.cursor = 'default';
-          event.currentTarget.style.opacity = 1;
+          changeCursor('default');
+          attr(event.currentTarget, 'class', null);
         };
       }
     },
@@ -585,7 +593,7 @@
   };
 
   if (!supportsSVG) {
-    document.body.style.display = 'none';
+    attr(document.body, 'class', 'hide');
     alert("Sorry, your browser doesn't support this application.");
     return;
   }

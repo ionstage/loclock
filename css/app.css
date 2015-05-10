@@ -18,6 +18,10 @@ body {
   width: 100%;
 }
 
+.hide {
+  display: none;
+}
+
 .unselectable {
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -56,6 +60,10 @@ body {
   width: 168px;
 }
 
+#list-container.unscrollable {
+  overflow-y: hidden;
+}
+
 .list-item {
   cursor: pointer;
 }
@@ -80,6 +88,10 @@ body {
 }
 
 #border:active {
+  opacity: 0.6;
+}
+
+#border.hover {
   opacity: 0.6;
 }
 
