@@ -1,4 +1,7 @@
 (function(global) {
+  var IScroll = global.IScroll;
+  var Base64 = global.Base64;
+
   var window = global.window;
   var document = global.document;
 
@@ -13,28 +16,27 @@
   var KEY_CURRENT_LOCATION = 'Current_Location';
 
   var supportsTouch = 'createTouch' in document;
-  var supportsSVG = !!(document.createElementNS &&
-                    document.createElementNS(NS, 'svg').createSVGRect);
+  var supportsSVG = !!(document.createElementNS && document.createElementNS(NS, 'svg').createSVGRect);
 
   function $(id) {
     return document.getElementById(id);
   }
 
   function attr(element, o, value) {
-    if (typeof value === 'undefined' && typeof o === 'string') {
+    if (typeof value === 'undefined' && typeof o === 'string')
       return element.getAttribute(o);
-    }
+
     if (typeof o === 'string') {
-      if (value === null) {
+      if (value === null)
         element.removeAttribute(o);
-      } else {
+      else
         element.setAttribute(o, value);
-      }
     } else {
       for (var key in o) {
         element.setAttribute(key, o[key]);
       }
     }
+
     return element;
   }
 
@@ -43,20 +45,19 @@
   }
 
   function loadScript(path, callback) {
-    var script = document.getElementsByTagName('script')[0],
-      new_script = document.createElement('script');
+    var script = document.getElementsByTagName('script')[0];
+    var new_script = document.createElement('script');
     new_script.src = path;
     new_script.onload = function() {
-      if (typeof callback === 'function') {
+      if (typeof callback === 'function')
         callback();
-      }
     };
     new_script.onreadystatechange = function() {
-      if (this.readyState === 'loaded' || this.readyState === 'complete'){
-        if (typeof callback === 'function') {
-          callback();
-        }
-      }
+      if (this.readyState !== 'loaded' && this.readyState !== 'complete')
+        return;
+
+      if (typeof callback === 'function')
+        callback();
     };
     script.parentNode.insertBefore(new_script, script);
   }
@@ -65,6 +66,7 @@
     var text = location.href.split('#')[1];
     if (!text)
       return '';
+
     return Base64.decode(text);
   }
 
@@ -91,8 +93,8 @@
   }
 
   function createText(text, o) {
-    var doc = document, element = doc.createElementNS(NS, 'text');
-    element.appendChild(doc.createTextNode(text));
+    var element = document.createElementNS(NS, 'text');
+    element.appendChild(document.createTextNode(text));
     return attr(element, o);
   }
 
@@ -107,61 +109,85 @@
 
   function createBoard(x, y, r) {
     var board = document.createElementNS(NS, 'g');
-    var i, len, dif = Math.PI / 12, deg = 0,
-        text, fontSize, rate, time, dif_x, dif_y;
-    board.appendChild(createCircle({cx: x, cy: y, r: r,
-                    'stroke-width': (r / 30).toFixed(1),
-                    'class': 'circle'}));
-    board.appendChild(createCircle({cx: x, cy: y, r: (r / 45).toFixed(1),
-                    'fill': 'black'}));
-    for (i = 0; i < 24; i += 1) {
-      text = (i % 3 === 0) ? String((i - 6 >= 0) ? i - 6 : i + 18) : '・';
-      fontSize = (text === '・') ? r / 12 : r / 4.5;
-      rate = (text === '18' || text === '15' || text === '21') ? 0.04 : 0;
-      dif_x = r * (0.8 - Math.abs(rate * Math.cos(deg))) * Math.cos(deg);
-      dif_y = r * (0.8 - Math.abs(rate * Math.sin(deg))) * Math.sin(deg);
-      board.appendChild(createText(text, {x: (x + dif_x).toFixed(1),
-                        y: (y + dif_y).toFixed(1),
-                        'font-size': fontSize.toFixed(),
-                        'class': 'text'}));
+
+    board.appendChild(createCircle({
+      cx: x,
+      cy: y,
+      r: r,
+      'stroke-width': (r / 30).toFixed(1),
+      'class': 'circle'
+    }));
+
+    board.appendChild(createCircle({
+      cx: x,
+      cy: y,
+      r: (r / 45).toFixed(1),
+      fill: 'black'
+    }));
+
+    var dif = Math.PI / 12;
+    var deg = 0;
+
+    for (var i = 0; i < 24; i++) {
+      var text = (i % 3 === 0) ? String((i - 6 >= 0) ? i - 6 : i + 18) : '・';
+      var fontSize = (text === '・') ? r / 12 : r / 4.5;
+      var rate = (text === '18' || text === '15' || text === '21') ? 0.04 : 0;
+      var dif_x = r * (0.8 - Math.abs(rate * Math.cos(deg))) * Math.cos(deg);
+      var dif_y = r * (0.8 - Math.abs(rate * Math.sin(deg))) * Math.sin(deg);
+
+      board.appendChild(createText(text, {
+        x: (x + dif_x).toFixed(1),
+        y: (y + dif_y).toFixed(1),
+        'font-size': fontSize.toFixed(),
+        'class': 'text'
+      }));
+
       deg += dif;
     }
+
     return board;
   }
 
   function adjustBoard(board) {
     forEachTextElement(board, function(element) {
-      if (typeof element.getBBox === 'function') {
-        var textBBox = element.getBBox(),
-          dy = +attr(element, 'y') - (textBBox.y + textBBox.height / 2);
-        attr(element, 'dy', dy);
-      }
+      if (typeof element.getBBox !== 'function')
+        return;
+
+      var textBBox = element.getBBox();
+      var dy = +attr(element, 'y') - (textBBox.y + textBBox.height / 2);
+      attr(element, 'dy', dy);
     });
   }
 
   function createPoint(x, y, r, timelist) {
-    var i, len, name, time, deg,
-        text, textBBox, textPoint,
-        textList = {}, fontSize = (r / 8).toFixed();
     var point = document.createElementNS(NS, 'g');
-    for (i = 0, len = timelist.length; i < len; i += 1) {
-      name = timelist[i][0];
-      time = timelist[i][1];
-      deg = (time.getHours() + time.getMinutes() / 60) /
-            24 * (Math.PI * 2) + Math.PI / 2;
-      point.appendChild(createCircle({cx: (x + r * Math.cos(deg)).toFixed(1),
-                      cy: (y + r * Math.sin(deg)).toFixed(1),
-                      r: (r / 20).toFixed(1),
-                      'stroke-width': (r / 90).toFixed(1),
-                      'class': 'circle'}));
-      textPoint = {x: x + r * Math.cos(deg), y: y + r * Math.sin(deg)};
-      text = textList[time.getTime()];
+    var textList = {};
+    var fontSize = (r / 8).toFixed();
+
+    for (var i = 0, len = timelist.length; i < len; i++) {
+      var name = timelist[i][0];
+      var time = timelist[i][1];
+      var deg = (time.getHours() + time.getMinutes() / 60) / 24 * (Math.PI * 2) + Math.PI / 2;
+      var textPoint = {x: x + r * Math.cos(deg), y: y + r * Math.sin(deg)};
+      var text = textList[time.getTime()];
+
+      point.appendChild(createCircle({
+        cx: (x + r * Math.cos(deg)).toFixed(1),
+        cy: (y + r * Math.sin(deg)).toFixed(1),
+        r: (r / 20).toFixed(1),
+        'stroke-width': (r / 90).toFixed(1),
+        'class': 'circle'
+      }));
+
       if (text) {
         changeText(text, getText(text) + ', ' + name);
       } else {
-        text = createText(name, {x: textPoint.x, y: textPoint.y,
-                     'font-size': fontSize,
-                     'class': 'text'});
+        text = createText(name, {
+          x: textPoint.x,
+          y: textPoint.y,
+          'font-size': fontSize,
+          'class': 'text'
+        });
         point.appendChild(text);
         textList[time.getTime()] = text;
         text.deg = deg;
@@ -172,16 +198,15 @@
 
   function forEachElement(parent, method) {
     var children = parent.childNodes;
-    for (var i = 0, len = children.length; i < len; i += 1) {
+    for (var i = 0, len = children.length; i < len; i++) {
       method(children[i]);
     }
   }
 
   function forEachTextElement(parent, method) {
     forEachElement(parent, function(element) {
-      if (element.nodeName === 'text') {
+      if (element.nodeName === 'text')
         method(element);
-      }
     });
   }
 
@@ -196,13 +221,18 @@
   }
 
   function shrinkElement(element, width, height, count) {
-    var bb = element.getBBox(), isOverflow = false, pattern = 0, newbb, value;
+    var bb = element.getBBox();
+    var pattern = 0;
+
     if ((bb.x < 0 && bb.x + bb.width > 0 && (pattern = 1)) ||
         (bb.x < width && bb.x + bb.width > width && (pattern = 2)) ||
         (bb.y < 0 && bb.y + bb.height > 0 && (pattern = 3)) ||
         (bb.y < height && bb.y + bb.height > height && (pattern = 4))) {
       attr(element, 'font-size', +attr(element, 'font-size') / 1.5);
-      newbb = element.getBBox();
+
+      var newbb = element.getBBox();
+      var value;
+
       switch (pattern) {
         case 1:
           value = bb.x + bb.width - (newbb.x + newbb.width);
@@ -223,80 +253,98 @@
         default:
       }
     }
-    if (isOverflow && count < 20) {
-      count += 1;
-      shrinkElement(element, width, height, count);
-    }
   }
 
   function adjustPointText(point, x, y, r, width, height) {
-    var upper_elements = [], down_elements = [],
-        i, j, len, item, el, bb0, bb1, dy, elements = [];
+    var upper_elements = [];
+    var down_elements = [];
+    var elements = [];
+
     forEachTextElement(point, function(element) {
-      if (typeof element.getBBox === 'function') {
-        var textBBox = element.getBBox(), deg = +element.deg,
-          dy = +attr(element, 'y') - (textBBox.y + textBBox.height / 2),
-          property = {x: x + (r + textBBox.width / 2 + r / 8) * Math.cos(deg),
-                y: y + (r + textBBox.height / 2 + r / 8) * Math.sin(deg),
-                dy: dy};
-        attr(element, property);
-        textBBox = element.getBBox();
-        if (textBBox.y + textBBox.height / 2 < y) {
-          upper_elements.push([element, textBBox]);
-        } else {
-          down_elements.push([element, textBBox]);
-        }
-      }
+      if (typeof element.getBBox !== 'function')
+        return;
+
+      var textBBox = element.getBBox();
+      var deg = +element.deg;
+      var dy = +attr(element, 'y') - (textBBox.y + textBBox.height / 2);
+      var property = {
+        x: x + (r + textBBox.width / 2 + r / 8) * Math.cos(deg),
+        y: y + (r + textBBox.height / 2 + r / 8) * Math.sin(deg),
+        dy: dy
+      };
+
+      attr(element, property);
+      textBBox = element.getBBox();
+
+      if (textBBox.y + textBBox.height / 2 < y)
+        upper_elements.push([element, textBBox]);
+      else
+        down_elements.push([element, textBBox]);
     });
+
     upper_elements.sort(function(a, b) {
       return (a[1].y < b[1].y) ? -1 : 1;
     });
-    len = upper_elements.length;
-    for (i = 0; i < len; i += 1) {
-      item = upper_elements[i], el = item[0];
-      for (j = i + 1; j < len; j += 1) {
-        bb0 = item[1];
-        bb1 = upper_elements[j][1];
+
+    var ulen = upper_elements.length;
+
+    for (var i = 0; i < ulen; i++) {
+      var item = upper_elements[i];
+      var el = item[0];
+
+      for (var j = i + 1; j < ulen; j++) {
+        var bb0 = item[1];
+        var bb1 = upper_elements[j][1];
         if (isBBoxOverlayed(bb0, bb1)) {
-          dy = +attr(el, 'dy') - ((bb0.y + bb0.height) - bb1.y);
+          var dy = +attr(el, 'dy') - ((bb0.y + bb0.height) - bb1.y);
           attr(el, 'dy', dy);
         }
       }
+
       elements.push([el, el.getBBox()]);
     }
+
     down_elements.sort(function(a, b) {
       return (a[1].y > b[1].y) ? -1 : 1;
     });
-    len = down_elements.length;
-    for (i = 0; i < len; i += 1) {
-      item = down_elements[i], el = item[0];
-      for (j = i + 1; j < len; j += 1) {
-        bb0 = item[1];
-        bb1 = down_elements[j][1];
+
+    var dlen = down_elements.length;
+
+    for (var i = 0; i < dlen; i++) {
+      var item = down_elements[i];
+      var el = item[0];
+
+      for (var j = i + 1; j < dlen; j++) {
+        var bb0 = item[1];
+        var bb1 = down_elements[j][1];
         if (isBBoxOverlayed(bb0, bb1)) {
-          dy = +attr(el, 'dy') + ((bb1.y + bb1.height) - bb0.y);
+          var dy = +attr(el, 'dy') + ((bb1.y + bb1.height) - bb0.y);
           attr(el, 'dy', dy);
         }
       }
+
       elements.push([el, el.getBBox()]);
     }
-    for (i = 0, len = elements.length; i < len; i += 1) {
+
+    for (var i = 0, len = elements.length; i < len; i++) {
       shrinkElement(elements[i][0], width, height, 0);
     }
   }
 
   function getTimelist(timezone) {
-    var i, len, timelist = [], name, time, date = new Date(),
-      currentTime = date.getTime(),
-      currentTimezoneOffset = date.getTimezoneOffset();
-    for (i = 0, len = timezone.length; i < len; ++i) {
-      name = timezone[i][0];
+    var timelist = [];
+    var date = new Date();
+    var currentTime = date.getTime();
+    var currentTimezoneOffset = date.getTimezoneOffset();
+
+    for (var i = 0, len = timezone.length; i < len; i++) {
+      var name = timezone[i][0];
       name = name.substring(name.lastIndexOf('/') + 1).replace(/_/g, ' ');
-      time = parseInt(timezone[i][1], 10);
-      time = new Date(currentTime + time * 1000 +
-                      currentTimezoneOffset * 60 * 1000);
+      var time = parseInt(timezone[i][1], 10);
+      time = new Date(currentTime + time * 1000 + currentTimezoneOffset * 60 * 1000);
       timelist[i] = [name, time];
     }
+
     return timelist;
   }
 
@@ -308,23 +356,23 @@
   }
 
   function updateClock() {
-    if (timelist.data) {
+    if (timelist.data)
       clock_view.updatePoint();
-    }
   }
 
   function loadTimezoneData(callback) {
     loadScript(MOMENT_SCRIPT_URL, function() {
       loadScript(MOMENT_TIMEZONE_SCRIPT_URL, function() {
-        var timezone_data  = {}, i, len, name;
+        var timezone_data  = {};
         var now = Date.now();
-        for (i = 0, len = TIMEZONE_NAMES.length; i < len; i += 1) {
-          name = TIMEZONE_NAMES[i];
+
+        for (var i = 0, len = TIMEZONE_NAMES.length; i < len; i++) {
+          var name = TIMEZONE_NAMES[i];
           timezone_data[name] = moment.tz.zone(name).offset(now) * (-60);
         }
-        if (typeof callback === 'function') {
+
+        if (typeof callback === 'function')
           callback(timezone_data);
-        }
       });
     });
   }
@@ -337,6 +385,7 @@
   function loadTimezone() {
     var timezone_data = getCache(KEY_TIMEZONE_DATA);
     var last_load_time = getCache(KEY_TIMEZONE_LAST_LOADTIME);
+
     if (!timezone_data) {
       clock_view.state('loading');
       loadTimezoneData(function(data) {
@@ -348,9 +397,9 @@
     } else {
       setTimezoneData(JSON.parse(timezone_data));
       updateClock();
-      if (getCurrentTime() - last_load_time > 43200) {
+
+      if (getCurrentTime() - last_load_time > 43200)
         loadTimezoneData(onTimezoneLoad);
-      }
     }
   }
 
@@ -366,21 +415,24 @@
 
   function setClockTimer() {
     return setInterval((function() {
-      var count = 0, currentHash = '';
+      var count = 0;
+      var currentHash = '';
       return function() {
         if (count % 100 === 0) {
           clock_view.timelist = timelist.get();
           updateClock();
         }
+
         var hash = getHashText();
         if (hash !== currentHash) {
           selectTimezone(hash.split(','));
           currentHash = hash;
           updateClock();
         }
+
         count += 1;
       };
-    }()), 100);
+    })(), 100);
   }
 
   function setTimezoneData(data) {
@@ -396,16 +448,17 @@
     data: null,
     selected: [],
     get: function() {
-      if (this.data === null || this.selected.length === 0) {
+      if (this.data === null || this.selected.length === 0)
         return [];
-      }
-      var selected_timezone = [], i, len, key;
-      for (i = 0, len = this.selected.length; i < len; i += 1) {
-        key = this.selected[i];
-        if (key in this.data) {
+
+      var selected_timezone = [];
+
+      for (var i = 0, len = this.selected.length; i < len; i++) {
+        var key = this.selected[i];
+        if (key in this.data)
           selected_timezone.push([key, this.data[key]]);
-        }
       }
+
       return getTimelist(selected_timezone);
     }
   };
@@ -431,6 +484,7 @@
       self.element = element;
       self.scrolling = false;
       self.clickable = true;
+
       element.parentNode.onclick = function(event) {
         event.preventDefault();
         if (self.scrolling || !self.clickable) {
@@ -440,81 +494,102 @@
         }
         self.onclick(event);
       };
+
       element.parentNode.ontouchstart = function() {
         self.clickable = !self.scrolling;
       };
-      if (supportsTouch) {
+
+      if (supportsTouch)
         attr(element.parentNode, 'class', 'unscrollable');
-      }
     },
     setList: function(list) {
-      var element = document.createElement('div'),
-          item, name, listitems = [], listitem, i, len;
-      for (i = 0, len = list.length; i < len; i += 1) {
-        item = list[i];
+      var element = document.createElement('div');
+      var listitems = [];
+
+      for (var i = 0, len = list.length; i < len; i++) {
+        var item = list[i];
         if (item !== KEY_CURRENT_LOCATION) {
-          name = item.substring(item.lastIndexOf('/') + 1).replace(/_/g, ' ');
+          var name = item.substring(item.lastIndexOf('/') + 1).replace(/_/g, ' ');
           listitems.push([item, name]);
         }
       }
-      listitems.sort(function(a, b) { return (a[1] < b[1]) ? -1 : 1; });
+
+      listitems.sort(function(a, b) {
+        return (a[1] < b[1]) ? -1 : 1;
+      });
       listitems.unshift([KEY_CURRENT_LOCATION, 'Current Location']);
-      for (i = 0, len = listitems.length; i < len; i += 1) {
-        item = document.createElement('div'),
-        listitem = listitems[i], key = listitem[0];
+
+      for (var i = 0, len = listitems.length; i < len; i++) {
+        var item = document.createElement('div');
+        var listitem = listitems[i], key = listitem[0];
         attr(item, {'data-key': key, 'class': 'list-item'});
         item.innerHTML = listitem[1];
         element.appendChild(item);
         this.items[key] = item;
       }
+
       this.element.parentNode.replaceChild(element, this.element);
       this.element = element;
+
       if (supportsTouch) {
         if (this.scroll) {
           this.scroll.destroy();
           this.scroll = null;
         }
+
         this.scroll = new IScroll(element.parentNode, {
           click: true,
           scrollbars: true,
           shrinkScrollbars: 'scale',
           fadeScrollbars: true
         });
+
         var self = this;
+
         this.scroll.on('scrollStart', function() {
           self.scrolling = true;
         });
+
         this.scroll.on('scrollEnd', function() {
           self.scrolling = false;
         });
       }
     },
     update: function() {
-      var i, len, selected_items = this.current_selected_items, item;
-      for (i = 0, len = selected_items.length; i < len; i += 1) {
-        item = selected_items[i];
+      var selected_items = this.current_selected_items;
+
+      for (var i = 0, len = selected_items.length; i < len; i++) {
+        var item = selected_items[i];
         attr(item, 'class', 'list-item');
       }
+
       selected_items = [];
-      for (i = 0, len = this.selected.length; i < len; i += 1) {
-        item = this.items[this.selected[i]];
+
+      for (var i = 0, len = this.selected.length; i < len; i++) {
+        var item = this.items[this.selected[i]];
         if (item) {
           attr(item, 'class', 'list-item list-selected');
           selected_items.push(item);
         }
       }
+
       this.current_selected_items = selected_items;
     },
     onclick: function(event) {
-      var key = attr(event.target, 'data-key'),
-          list = timelist.selected, i, isAlreadySelected = false;
-      for (i = list.length - 1; i >= 0; i -= 1) {
+      var key = attr(event.target, 'data-key');
+      var list = timelist.selected;
+      var isAlreadySelected = false;
+
+      for (var i = list.length - 1; i >= 0; i--) {
         if (list[i] === key) {
           isAlreadySelected = true;
           list.splice(i, 1);
         }
       }
-      (!isAlreadySelected) && list.push(key);
+
+      if (!isAlreadySelected)
+        list.push(key);
+
       setHashText(list.join(','));
     }
   };
@@ -523,12 +598,14 @@
     init: function(element) {
       var self = this;
       self.element = element;
+
       element.onclick = function(event) {
-        if (!supportsTouch) {
+        if (!supportsTouch)
           self.element.onmouseout(event);
-        }
+
         self.onclick(event);
       };
+
       if (supportsTouch) {
         element.ontouchmove = function(event) {
           event.stopPropagation();
@@ -538,6 +615,7 @@
           changeCursor('pointer');
           attr(event.currentTarget, 'class', 'hover');
         };
+
         element.onmouseout = function(event) {
           changeCursor('default');
           attr(event.currentTarget, 'class', null);
@@ -577,8 +655,7 @@
     updatePoint: function() {
       var new_point = createPoint(this.x, this.y, this.r, this.timelist);
       this.element.replaceChild(new_point, this.point_element);
-      adjustPointText(new_point, this.x, this.y, this.r,
-                      this.width, this.height);
+      adjustPointText(new_point, this.x, this.y, this.r, this.width, this.height);
       this.point_element = new_point;
     },
     open: function() {
@@ -600,12 +677,13 @@
 
   document.addEventListener('DOMContentLoaded', function() {
     clock_view.init($('clock'), timelist.get());
+
     var hash = getHashText();
-    if (hash) {
+    if (hash)
       selectTimezone(hash.split(','));
-    } else {
+    else
       setHashText(DEFAULT_LOCATION);
-    }
+
     side_panel_view.init($('side-panel'));
     list_view.init($('list'));
     border_view.init($('border'));
