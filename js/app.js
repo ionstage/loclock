@@ -468,7 +468,7 @@
       this.element = element;
     },
     open: function() {
-      attr(this.element, 'class', 'open');
+      attr(this.element, 'class', null);
     },
     close: function() {
       attr(this.element, 'class', 'close');
@@ -659,7 +659,7 @@
       this.point_element = new_point;
     },
     open: function() {
-      attr(this.element.parentNode, 'class', 'open');
+      attr(this.element.parentNode, 'class', null);
     },
     close: function() {
       attr(this.element.parentNode, 'class', 'close');

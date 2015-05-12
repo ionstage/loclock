@@ -34,12 +34,9 @@ body {
   -webkit-transition: left 0.3s;
   -o-transition: left 0.3s;
   height: 100%;
+  left: 0px;
   position: absolute;
   transition: left 0.3s;
-}
-
-#side-panel.open {
-  left: 0px;
 }
 
 #side-panel.close {
@@ -101,7 +98,7 @@ body {
   vertical-align: middle;
 }
 
-#side-panel.open #border-text:before {
+#border-text:before {
   content: "<";
 }
 
@@ -113,13 +110,10 @@ body {
   -webkit-transition: margin-left 0.3s, width 0.3s;
   -o-transition: margin-left 0.3s, width 0.3s;
   height: 100%;
+  margin-left: 200px;
   overflow: hidden;
   position: absolute;
   transition: margin-left 0.3s, width 0.3s;
-}
-
-#clock-container.open {
-  margin-left: 200px;
   width: calc(100% - 200px);
 }
 
