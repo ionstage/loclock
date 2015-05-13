@@ -129,17 +129,6 @@ body {
   width: 100%;
 }
 
-#clock.loading {
-  opacity: 0.3;
-}
-
-#clock.loaded {
-  -webkit-transition: opacity 0.5s;
-  -o-transition: opacity 0.5s;
-  opacity: 1;
-  transition: opacity 0.5s;
-}
-
 #clock .text {
   dominant-baseline: central;
   text-anchor: middle;
