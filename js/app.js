@@ -58,15 +58,6 @@
     return attr(element, o);
   }
 
-  function getText(element) {
-    return element.childNodes[0].textContent;
-  }
-
-  function changeText(element, text) {
-    element.replaceChild(document.createTextNode(text), element.childNodes[0]);
-    return element;
-  }
-
   function createBoard(x, y, r) {
     var board = document.createElementNS(NS, 'g');
 
@@ -120,18 +111,32 @@
   }
 
   function createPoint(x, y, r, timelist) {
-    var point = document.createElementNS(NS, 'g');
-    var textList = {};
-    var fontSize = (r / 8).toFixed();
+    var containerElement = document.createElementNS(NS, 'g');
+    var pointItemMap = {};
 
-    for (var i = 0, len = timelist.length; i < len; i++) {
-      var name = timelist[i][0];
-      var time = timelist[i][1];
-      var deg = (time.getHours() + time.getMinutes() / 60) / 24 * (Math.PI * 2) + Math.PI / 2;
-      var textPoint = {x: x + r * Math.cos(deg), y: y + r * Math.sin(deg)};
-      var text = textList[time.getTime()];
+    timelist.forEach(function(item) {
+      var locationName = item[0];
+      var date = item[1];
+      var key = date.getTime();
+      var pointItem = pointItemMap[key];
 
-      point.appendChild(createCircle({
+      if (pointItem) {
+        pointItem.text +=  ', ' + locationName;
+        return;
+      }
+
+      pointItemMap[key] = {
+        text: locationName,
+        deg: (date.getHours() + date.getMinutes() / 60) / 24 * (Math.PI * 2) + Math.PI / 2
+      };
+    });
+
+    for (var key in pointItemMap) {
+      var pointItem = pointItemMap[key];
+      var text = pointItem.text;
+      var deg = pointItem.deg;
+
+      containerElement.appendChild(createCircle({
         cx: (x + r * Math.cos(deg)).toFixed(1),
         cy: (y + r * Math.sin(deg)).toFixed(1),
         r: (r / 20).toFixed(1),
@@ -139,21 +144,16 @@
         'class': 'circle'
       }));
 
-      if (text) {
-        changeText(text, getText(text) + ', ' + name);
-      } else {
-        text = createText(name, {
-          x: textPoint.x,
-          y: textPoint.y,
-          'font-size': fontSize,
-          'class': 'text'
-        });
-        point.appendChild(text);
-        textList[time.getTime()] = text;
-        text.deg = deg;
-      }
+      containerElement.appendChild(createText(text, {
+        x: x + r * Math.cos(deg),
+        y: y + r * Math.sin(deg),
+        'font-size': (r / 8).toFixed(),
+        'class': 'text',
+        'data-deg': deg
+      }));
     }
-    return point;
+
+    return containerElement;
   }
 
   function forEachElement(parent, method) {
@@ -225,7 +225,7 @@
         return;
 
       var textBBox = element.getBBox();
-      var deg = +element.deg;
+      var deg = +element.getAttribute('data-deg');
       var dy = +attr(element, 'y') - (textBBox.y + textBBox.height / 2);
       var property = {
         x: x + (r + textBBox.width / 2 + r / 8) * Math.cos(deg),
