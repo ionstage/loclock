@@ -38,19 +38,23 @@ body {
 }
 
 #container {
+  -webkit-transform: translateX(-168px);
   -webkit-transition: -webkit-transform 0.3s;
+  -ms-transform: translateX(-168px);
+  -o-transform: translateX(-168px);
   -o-transition: -o-transform 0.3s;
   height: 100%;
   position: absolute;
+  transform: translateX(-168px);
   transition: transform 0.3s;
   width: 100%;
 }
 
-#container.close {
-  -webkit-transform: translateX(-168px);
-  -ms-transform: translateX(-168px);
-  -o-transform: translateX(-168px);
-  transform: translateX(-168px);
+#container.open {
+  -webkit-transform: translateX(0px);
+  -ms-transform: translateX(0px);
+  -o-transform: translateX(0px);
+  transform: translateX(0px);
 }
 
 #list-container {
@@ -89,7 +93,11 @@ body {
 }
 
 #bars:active {
-  opacity: 0.3;
+  color: lightgray;
+}
+
+.open #bars {
+  color: lightgray;
 }
 
 #clock-container {

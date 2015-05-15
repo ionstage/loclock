@@ -333,9 +333,9 @@
       var container = $('container');
 
       if (isOpen)
-        attr(container, 'class', 'close');
-      else
         attr(container, 'class', null);
+      else
+        attr(container, 'class', 'open');
 
       isOpen = !isOpen;
     };
@@ -538,7 +538,7 @@
 
       var self = this;
       element[supportsTouch ? 'ontouchstart' : 'onmousedown'] = function() {
-        if (attr(self.element.parentNode.parentNode, 'class') !== 'close')
+        if (attr(self.element.parentNode.parentNode, 'class') === 'open')
           listToggle();
       };
     },
