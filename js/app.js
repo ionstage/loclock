@@ -553,9 +553,6 @@
       this.element.replaceChild(new_point, this.point_element);
       adjustPointText(new_point, this.x, this.y, this.r, this.width, this.height);
       this.point_element = new_point;
-    },
-    state: function(value) {
-      attr(this.element, 'class', value);
     }
   };
 
