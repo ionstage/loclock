@@ -1,10 +1,10 @@
-(function(global) {
+(function(window) {
   var IScroll = require('iscroll');
   var Base64 = require('js-base64').Base64;
   var moment = require('moment-timezone');
 
-  var window = global.window;
-  var document = global.document;
+  var document = window.document;
+  var location = window.location;
 
   var NS = 'http://www.w3.org/2000/svg';
   var DEFAULT_LOCATION = 'America/New_York,Europe/London,Asia/Tokyo';
