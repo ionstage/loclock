@@ -36,10 +36,6 @@
     return element;
   }
 
-  function changeCursor(value) {
-    document.body.style.cursor = value;
-  }
-
   function getHashText() {
     var text = location.href.split('#')[1];
     if (!text)
@@ -331,15 +327,19 @@
     return timezone_data;
   }
 
-  function listToggle(isOpen) {
-    if (isOpen) {
-      side_panel_view.open();
-      clock_view.open();
-    } else {
-      side_panel_view.close();
-      clock_view.close();
-    }
-  }
+  var listToggle = (function() {
+    var isOpen = false;
+    return function() {
+      var container = $('container');
+
+      if (isOpen)
+        attr(container, 'class', 'close');
+      else
+        attr(container, 'class', null);
+
+      isOpen = !isOpen;
+    };
+  })();
 
   function setClockTimer() {
     return setInterval((function() {
@@ -389,18 +389,6 @@
       }
 
       return getTimelist(selected_timezone);
-    }
-  };
-
-  var side_panel_view = {
-    init: function(element) {
-      this.element = element;
-    },
-    open: function() {
-      attr(this.element, 'class', null);
-    },
-    close: function() {
-      attr(this.element, 'class', 'close');
     }
   };
 
@@ -523,41 +511,14 @@
     }
   };
 
-  var border_view = {
+  var bars_view = {
     init: function(element) {
-      var self = this;
-      self.element = element;
-
-      element.onclick = function(event) {
-        if (!supportsTouch)
-          self.element.onmouseout(event);
-
-        self.onclick(event);
+      element[supportsTouch ? 'ontouchend' : 'onclick'] = function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        listToggle();
       };
-
-      if (supportsTouch) {
-        element.ontouchmove = function(event) {
-          event.stopPropagation();
-        };
-      } else {
-        element.onmouseover = function(event) {
-          changeCursor('pointer');
-          attr(event.currentTarget, 'class', 'hover');
-        };
-
-        element.onmouseout = function(event) {
-          changeCursor('default');
-          attr(event.currentTarget, 'class', null);
-        };
-      }
-    },
-    onclick: (function() {
-      var isOpen = false;
-      return function() {
-        isOpen = !isOpen;
-        listToggle(isOpen);
-      };
-    })()
+    }
   };
 
   var clock_view = {
@@ -574,6 +535,12 @@
       this.r = Math.min(width, height) / 2 * 0.6,
       this.width = width;
       this.height = height;
+
+      var self = this;
+      element[supportsTouch ? 'ontouchstart' : 'onmousedown'] = function() {
+        if (attr(self.element.parentNode.parentNode, 'class') !== 'close')
+          listToggle();
+      };
     },
     updateBoard: function() {
       var new_board = createBoard(this.x, this.y, this.r);
@@ -586,12 +553,6 @@
       this.element.replaceChild(new_point, this.point_element);
       adjustPointText(new_point, this.x, this.y, this.r, this.width, this.height);
       this.point_element = new_point;
-    },
-    open: function() {
-      attr(this.element.parentNode, 'class', null);
-    },
-    close: function() {
-      attr(this.element.parentNode, 'class', 'close');
     },
     state: function(value) {
       attr(this.element, 'class', value);
@@ -613,9 +574,8 @@
     else
       setHashText(DEFAULT_LOCATION);
 
-    side_panel_view.init($('side-panel'));
     list_view.init($('list'));
-    border_view.init($('border'));
+    bars_view.init($('bars'));
     setTimezoneData();
     setClockTimer();
     clock_view.updateBoard();

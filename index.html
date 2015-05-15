@@ -14,19 +14,13 @@
   <link rel="apple-touch-icon-precomposed" href="images/icon.png">
 </head>
 <body class="unselectable">
-  <div id="clock-container" class="close">
-    <svg id="clock" xmlns="http://www.w3.org/2000/svg" viewBox="0,0,720,720"></svg>
-  </div>
-  <div id="side-panel" class="close">
+  <div id="container" class="close">
     <div id="list-container">
       <div id="list"></div>
     </div>
-    <div id="border-container">
-      <div id="border">
-        <div id="border-text-container">
-          <span id="border-text"></span>
-        </div>
-      </div>
+    <div id="clock-container">
+      <div id="bars" class="rotate-90">|||</div>
+      <svg id="clock" xmlns="http://www.w3.org/2000/svg" viewBox="0,0,720,720"></svg>
     </div>
   </div>
   <script src="js/bundle.js"></script>

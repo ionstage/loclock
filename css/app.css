@@ -30,15 +30,23 @@ body {
   user-select: none;
 }
 
-#side-panel {
+.rotate-90 {
+  -webkit-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
+#container {
   -webkit-transition: -webkit-transform 0.3s;
   -o-transition: -o-transform 0.3s;
   height: 100%;
   position: absolute;
   transition: transform 0.3s;
+  width: 100%;
 }
 
-#side-panel.close {
+#container.close {
   -webkit-transform: translateX(-168px);
   -ms-transform: translateX(-168px);
   -o-transform: translateX(-168px);
@@ -46,6 +54,7 @@ body {
 }
 
 #list-container {
+  border-right: 1px solid lightgray;
   color: lightgray;
   float: left;
   font-family: Helvetica;
@@ -71,56 +80,24 @@ body {
   color: black;
 }
 
-#border-container {
-  float: left;
-  font-family: Courier;
+#bars {
+  cursor: pointer;
+  font-family: sans-serif;
   font-size: 26px;
-  height: 100%;
-  width: 32px;
+  padding: 8px 12px;
+  position: absolute;
 }
 
-#border {
-  background-color: lightgray;
-  display: table;
-  height: 100%;
-  width: 100%;
-}
-
-#border:active {
-  opacity: 0.6;
-}
-
-#border.hover {
-  opacity: 0.6;
-}
-
-#border-text-container {
-  display: table-cell;
-  text-align: center;
-  vertical-align: middle;
-}
-
-#border-text:before {
-  content: "<";
-}
-
-#side-panel.close #border-text:before {
-  content: ">";
+#bars:active {
+  opacity: 0.3;
 }
 
 #clock-container {
-  -webkit-transition: padding-left 0.3s;
-  -o-transition: padding-left 0.3s;
   height: 100%;
-  padding-left: 200px;
+  left: 168px;
   overflow: hidden;
   position: absolute;
-  transition: padding-left 0.3s;
   width: 100%;
-}
-
-#clock-container.close {
-  padding-left: 32px;
 }
 
 #clock {
