@@ -6,29 +6,24 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Loclock</title>
+  <meta name="description" content="World time clock">
   <link rel="stylesheet" href="css/app.css">
   <link rel="icon" sizes="192x192" href="images/icon.png">
   <link rel="apple-touch-icon-precomposed" href="images/icon.png">
 </head>
 <body class="unselectable">
-  <div id="side-panel" class="close">
+  <div id="container">
     <div id="list-container">
       <div id="list"></div>
     </div>
-    <div id="border-container">
-      <div id="border">
-        <div id="border-text-container">
-          <span id="border-text"></span>
-        </div>
-      </div>
+    <div id="clock-container">
+      <div id="bars" class="rotate-90">|||</div>
+      <svg id="clock" xmlns="http://www.w3.org/2000/svg" viewBox="0,0,720,720"></svg>
     </div>
   </div>
-  <div id="clock-container" class="close">
-    <svg id="clock" xmlns="http://www.w3.org/2000/svg" viewBox="0,0,720,720"></svg>
-  </div>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/iScroll/5.1.1/iscroll-min.js"></script>
-  <script src="//cdn.rawgit.com/dankogai/js-base64/master/base64.min.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/bundle.min.js"></script>
+  <script src="js/app.min.js"></script>
 </body>
 </html>
