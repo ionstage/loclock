@@ -180,7 +180,7 @@
     return false;
   }
 
-  function shrinkElement(element, width, height, count) {
+  function shrinkElement(element, width, height) {
     var bb = element.getBBox();
     var pattern = 0;
 
