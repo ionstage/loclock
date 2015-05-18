@@ -19,7 +19,13 @@
       <div id="list"></div>
     </div>
     <div id="clock-container">
-      <div id="bars" class="rotate-90">|||</div>
+      <svg id="bars">
+        <g transform="translate(13,16)">
+          <line x1="0" y1="0" x2="22" y2="0" />
+          <line x1="0" y1="8" x2="22" y2="8" />
+          <line x1="0" y1="16" x2="22" y2="16" />
+        </g>
+      </svg>
       <svg id="clock" viewBox="0,0,720,720"></svg>
     </div>
   </div>
