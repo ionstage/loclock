@@ -345,7 +345,7 @@
     return setInterval(function() {
       clock_view.timelist = timelist.get();
       clock_view.updatePoint();
-    }, 10000);
+    }, 60000);
   }
 
   function setTimezoneData() {
