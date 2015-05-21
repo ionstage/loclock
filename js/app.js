@@ -182,12 +182,13 @@
 
   function shrinkElement(element, width, height) {
     var bb = element.getBBox();
+    var gbb = clock_view.globalBBox(bb);
     var pattern = 0;
 
-    if ((bb.x < 0 && bb.x + bb.width > 0 && (pattern = 1)) ||
-        (bb.x < width && bb.x + bb.width > width && (pattern = 2)) ||
-        (bb.y < 0 && bb.y + bb.height > 0 && (pattern = 3)) ||
-        (bb.y < height && bb.y + bb.height > height && (pattern = 4))) {
+    if ((gbb.x < 0 && (pattern = 1)) ||
+        (gbb.x + gbb.width > width && (pattern = 2)) ||
+        (gbb.y < 0 && (pattern = 3)) ||
+        (gbb.y + gbb.height > height && (pattern = 4))) {
       attr(element, 'font-size', +attr(element, 'font-size') / 1.5);
 
       var newbb = element.getBBox();
@@ -287,7 +288,7 @@
     }
 
     for (var i = 0, len = elements.length; i < len; i++) {
-      shrinkElement(elements[i][0], width, height, 0);
+      shrinkElement(elements[i][0], width, height);
     }
   }
 
@@ -516,10 +517,8 @@
       this.element.appendChild(this.board_element);
       this.element.appendChild(this.point_element);
       this.x = width / 2;
-      this.y = height / 2,
-      this.r = Math.min(width, height) / 2 * 0.6,
-      this.width = width;
-      this.height = height;
+      this.y = height / 2;
+      this.r = Math.min(width, height) / 2 * 0.6;
 
       var self = this;
       element[supportsTouch ? 'ontouchstart' : 'onmousedown'] = function() {
@@ -536,8 +535,19 @@
     updatePoint: function() {
       var new_point = createPoint(this.x, this.y, this.r, this.timelist);
       this.element.replaceChild(new_point, this.point_element);
-      adjustPointText(new_point, this.x, this.y, this.r, this.width, this.height);
+      adjustPointText(new_point, this.x, this.y, this.r, window.innerWidth, window.innerHeight);
       this.point_element = new_point;
+    },
+    globalBBox: function(bb) {
+      var stageElement = this.element;
+      var lpt = stageElement.createSVGPoint();
+      lpt.x = bb.x;
+      lpt.y = bb.y;
+      var pt0 = lpt.matrixTransform(stageElement.getCTM() || stageElement.getScreenCTM());
+      lpt.x = bb.x + bb.width;
+      lpt.y = bb.y + bb.height;
+      var pt1 = lpt.matrixTransform(stageElement.getCTM() || stageElement.getScreenCTM());
+      return {x: pt0.x, y: pt0.y, width: pt1.x - pt0.x, height: pt1.y - pt0.y};
     }
   };
 
@@ -561,6 +571,10 @@
     setTimezoneData();
     setClockTimer();
     clock_view.updateBoard();
+    clock_view.updatePoint();
+  });
+
+  window.addEventListener('resize', function() {
     clock_view.updatePoint();
   });
 
