@@ -5,6 +5,7 @@
 
   var document = window.document;
   var location = window.location;
+  var navigator = window.navigator;
 
   var NS_SVG = 'http://www.w3.org/2000/svg';
   var DEFAULT_LOCATION = 'America/New_York,Europe/London,Asia/Tokyo';
@@ -13,6 +14,7 @@
 
   var supportsTouch = 'createTouch' in document;
   var supportsSVG = !!(document.createElementNS && document.createElementNS(NS_SVG, 'svg').createSVGRect);
+  var isFF = (navigator.userAgent.toLowerCase().indexOf('firefox') !== -1);
 
   function el(selector, namespace) {
     if (selector[0] === '<') {
@@ -192,8 +194,8 @@
     var gbb = clock_view.globalBBox(bb);
     var pattern = 0;
 
-    if ((gbb.x < 0 && (pattern = 1)) ||
-        (gbb.x + gbb.width > width && (pattern = 2)) ||
+    if ((gbb.x < (isFF ? 168 : 0) && (pattern = 1)) ||
+        (gbb.x + gbb.width > width + (isFF ? 168 : 0) && (pattern = 2)) ||
         (gbb.y < 0 && (pattern = 3)) ||
         (gbb.y + gbb.height > height && (pattern = 4))) {
       attr(element, 'font-size', +attr(element, 'font-size') / 1.5);
