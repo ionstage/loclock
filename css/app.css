@@ -30,23 +30,16 @@ body {
   user-select: none;
 }
 
-.rotate-90 {
-  -webkit-transform: rotate(90deg);
-  -ms-transform: rotate(90deg);
-  -o-transform: rotate(90deg);
-  transform: rotate(90deg);
-}
-
 #container {
   -webkit-transform: translateX(-168px);
-  -webkit-transition: -webkit-transform 0.3s;
+  -webkit-transition: -webkit-transform 0.3s ease-in-out;
   -ms-transform: translateX(-168px);
   -o-transform: translateX(-168px);
-  -o-transition: -o-transform 0.3s;
+  -o-transition: -o-transform 0.3s ease-in-out;
   height: 100%;
   position: absolute;
   transform: translateX(-168px);
-  transition: transform 0.3s;
+  transition: transform 0.3s ease-in-out;
   width: 100%;
 }
 
@@ -86,18 +79,19 @@ body {
 
 #bars {
   cursor: pointer;
-  font-family: sans-serif;
-  font-size: 26px;
-  padding: 8px 12px;
+  height: 48px;
   position: absolute;
+  width: 48px;
 }
 
-#bars:active {
-  color: lightgray;
+#bars g {
+  stroke: black;
+  stroke-linecap: round;
+  stroke-width: 3px;
 }
 
-.open #bars {
-  color: lightgray;
+#bars:active g, .open #bars g {
+  stroke: lightgray;
 }
 
 #clock-container {
