@@ -16,6 +16,19 @@
   var supportsSVG = !!(document.createElementNS && document.createElementNS(NS_SVG, 'svg').createSVGRect);
   var isFF = (navigator.userAgent.toLowerCase().indexOf('firefox') !== -1);
 
+  function debounce(func, wait) {
+    var updateTimer = null, context, args;
+    return function() {
+      context = this;
+      args = arguments;
+      if (updateTimer !== null)
+        clearTimeout(updateTimer);
+      updateTimer = setTimeout(function() {
+        func.apply(context, args);
+      }, wait);
+    };
+  }
+
   function el(selector, namespace) {
     if (selector[0] === '<') {
       selector = selector.match(/<(.+)>/)[1];
@@ -583,9 +596,9 @@
     clock_view.updatePoint();
   });
 
-  window.addEventListener('resize', function() {
+  window.addEventListener('resize', debounce(function() {
     clock_view.updatePoint();
-  });
+  }, 100));
 
   window.addEventListener('hashchange', function(event) {
     var hash = getHashText();
