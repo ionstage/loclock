@@ -123,9 +123,6 @@
 
   function adjustBoard(board) {
     forEachTextElement(board, function(element) {
-      if (typeof element.getBBox !== 'function')
-        return;
-
       var textBBox = element.getBBox();
       var dy = +attr(element, 'y') - (textBBox.y + textBBox.height / 2);
       attr(element, 'dy', dy);
@@ -244,9 +241,6 @@
     var elements = [];
 
     forEachTextElement(point, function(element) {
-      if (typeof element.getBBox !== 'function')
-        return;
-
       var textBBox = element.getBBox();
       var deg = +element.getAttribute('data-deg');
       var dy = +attr(element, 'y') - (textBBox.y + textBBox.height / 2);
