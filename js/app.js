@@ -175,15 +175,9 @@
     return containerElement;
   }
 
-  function forEachElement(parent, method) {
-    var children = parent.childNodes;
-    for (var i = 0, len = children.length; i < len; i++) {
-      method(children[i]);
-    }
-  }
-
   function forEachTextElement(parent, method) {
-    forEachElement(parent, function(element) {
+    var children = Array.prototype.slice.call(parent.childNodes);
+    children.forEach(function(element) {
       if (element.nodeName === 'text')
         method(element);
     });
