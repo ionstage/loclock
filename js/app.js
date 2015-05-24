@@ -225,6 +225,7 @@
           attr(element, 'y', +attr(element, 'y') - value);
           break;
         default:
+          break;
       }
     }
   }
@@ -253,53 +254,42 @@
         down_elements.push([element, textBBox]);
     });
 
+    var ulen = upper_elements.length;
+    var dlen = down_elements.length;
+
     upper_elements.sort(function(a, b) {
       return (a[1].y < b[1].y) ? -1 : 1;
-    });
-
-    var ulen = upper_elements.length;
-
-    for (var i = 0; i < ulen; i++) {
-      var item = upper_elements[i];
+    }).forEach(function(item, i) {
       var el = item[0];
-
       for (var j = i + 1; j < ulen; j++) {
         var bb0 = item[1];
         var bb1 = upper_elements[j][1];
-        if (isBBoxOverlayed(bb0, bb1)) {
-          var dy = +attr(el, 'dy') - ((bb0.y + bb0.height) - bb1.y);
-          attr(el, 'dy', dy);
-        }
+        if (!isBBoxOverlayed(bb0, bb1))
+          continue;
+        var dy = +attr(el, 'dy') - ((bb0.y + bb0.height) - bb1.y);
+        attr(el, 'dy', dy);
       }
-
-      elements.push([el, el.getBBox()]);
-    }
+      elements.push(el);
+    });
 
     down_elements.sort(function(a, b) {
       return (a[1].y > b[1].y) ? -1 : 1;
-    });
-
-    var dlen = down_elements.length;
-
-    for (var i = 0; i < dlen; i++) {
-      var item = down_elements[i];
+    }).forEach(function(item, i) {
       var el = item[0];
-
       for (var j = i + 1; j < dlen; j++) {
         var bb0 = item[1];
         var bb1 = down_elements[j][1];
-        if (isBBoxOverlayed(bb0, bb1)) {
-          var dy = +attr(el, 'dy') + ((bb1.y + bb1.height) - bb0.y);
-          attr(el, 'dy', dy);
-        }
+        if (!isBBoxOverlayed(bb0, bb1))
+          continue;
+        var dy = +attr(el, 'dy') + ((bb1.y + bb1.height) - bb0.y);
+        attr(el, 'dy', dy);
       }
+      elements.push(el);
+    });
 
-      elements.push([el, el.getBBox()]);
-    }
-
-    for (var i = 0, len = elements.length; i < len; i++) {
-      shrinkElement(elements[i][0], width, height);
-    }
+    elements.forEach(function(element) {
+      shrinkElement(element, width, height);
+    });
   }
 
   function getTimelist(timezone) {
