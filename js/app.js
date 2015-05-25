@@ -481,16 +481,11 @@
     onclick: function(event) {
       var key = attr(event.target, 'data-key');
       var list = timelist.selected;
-      var isAlreadySelected = false;
+      var index = list.indexOf(key);
 
-      for (var i = list.length - 1; i >= 0; i--) {
-        if (list[i] === key) {
-          isAlreadySelected = true;
-          list.splice(i, 1);
-        }
-      }
-
-      if (!isAlreadySelected)
+      if (index !== -1)
+        list.splice(index, 1);
+      else
         list.push(key);
 
       setHashText(list.join(','));
