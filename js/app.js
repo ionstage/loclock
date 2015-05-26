@@ -406,6 +406,10 @@
     selectTimezone(list.concat());
   }
 
+  function resetLocations() {
+    setLocations(DEFAULT_LOCATIONS);
+  }
+
   var timelist = {
     data: null,
     selected: [],
@@ -621,6 +625,7 @@
   }
 
   app.useStorage = false;
+  app.resetLocations = resetLocations;
 
   window.app = app;
 })(this);
