@@ -1,9 +1,12 @@
 (function(window) {
+  var app = {};
+
   var IScroll = require('iscroll');
   var Base64 = require('js-base64').Base64;
   var moment = require('moment-timezone');
 
   var document = window.document;
+  var localStorage = window.localStorage;
   var location = window.location;
   var navigator = window.navigator;
 
@@ -27,6 +30,21 @@
         func.apply(context, args);
       }, wait);
     };
+  }
+
+  function storageKey(key) {
+    return 'org.ionstage.loclock.' + key;
+  }
+
+  function loadData(key, defaultValue) {
+    var value = localStorage.getItem(storageKey(key));
+    if (value === null && typeof defaultValue !== 'undefined')
+      return defaultValue;
+    return JSON.parse(value);
+  }
+
+  function saveData(key, data) {
+    localStorage.setItem(storageKey(key), JSON.stringify(data));
   }
 
   function el(selector, namespace) {
@@ -361,11 +379,31 @@
   }
 
   function initLocations() {
-    var hash = getHashText();
-    if (hash)
-      selectTimezone(hash.split(','));
+    setLocations(getLocations());
+  }
+
+  function useStorage() {
+    return app.useStorage;
+  }
+
+  function getLocations() {
+    if (useStorage()) {
+      return loadData('locations', DEFAULT_LOCATIONS);
+    } else {
+      var hash = getHashText();
+      if (hash)
+        return hash.split(',');
+      else
+        return DEFAULT_LOCATIONS;
+    }
+  }
+
+  function setLocations(list) {
+    if (useStorage())
+      saveData('locations', list);
     else
-      setHashText(DEFAULT_LOCATIONS.join(','));
+      setHashText(list.join(','));
+    selectTimezone(list.concat());
   }
 
   var timelist = {
@@ -497,7 +535,7 @@
       else
         list.push(key);
 
-      setHashText(list.join(','));
+      setLocations(list);
     }
   };
 
@@ -576,14 +614,13 @@
     clock_view.updatePoint();
   }, 100));
 
-  window.addEventListener('hashchange', function(event) {
-    var hash = getHashText();
-    selectTimezone(hash.split(','));
-  });
-
   if (supportsTouch) {
     window.addEventListener('touchmove', function(event) {
       event.preventDefault();
     });
   }
+
+  app.useStorage = false;
+
+  window.app = app;
 })(this);
