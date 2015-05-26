@@ -343,7 +343,7 @@
     };
   })();
 
-  function setTimezoneData() {
+  function initTimezoneData() {
     var data = createTimezoneData();
     data[KEY_CURRENT_LOCATION] = new Date().getTimezoneOffset() * (-60);
     timelist.data = data;
@@ -353,14 +353,14 @@
     list_view.update();
   }
 
-  function setClockTimer() {
+  function initClockTimer() {
     return setInterval(function() {
       clock_view.timelist = timelist.get();
       clock_view.updatePoint();
     }, 60000);
   }
 
-  function setLocations() {
+  function initLocations() {
     var hash = getHashText();
     if (hash)
       selectTimezone(hash.split(','));
@@ -567,9 +567,9 @@
     clock_view.init(el('#clock'), timelist.get());
     clock_view.updateBoard();
 
-    setTimezoneData();
-    setClockTimer();
-    setLocations();
+    initTimezoneData();
+    initClockTimer();
+    initLocations();
   });
 
   window.addEventListener('resize', debounce(function() {
