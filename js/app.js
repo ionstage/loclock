@@ -311,20 +311,17 @@
   }
 
   function getTimelist(timezone) {
-    var timelist = [];
     var date = new Date();
     var currentTime = date.getTime();
     var currentTimezoneOffset = date.getTimezoneOffset();
 
-    for (var i = 0, len = timezone.length; i < len; i++) {
-      var name = timezone[i][0];
+    return timezone.map(function(item) {
+      var name = item[0];
       name = name.substring(name.lastIndexOf('/') + 1).replace(/_/g, ' ');
-      var time = parseInt(timezone[i][1], 10);
+      var time = parseInt(item[1], 10);
       time = new Date(currentTime + time * 1000 + currentTimezoneOffset * 60 * 1000);
-      timelist[i] = [name, time];
-    }
-
-    return timelist;
+      return [name, time];
+    });
   }
 
   function selectTimezone(list) {
@@ -339,10 +336,9 @@
     var timezone_data  = {};
     var now = Date.now();
 
-    for (var i = 0, len = TIMEZONE_NAMES.length; i < len; i++) {
-      var name = TIMEZONE_NAMES[i];
+    TIMEZONE_NAMES.forEach(function(name) {
       timezone_data[name] = moment.tz.zone(name).offset(now) * (-60);
-    }
+    });
 
     return timezone_data;
   }
@@ -417,13 +413,9 @@
       if (this.data === null || this.selected.length === 0)
         return [];
 
-      var selected_timezone = [];
-
-      for (var i = 0, len = this.selected.length; i < len; i++) {
-        var key = this.selected[i];
-        if (key in this.data)
-          selected_timezone.push([key, this.data[key]]);
-      }
+      var selected_timezone = this.selected.map(function(key) {
+        return [key, this.data[key]];
+      }.bind(this));
 
       return getTimelist(selected_timezone);
     }
@@ -434,24 +426,23 @@
     selected: [],
     current_selected_items: [],
     init: function(element) {
-      var self = this;
-      self.element = element;
-      self.scrolling = false;
-      self.clickable = true;
+      this.element = element;
+      this.scrolling = false;
+      this.clickable = true;
 
       element.parentNode.onclick = function(event) {
         event.preventDefault();
-        if (self.scrolling || !self.clickable) {
-          self.scrolling = false;
-          self.clickable = true;
+        if (this.scrolling || !this.clickable) {
+          this.scrolling = false;
+          this.clickable = true;
           return;
         }
-        self.onclick(event);
-      };
+        this.onclick(event);
+      }.bind(this);
 
       element.parentNode.ontouchstart = function() {
-        self.clickable = !self.scrolling;
-      };
+        this.clickable = !this.scrolling;
+      }.bind(this);
 
       if (supportsTouch)
         attr(element.parentNode, 'class', 'unscrollable');
@@ -460,27 +451,27 @@
       var element = el('<div>');
       var listitems = [];
 
-      for (var i = 0, len = list.length; i < len; i++) {
-        var item = list[i];
-        if (item !== KEY_CURRENT_LOCATION) {
-          var name = item.substring(item.lastIndexOf('/') + 1).replace(/_/g, ' ');
-          listitems.push([item, name]);
-        }
-      }
+      list.forEach(function(item) {
+        if (item === KEY_CURRENT_LOCATION)
+          return;
+        var name = item.substring(item.lastIndexOf('/') + 1).replace(/_/g, ' ');
+        listitems.push([item, name]);
+      });
 
       listitems.sort(function(a, b) {
         return (a[1] < b[1]) ? -1 : 1;
       });
+
       listitems.unshift([KEY_CURRENT_LOCATION, 'Current Location']);
 
-      for (var i = 0, len = listitems.length; i < len; i++) {
+      listitems.forEach(function(listitem) {
         var item = el('<div>');
-        var listitem = listitems[i], key = listitem[0];
+        var key = listitem[0];
         attr(item, {'data-key': key, 'class': 'list-item'});
         item.innerHTML = listitem[1];
         element.appendChild(item);
         this.items[key] = item;
-      }
+      }.bind(this));
 
       this.element.parentNode.replaceChild(element, this.element);
       this.element = element;
@@ -498,36 +489,27 @@
           fadeScrollbars: true
         });
 
-        var self = this;
-
         this.scroll.on('scrollStart', function() {
-          self.scrolling = true;
-        });
+          this.scrolling = true;
+        }.bind(this));
 
         this.scroll.on('scrollEnd', function() {
-          self.scrolling = false;
-        });
+          this.scrolling = false;
+        }.bind(this));
       }
     },
     update: function() {
-      var selected_items = this.current_selected_items;
-
-      for (var i = 0, len = selected_items.length; i < len; i++) {
-        var item = selected_items[i];
-        attr(item, 'class', 'list-item');
+      if (this.current_selected_items.length > this.selected.length) {
+        this.current_selected_items.forEach(function(item) {
+          attr(item, 'class', 'list-item');
+        });
       }
 
-      selected_items = [];
-
-      for (var i = 0, len = this.selected.length; i < len; i++) {
-        var item = this.items[this.selected[i]];
-        if (item) {
-          attr(item, 'class', 'list-item list-selected');
-          selected_items.push(item);
-        }
-      }
-
-      this.current_selected_items = selected_items;
+      this.current_selected_items = this.selected.map(function(key) {
+        var item = this.items[key];
+        attr(item, 'class', 'list-item list-selected');
+        return item;
+      }.bind(this));
     },
     onclick: function(event) {
       var key = attr(event.target, 'data-key');
@@ -566,11 +548,10 @@
       this.y = height / 2;
       this.r = Math.min(width, height) / 2 * 0.6;
 
-      var self = this;
       element[supportsTouch ? 'ontouchstart' : 'onmousedown'] = function() {
-        if (attr(self.element.parentNode.parentNode, 'class') === 'open')
+        if (attr(this.element.parentNode.parentNode, 'class') === 'open')
           listToggle();
-      };
+      }.bind(this);
     },
     updateBoard: function() {
       var new_board = createBoard(this.x, this.y, this.r);
@@ -593,7 +574,12 @@
       lpt.x = bb.x + bb.width;
       lpt.y = bb.y + bb.height;
       var pt1 = lpt.matrixTransform(stageElement.getCTM() || stageElement.getScreenCTM());
-      return {x: pt0.x, y: pt0.y, width: pt1.x - pt0.x, height: pt1.y - pt0.y};
+      return {
+        x: pt0.x,
+        y: pt0.y,
+        width: pt1.x - pt0.x,
+        height: pt1.y - pt0.y
+      };
     }
   };
 
