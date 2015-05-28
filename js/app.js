@@ -430,7 +430,7 @@
       this.scrolling = false;
       this.clickable = true;
 
-      element.parentNode.onclick = function(event) {
+      element.parentNode.addEventListener('click', function(event) {
         event.preventDefault();
         if (this.scrolling || !this.clickable) {
           this.scrolling = false;
@@ -438,11 +438,11 @@
           return;
         }
         this.onclick(event);
-      }.bind(this);
+      }.bind(this));
 
-      element.parentNode.ontouchstart = function() {
+      element.parentNode.addEventListener('touchstart', function() {
         this.clickable = !this.scrolling;
-      }.bind(this);
+      }.bind(this));
 
       if (supportsTouch)
         attr(element.parentNode, 'class', 'unscrollable');
@@ -527,11 +527,11 @@
 
   var bars_view = {
     init: function(element) {
-      element[supportsTouch ? 'ontouchend' : 'onclick'] = function(event) {
+      element.addEventListener((supportsTouch ? 'touchend' : 'click'), function(event) {
         event.preventDefault();
         event.stopPropagation();
         listToggle();
-      };
+      });
     }
   };
 
@@ -548,10 +548,10 @@
       this.y = height / 2;
       this.r = Math.min(width, height) / 2 * 0.6;
 
-      element[supportsTouch ? 'ontouchstart' : 'onmousedown'] = function() {
+      element.addEventListener((supportsTouch ? 'touchstart' : 'mousedown'), function() {
         if (attr(this.element.parentNode.parentNode, 'class') === 'open')
           listToggle();
-      }.bind(this);
+      }.bind(this));
     },
     updateBoard: function() {
       var new_board = createBoard(this.x, this.y, this.r);
