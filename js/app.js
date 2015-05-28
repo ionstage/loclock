@@ -333,14 +333,16 @@
   }
 
   function createTimezoneData() {
-    var timezone_data  = {};
+    var data  = {};
     var now = Date.now();
 
     TIMEZONE_NAMES.forEach(function(name) {
-      timezone_data[name] = moment.tz.zone(name).offset(now) * (-60);
+      data[name] = moment.tz.zone(name).offset(now) * (-60);
     });
 
-    return timezone_data;
+    data[KEY_CURRENT_LOCATION] = new Date().getTimezoneOffset() * (-60);
+
+    return data;
   }
 
   var listToggle = (function() {
@@ -359,7 +361,6 @@
 
   function initTimezoneData() {
     var data = createTimezoneData();
-    data[KEY_CURRENT_LOCATION] = new Date().getTimezoneOffset() * (-60);
     timelist.data = data;
     clock_view.timelist = timelist.get();
     list_view.setList(Object.keys(data));
