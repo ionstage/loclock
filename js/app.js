@@ -384,18 +384,26 @@
   }
 
   function getLocations() {
+    var list;
     if (useStorage()) {
-      return loadData('locations', DEFAULT_LOCATIONS);
+      list = loadData('locations', DEFAULT_LOCATIONS);
     } else {
       var hash = getHashText();
       if (hash)
-        return hash.split(',');
+        list = hash.split(',');
       else
-        return DEFAULT_LOCATIONS;
+        list = DEFAULT_LOCATIONS;
     }
+    return list.filter(function(item) {
+      return TIMEZONE_NAMES.indexOf(item) !== -1;
+    });
   }
 
   function setLocations(list) {
+    list = list.filter(function(item) {
+      return TIMEZONE_NAMES.indexOf(item) !== -1;
+    });
+
     if (useStorage())
       saveData('locations', list);
     else
