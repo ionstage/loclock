@@ -370,9 +370,12 @@
 
   function initClockTimer() {
     return setInterval(function() {
+      var minutes = new Date().getMinutes();
+      if (minutes === 0 || minutes === 15 || minutes === 30 || minutes === 45)
+        timelist.data = createTimezoneData();
       clock_view.timelist = timelist.get();
       clock_view.updatePoint();
-    }, 60000);
+    }, 30000);
   }
 
   function initLocations() {
