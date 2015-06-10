@@ -400,7 +400,7 @@
       saveData('locations', list);
     else
       setHashText(list.join(','));
-    selectTimezone(list.concat());
+    selectTimezone(list);
   }
 
   function resetLocations() {
