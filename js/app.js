@@ -398,13 +398,13 @@
         list = DEFAULT_LOCATIONS;
     }
     return list.filter(function(item) {
-      return TIMEZONE_NAMES.indexOf(item) !== -1;
+      return TIMEZONE_NAMES.indexOf(item) !== -1 || item === KEY_CURRENT_LOCATION;
     });
   }
 
   function setLocations(list) {
     list = list.filter(function(item) {
-      return TIMEZONE_NAMES.indexOf(item) !== -1;
+      return TIMEZONE_NAMES.indexOf(item) !== -1 || item === KEY_CURRENT_LOCATION;
     });
 
     if (useStorage())
