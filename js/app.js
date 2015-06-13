@@ -1,14 +1,7 @@
-(function(window) {
-  var app = {};
-
+(function() {
   var IScroll = require('iscroll');
   var Base64 = require('js-base64').Base64;
   var moment = require('moment-timezone');
-
-  var document = window.document;
-  var localStorage = window.localStorage;
-  var location = window.location;
-  var navigator = window.navigator;
 
   var NS_SVG = 'http://www.w3.org/2000/svg';
   var DEFAULT_LOCATIONS = ['America/New_York', 'Europe/London', 'Asia/Tokyo'];
@@ -18,6 +11,15 @@
   var supportsTouch = 'createTouch' in document;
   var supportsSVG = !!(document.createElementNS && document.createElementNS(NS_SVG, 'svg').createSVGRect);
   var isFF = (navigator.userAgent.toLowerCase().indexOf('firefox') !== -1);
+
+  var prop = function(initialValue) {
+    var cache = initialValue;
+    return function(value) {
+      if (typeof value === 'undefined')
+        return cache;
+      cache = value;
+    };
+  };
 
   function debounce(func, wait) {
     var updateTimer = null, context, args;
@@ -382,9 +384,7 @@
     setLocations(getLocations());
   }
 
-  function useStorage() {
-    return app.useStorage;
-  }
+  var useStorage = prop(false);
 
   function getLocations() {
     var list;
@@ -622,8 +622,8 @@
     });
   }
 
-  app.useStorage = false;
-  app.resetLocations = resetLocations;
-
-  window.app = app;
-})(this);
+  window.app = {
+    useStorage: useStorage,
+    resetLocations: resetLocations
+  };
+})();
