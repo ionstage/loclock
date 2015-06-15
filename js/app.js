@@ -1,4 +1,5 @@
 (function() {
+  'use strict';
   var IScroll = require('iscroll');
   var Base64 = require('js-base64').Base64;
   var moment = require('moment-timezone');
