@@ -419,6 +419,13 @@
     setLocations(DEFAULT_LOCATIONS);
   }
 
+  function toggleDialog() {
+    if (dialog_view.isShown)
+      dialog_view.hide();
+    else
+      dialog_view.show();
+  }
+
   var timelist = {
     data: null,
     selected: [],
@@ -596,6 +603,89 @@
     }
   };
 
+  var dialog_view = {
+    init: function(element) {
+      this.element = element;
+      this.list_dialog_element = element.children[0];
+      this.acknowledgements_dialog_element = element.children[1];
+
+      var reset_locations_button = this.list_dialog_element.children[0];
+      var acknowledgements_button = this.list_dialog_element.children[1];
+      var acknowledgements_close_button = this.acknowledgements_dialog_element.children[1];
+
+      this.acknowledgements_text_container = this.acknowledgements_dialog_element.children[0];
+      this.acknowledgements_text = this.acknowledgements_text_container.children[0];
+
+      if (supportsTouch) {
+        attr(this.acknowledgements_text_container, 'class', 'text-container unscrollable');
+        this.scroll = new IScroll(this.acknowledgements_text_container, {
+          click: true,
+          scrollbars: true,
+          shrinkScrollbars: 'scale',
+          fadeScrollbars: true
+        });
+      }
+
+      element.addEventListener((supportsTouch ? 'touchstart' : 'mousedown'), function(event) {
+        if (event.target !== this.element)
+          return;
+        event.preventDefault();
+        event.stopPropagation();
+        this.hide();
+      }.bind(this));
+
+      reset_locations_button.addEventListener('click', function() {
+        this.hide();
+        if (typeof window.app.resetLocationsHandler === 'function')
+          window.app.resetLocationsHandler();
+      }.bind(this));
+
+      acknowledgements_button.addEventListener('click', function() {
+        attr(this.list_dialog_element, 'class', 'hide');
+        attr(this.acknowledgements_dialog_element, 'class', null);
+        if (supportsTouch) {
+          this.scroll.refresh();
+          this.scroll.scrollTo(0, 0);
+        } else {
+          this.acknowledgements_text_container.scrollTop = 0;
+        }
+        this.loadAcknowledgements();
+      }.bind(this));
+
+      acknowledgements_close_button.addEventListener('click', function() {
+        this.hide();
+      }.bind(this));
+
+      this.isShown = false;
+    },
+    show: function() {
+      attr(this.list_dialog_element, 'class', null);
+      attr(this.acknowledgements_dialog_element, 'class', 'hide');
+      attr(this.element, 'class', 'show');
+      this.isShown = true;
+    },
+    hide: function() {
+      attr(this.element, 'class', 'hide');
+      this.isShown = false;
+    },
+    loadAcknowledgements: function() {
+      if (this.acknowledgementsLoaded)
+        return;
+      var request = new XMLHttpRequest();
+      request.open('GET', 'assets/acknowledgements.txt', true);
+      request.onload = function() {
+        if (request.status >= 200 && request.status < 400) {
+          var text = request.responseText;
+          this.acknowledgements_text.innerHTML = text.replace(/\n/g, '<br>');
+          if (supportsTouch)
+            this.scroll.refresh();
+          this.acknowledgementsLoaded = true;
+        }
+      }.bind(this);
+      request.send();
+    }
+  };
+
   if (!supportsSVG) {
     attr(document.body, 'class', 'hide');
     alert("Sorry, your browser doesn't support this application.");
@@ -606,8 +696,9 @@
     list_view.init(el('#list'));
     bars_view.init(el('#bars'));
     clock_view.init(el('#clock'), timelist.get());
-    clock_view.updateBoard();
+    dialog_view.init(el('#dialog'));
 
+    clock_view.updateBoard();
     initTimezoneData();
     initClockTimer();
     initLocations();
@@ -625,6 +716,8 @@
 
   window.app = {
     useStorage: useStorage,
-    resetLocations: resetLocations
+    resetLocations: resetLocations,
+    resetLocationsHandler: resetLocations,
+    toggleDialog: toggleDialog
   };
 })();
