@@ -1,5 +1,5 @@
 Acknowledgements
-Portions of this application makes use of the following third party libraries, the use of which is hereby acknowledged:
+Portions of this application may utilize the following material, the use of which is hereby acknowledged:
 
 
 Matteo Spinelli - (iScroll)
