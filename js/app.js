@@ -642,7 +642,7 @@
 
       acknowledgements_button.addEventListener('click', function() {
         attr(this.list_dialog_element, 'class', 'hide');
-        attr(this.acknowledgements_dialog_element, 'class', null);
+        attr(this.acknowledgements_dialog_element, 'class', 'show');
         if (supportsTouch) {
           this.scroll.refresh();
           this.scroll.scrollTo(0, 0);
@@ -665,7 +665,7 @@
       this.isShown = true;
     },
     hide: function() {
-      attr(this.element, 'class', 'hide');
+      attr(this.element, 'class', null);
       this.isShown = false;
     },
     loadAcknowledgements: function() {
