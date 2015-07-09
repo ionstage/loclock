@@ -95,10 +95,13 @@ body {
 }
 
 #clock-container {
+  -webkit-transform: translateX(168px);
+  -ms-transform: translateX(168px);
+  -o-transform: translateX(168px);
   height: 100%;
-  left: 168px;
   overflow: hidden;
   position: absolute;
+  transform: translateX(168px);
   width: 100%;
 }
 
@@ -122,8 +125,11 @@ body {
 #dialog {
   -webkit-align-items: center;
   -webkit-justify-content: center;
+  -webkit-transform: translateX(168px);
   -webkit-transition: visibility 0s linear .3s, opacity .3s linear;
+  -ms-transform: translateX(168px);
   -ms-transition: visibility 0s linear .3s, opacity .3s linear;
+  -o-transform: translateX(168px);
   -o-transition: visibility 0s linear .3s, opacity .3s linear;
   align-items: center;
   background-color: rgba(0,0,0,0.6);
@@ -131,9 +137,9 @@ body {
   display: flex;
   height: 100%;
   justify-content: center;
-  left: 168px;
   opacity: 0;
   position: absolute;
+  transform: translateX(168px);
   transition: visibility 0s linear .3s, opacity .3s linear;
   visibility: hidden;
   width: 100%;
@@ -141,7 +147,10 @@ body {
 }
 
 .open #dialog {
-  left: 0;
+  -webkit-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
 }
 
 #dialog.show {
