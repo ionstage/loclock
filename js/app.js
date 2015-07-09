@@ -10,7 +10,6 @@
   var KEY_CURRENT_LOCATION = 'Current_Location';
 
   var supportsTouch = 'createTouch' in document;
-  var supportsSVG = !!(document.createElementNS && document.createElementNS(NS_SVG, 'svg').createSVGRect);
   var isFF = (navigator.userAgent.toLowerCase().indexOf('firefox') !== -1);
 
   var prop = function(initialValue) {
@@ -685,12 +684,6 @@
       request.send();
     }
   };
-
-  if (!supportsSVG) {
-    attr(document.body, 'class', 'hide');
-    alert("Sorry, your browser doesn't support this application.");
-    return;
-  }
 
   document.addEventListener('DOMContentLoaded', function() {
     list_view.init(el('#list'));
