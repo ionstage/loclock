@@ -9,7 +9,7 @@
   "dependencies": {
     "iscroll": "^5.1.3",
     "js-base64": "^2.1.8",
-    "moment-timezone": "^0.4.1"
+    "moment-timezone": "^0.5.20"
   },
   "devDependencies": {
     "browser-sync": "^2.7.1",
