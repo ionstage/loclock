@@ -339,7 +339,7 @@
     var now = Date.now();
 
     TIMEZONE_NAMES.forEach(function(name) {
-      data[name] = moment.tz.zone(name).offset(now) * (-60);
+      data[name] = moment.tz.zone(name).utcOffset(now) * (-60);
     });
 
     data[KEY_CURRENT_LOCATION] = new Date().getTimezoneOffset() * (-60);
