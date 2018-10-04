@@ -602,7 +602,7 @@ module.exports={
 }
 },{}],3:[function(require,module,exports){
 //! moment-timezone.js
-//! version : 0.5.20
+//! version : 0.5.21
 //! Copyright (c) JS Foundation and other contributors
 //! license : MIT
 //! github.com/moment/moment-timezone
@@ -627,7 +627,7 @@ module.exports={
 	// 	return moment;
 	// }
 
-	var VERSION = "0.5.20",
+	var VERSION = "0.5.21",
 		zones = {},
 		links = {},
 		names = {},
@@ -1000,10 +1000,7 @@ module.exports={
 	}
 
 	function getZone (name, caller) {
-		if (typeof name !== 'string') {
-			throw new Error('Time zone name must be a string, got ' + name + ' [' + typeof name + ']');
-		}
-
+		
 		name = normalizeName(name);
 
 		var zone = zones[name];
@@ -1162,6 +1159,9 @@ module.exports={
 
 	fn.tz = function (name, keepTime) {
 		if (name) {
+			if (typeof name !== 'string') {
+				throw new Error('Time zone name must be a string, got ' + name + ' [' + typeof name + ']');
+			}
 			this._z = getZone(name);
 			if (this._z) {
 				moment.updateOffset(this, keepTime);
