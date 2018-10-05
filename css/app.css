@@ -67,6 +67,7 @@ body {
 
 #list-container.unscrollable {
   overflow-y: hidden;
+  touch-action: none;
 }
 
 .list-item {
