@@ -314,14 +314,17 @@
     });
   }
 
+  function getLocationName(tzName) {
+    return tzName.substring(tzName.lastIndexOf('/') + 1).replace(/_/g, ' ');
+  }
+
   function getTimelist(timezone) {
     var date = new Date();
     var currentTime = date.getTime();
     var currentTimezoneOffset = date.getTimezoneOffset();
 
     return timezone.map(function(item) {
-      var name = item[0];
-      name = name.substring(name.lastIndexOf('/') + 1).replace(/_/g, ' ');
+      var name = getLocationName(item[0]);
       var time = parseInt(item[1], 10);
       time = new Date(currentTime + time * 1000 + currentTimezoneOffset * 60 * 1000);
       return [name, time];
@@ -475,7 +478,7 @@
       list.forEach(function(item) {
         if (item === KEY_CURRENT_LOCATION)
           return;
-        var name = item.substring(item.lastIndexOf('/') + 1).replace(/_/g, ' ');
+        var name = getLocationName(item);
         listitems.push([item, name]);
       });
 
