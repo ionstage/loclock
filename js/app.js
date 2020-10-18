@@ -14,15 +14,6 @@
   var supportsTouch = ('ontouchstart' in window || (typeof DocumentTouch !== 'undefined' && document instanceof DocumentTouch));
   var isFF = (navigator.userAgent.toLowerCase().indexOf('firefox') !== -1);
 
-  var prop = function(initialValue) {
-    var cache = initialValue;
-    return function(value) {
-      if (typeof value === 'undefined')
-        return cache;
-      cache = value;
-    };
-  };
-
   function debounce(func, wait) {
     var updateTimer = null, context, args;
     return function() {
@@ -34,21 +25,6 @@
         func.apply(context, args);
       }, wait);
     };
-  }
-
-  function storageKey(key) {
-    return 'org.ionstage.loclock.' + key;
-  }
-
-  function loadData(key, defaultValue) {
-    var value = localStorage.getItem(storageKey(key));
-    if (value === null && typeof defaultValue !== 'undefined')
-      return defaultValue;
-    return JSON.parse(value);
-  }
-
-  function saveData(key, data) {
-    localStorage.setItem(storageKey(key), JSON.stringify(data));
   }
 
   function el(selector, namespace) {
@@ -394,19 +370,13 @@
     setLocations(getLocations());
   }
 
-  var useStorage = prop(false);
-
   function getLocations() {
     var list;
-    if (useStorage()) {
-      list = loadData('locations', DEFAULT_LOCATIONS);
-    } else {
-      var hash = getHashText();
-      if (hash)
-        list = hash.split(',');
-      else
-        list = DEFAULT_LOCATIONS;
-    }
+    var hash = getHashText();
+    if (hash)
+      list = hash.split(',');
+    else
+      list = DEFAULT_LOCATIONS;
     return list.filter(function(item) {
       return TIMEZONE_NAMES.indexOf(item) !== -1 || item === KEY_CURRENT_LOCATION;
     });
@@ -416,11 +386,7 @@
     list = list.filter(function(item) {
       return TIMEZONE_NAMES.indexOf(item) !== -1 || item === KEY_CURRENT_LOCATION;
     });
-
-    if (useStorage())
-      saveData('locations', list);
-    else
-      setHashText(list.join(','));
+    setHashText(list.join(','));
     selectTimezone(list);
   }
 
@@ -621,8 +587,4 @@
       event.preventDefault();
     });
   }
-
-  window.app = {
-    useStorage: useStorage
-  };
 })();
