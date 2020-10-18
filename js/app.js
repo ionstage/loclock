@@ -182,13 +182,10 @@
   }
 
   function isBBoxOverlayed(bb0, bb1) {
-    if (((bb0.x < bb1.x && bb0.x + bb0.width > bb1.x) ||
-          (bb0.x > bb1.x && bb1.x + bb1.width > bb0.x)) &&
-        ((bb0.y < bb1.y && bb0.y + bb0.height > bb1.y) ||
-          (bb0.y > bb1.y && bb1.y + bb1.height > bb0.y))) {
-      return true;
-    }
-    return false;
+    return ((bb0.x < bb1.x && bb0.x + bb0.width > bb1.x) ||
+              (bb0.x > bb1.x && bb1.x + bb1.width > bb0.x)) &&
+            ((bb0.y < bb1.y && bb0.y + bb0.height > bb1.y) ||
+              (bb0.y > bb1.y && bb1.y + bb1.height > bb0.y))
   }
 
   function shrinkElement(element, width, height) {
@@ -371,12 +368,8 @@
   }
 
   function getLocations() {
-    var list;
     var hash = getHashText();
-    if (hash)
-      list = hash.split(',');
-    else
-      list = DEFAULT_LOCATIONS;
+    var list = (hash ? hash.split(',') : DEFAULT_LOCATIONS);
     return list.filter(function(item) {
       return TIMEZONE_NAMES.indexOf(item) !== -1 || item === KEY_CURRENT_LOCATION;
     });
