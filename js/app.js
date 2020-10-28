@@ -333,14 +333,8 @@
   var listToggle = (function() {
     var isOpen = false;
     return function() {
-      var container = el('#container');
-
-      if (isOpen)
-        attr(container, 'class', null);
-      else
-        attr(container, 'class', 'open');
-
       isOpen = !isOpen;
+      attr(el('#container'), 'class', (isOpen ? 'open' : null));
     };
   })();
 
