@@ -3,6 +3,7 @@
   var IScroll = require('iscroll');
   var Base64 = require('js-base64').Base64;
   var moment = require('moment-timezone');
+  var Draggable = app.Draggable || require('./draggable.js');
   var timezone = app.timezone || require('./timezone.js');
 
   var NS_SVG = 'http://www.w3.org/2000/svg';
