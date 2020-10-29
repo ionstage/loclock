@@ -58,10 +58,7 @@
 
   function getHashText() {
     var text = location.href.split('#')[1];
-    if (!text)
-      return '';
-
-    return Base64.decode(text);
+    return (text ? Base64.decode(text) : '');
   }
 
   function setHashText(text) {
