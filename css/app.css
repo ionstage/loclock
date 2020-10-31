@@ -122,3 +122,25 @@ body {
   fill: white;
   stroke: black;
 }
+
+#clock .center-spin {
+  fill: gray;
+  font-family: 'Courier New';
+  visibility: hidden;
+}
+
+#clock .center-reset {
+  cursor: pointer;
+}
+
+#clock.spin .circle {
+  stroke: gray;
+}
+
+#clock.spin .center-point {
+  visibility: hidden;
+}
+
+#clock.spin .center-spin {
+  visibility: visible;
+}

@@ -90,8 +90,28 @@
       cx: x,
       cy: y,
       r: (r / 45).toFixed(1),
-      fill: 'black'
+      fill: 'black',
+      'class': 'center-point'
     }));
+
+    var center_spin = el('<g>', NS_SVG);
+    attr(center_spin, 'class', 'center-spin');
+
+    center_spin.appendChild(createText('+00:00', {
+      x: x - 11,
+      y: y - 16,
+      'font-size': r / 6,
+      'class': 'text center-time'
+    }));
+
+    center_spin.appendChild(createText('RESET', {
+      x: x,
+      y: y + 32,
+      'font-size': r / 10,
+      'class': 'text center-reset'
+    }));
+
+    board.appendChild(center_spin);
 
     var dif = Math.PI / 12;
     var deg = 0;
