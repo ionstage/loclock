@@ -14,6 +14,12 @@
   var supportsTouch = ('ontouchstart' in window || (typeof DocumentTouch !== 'undefined' && document instanceof DocumentTouch));
   var isFF = (navigator.userAgent.toLowerCase().indexOf('firefox') !== -1);
 
+  if (!window.requestAnimationFrame) {
+    window.requestAnimationFrame = function(callback) {
+      return setTimeout(callback, 1000 / 60);
+    };
+  }
+
   function debounce(func, wait) {
     var updateTimer = null, context, args;
     return function() {
@@ -684,7 +690,7 @@
       var h = ('00' + Math.abs((timeOffset - timeOffset % 60) / 60)).slice(-2);
       var m = ('00' + Math.abs(timeOffset % 60)).slice(-2);
       var text = (timeOffset >= 0 ? '+' : '-') + h + ':' + m;
-      this.center_time_element.innerHTML = text;
+      this.center_time_element.textContent = text;
       attr(this.element, 'class', (timeOffset ? 'clock spin' : 'clock'));
     },
     globalBBox: function(bb) {
