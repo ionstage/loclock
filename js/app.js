@@ -431,9 +431,23 @@
       clock_view.updateCenter();
     },
     reset: function() {
-      this.timeOffset = 0;
-      clock_view.updatePoint();
-      clock_view.updateCenter();
+      var offset = this.timeOffset;
+      if (!offset)
+        return;
+      var dt = (offset >= 0 ? -1 : 1) * Math.ceil(Math.ceil(Math.abs(offset / 6)) / 10) * 10;
+      var callback = function() {
+        if (dt && Math.abs(this.timeOffset) > Math.abs(dt)) {
+          this.timeOffset += dt;
+          requestAnimationFrame(callback);
+        } else {
+          this.timeOffset = 0;
+          clock_view.draggable.enable();
+        }
+        clock_view.updatePoint();
+        clock_view.updateCenter();
+      }.bind(this);
+      clock_view.draggable.disable();
+      requestAnimationFrame(callback);
     },
     dragstart: function(context) {
       var event = context.event;
