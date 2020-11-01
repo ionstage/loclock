@@ -457,6 +457,7 @@
     },
     dragstart: function(context) {
       var event = context.event;
+      event.preventDefault();
       this.startClassName = attr(event.target, 'class') || '';
       if (this.startClassName.indexOf('center-time') !== -1) {
         this.isDragCanceled = true;
@@ -519,7 +520,14 @@
       clock_view.updateCenter();
     },
     dragend: function(context) {
-      var className = attr(context.event.target, 'class') || '';
+      var event = context.event;
+      var target = event.target;
+      if (supportsTouch) {
+        var x = (event.touches ? event.changedTouches[0].clientX : event.clientX);
+        var y = (event.touches ? event.changedTouches[0].clientY : event.clientY);
+        target = document.elementFromPoint(x, y);
+      }
+      var className = attr(target, 'class') || '';
       if (this.startClassName === className) {
         if (className.indexOf('center-time') !== -1)
           this.toggleTimeOffset();
@@ -730,6 +738,6 @@
   if (supportsTouch) {
     window.addEventListener('touchmove', function(event) {
       event.preventDefault();
-    });
+    }, { passive: false });
   }
 })(this.app || (this.app = {}));

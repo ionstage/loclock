@@ -113,8 +113,13 @@ body {
   width: 100%;
 }
 
-.open #clock > * {
+#clock > * {
   pointer-events: none;
+}
+
+#clock .center-time,
+#clock .center-reset {
+  pointer-events: auto;
 }
 
 #clock .text {
