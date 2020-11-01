@@ -144,7 +144,7 @@
     });
   }
 
-  function createPoint(x, y, r, timelist) {
+  function createPoint(x, y, r, timelist, timeOffset) {
     var containerElement = el('<g>', NS_SVG);
     var pointItemMap = {};
 
@@ -161,7 +161,7 @@
 
       pointItemMap[key] = {
         text: locationName,
-        deg: (date.getHours() + date.getMinutes() / 60) / 24 * (Math.PI * 2) + Math.PI / 2
+        deg: (date.getHours() + (date.getMinutes() + timeOffset) / 60) / 24 * (Math.PI * 2) + Math.PI / 2
       };
     });
 
@@ -352,6 +352,10 @@
     return function() {
       isOpen = !isOpen;
       attr(el('#container'), 'class', (isOpen ? 'open' : null));
+      if (isOpen)
+        clock_view.draggable.disable();
+      else
+        clock_view.draggable.enable();
     };
   })();
 
@@ -376,6 +380,10 @@
 
   function initLocations() {
     setLocations(getLocations());
+  }
+
+  function initDialSpinner() {
+    dial_spinner.init(clock_view.element);
   }
 
   function getLocations() {
@@ -406,6 +414,102 @@
       }.bind(this));
 
       return getTimelist(selected_timezone);
+    }
+  };
+
+  var dial_spinner = {
+    timeOffset: 0,
+    isRightHanded: true,
+    init: function(clock_element) {
+      this.clock_element = clock_element;
+      this.center_time_element = clock_element.querySelector('.center-time');
+      this.center_reset_element = clock_element.querySelector('.center-reset');
+    },
+    toggleTimeOffset: function() {
+      this.timeOffset = (this.timeOffset + (this.timeOffset >= 0 ? -1 : 1) * 1440) % 1440;
+      this.isRightHanded = (this.timeOffset >= 0);
+      clock_view.updateCenter();
+    },
+    reset: function() {
+      this.timeOffset = 0;
+      clock_view.updatePoint();
+      clock_view.updateCenter();
+    },
+    dragstart: function(context) {
+      var event = context.event;
+      this.startClassName = attr(event.target, 'class') || '';
+      if (this.startClassName.indexOf('center-time') !== -1) {
+        this.isDragCanceled = true;
+        attr(this.center_time_element, 'fill', 'lightgray');
+        return;
+      }
+      if (this.startClassName.indexOf('center-reset') !== -1) {
+        this.isDragCanceled = true;
+        attr(this.center_reset_element, 'fill', 'lightgray');
+        return;
+      }
+      this.isDragCanceled = false;
+      this.x0 = (event.touches ? event.changedTouches[0].clientX : event.clientX);
+      this.y0 = (event.touches ? event.changedTouches[0].clientY : event.clientY);
+      this.startTimeOffset = this.timeOffset;
+    },
+    dragmove: function(context) {
+      if (this.isDragCanceled)
+        return;
+
+      var rect = this.clock_element.getBoundingClientRect();
+      var cx = rect.width / 2;
+      var cy = rect.height / 2;
+      var x1 = this.x0 + context.dx;
+      var y1 = this.y0 + context.dy;
+      var a1 = this.x0 - cx;
+      var a2 = this.y0 - cy;
+      var b1 = x1 - cx;
+      var b2 = y1 - cy;
+      var cos = (a1 * b1 + a2 * b2) / (Math.sqrt(a1 * a1 + a2 * a2) * Math.sqrt(b1 * b1 + b2 * b2));
+      var acos = Math.acos(cos) || 0;
+      var offset = acos / Math.PI * 12 * 60;
+      var direction = (a1 * b2 - b1 * a2 >= 0 ? 1 : -1);
+      var timeOffset = this.startTimeOffset + direction * Math.round(offset / 10) * 10;
+      timeOffset = timeOffset % 1440;
+
+      /* -720 < timeOffset <= 720 */
+      if (timeOffset > 720)
+        timeOffset -= 1440;
+      else if (timeOffset <= -720)
+        timeOffset += 1440;
+
+      /* determine rotation direction */
+      if (this.timeOffset <= 0 && this.timeOffset > -360 && timeOffset > 0 && timeOffset < 360)
+        this.isRightHanded = true;
+      else if (this.timeOffset >= 0 && this.timeOffset < 360 && timeOffset < 0 && timeOffset > -360)
+        this.isRightHanded = false;
+
+      /* -1440 < timeOffset <= 0 or 0 <= timeOffset < 1440 */
+      if (this.isRightHanded && timeOffset < 0)
+        timeOffset += 1440;
+      else if (!this.isRightHanded && timeOffset > 0)
+        timeOffset -= 1440;
+
+      if (timeOffset === this.timeOffset)
+        return;
+
+      this.timeOffset = timeOffset;
+      clock_view.updatePoint();
+      clock_view.updateCenter();
+    },
+    dragend: function(context) {
+      var className = attr(context.event.target, 'class') || '';
+      if (this.startClassName === className) {
+        if (className.indexOf('center-time') !== -1)
+          this.toggleTimeOffset();
+        else if (className.indexOf('center-reset') !== -1)
+          this.reset();
+      }
+      if (this.isDragCanceled) {
+        attr(this.center_time_element, 'fill', 'gray');
+        attr(this.center_reset_element, 'fill', 'gray');
+      }
     }
   };
 
@@ -535,7 +639,14 @@
       this.x = width / 2;
       this.y = height / 2;
       this.r = Math.min(width, height) / 2 * 0.6;
+      this.draggable = new Draggable({
+        element: element,
+        onstart: dial_spinner.dragstart.bind(dial_spinner),
+        onmove: dial_spinner.dragmove.bind(dial_spinner),
+        onend: dial_spinner.dragend.bind(dial_spinner)
+      });
 
+      this.draggable.enable();
       element.addEventListener((supportsTouch ? 'touchstart' : 'mousedown'), function() {
         if (attr(this.element.parentNode.parentNode, 'class') === 'open')
           listToggle();
@@ -546,12 +657,21 @@
       this.element.replaceChild(new_board, this.board_element);
       adjustBoard(new_board);
       this.board_element = new_board;
+      this.center_time_element = this.board_element.querySelector('.center-time');
     },
     updatePoint: function() {
-      var new_point = createPoint(this.x, this.y, this.r, this.timelist);
+      var new_point = createPoint(this.x, this.y, this.r, this.timelist, dial_spinner.timeOffset);
       this.element.replaceChild(new_point, this.point_element);
       adjustPointText(new_point, this.x, this.y, this.r, window.innerWidth, window.innerHeight);
       this.point_element = new_point;
+    },
+    updateCenter: function() {
+      var timeOffset = dial_spinner.timeOffset;
+      var h = ('00' + Math.abs((timeOffset - timeOffset % 60) / 60)).slice(-2);
+      var m = ('00' + Math.abs(timeOffset % 60)).slice(-2);
+      var text = (timeOffset >= 0 ? '+' : '-') + h + ':' + m;
+      this.center_time_element.innerHTML = text;
+      attr(this.element, 'class', (timeOffset ? 'clock spin' : 'clock'));
     },
     globalBBox: function(bb) {
       var stageElement = this.element;
@@ -580,6 +700,7 @@
     initTimezoneData();
     initClockTimer();
     initLocations();
+    initDialSpinner();
   });
 
   window.addEventListener('resize', debounce(function() {

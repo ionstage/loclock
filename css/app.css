@@ -113,6 +113,10 @@ body {
   width: 100%;
 }
 
+.open #clock > * {
+  pointer-events: none;
+}
+
 #clock .text {
   dominant-baseline: central;
   text-anchor: middle;
