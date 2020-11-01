@@ -472,6 +472,8 @@
       this.x0 = (event.touches ? event.changedTouches[0].clientX : event.clientX);
       this.y0 = (event.touches ? event.changedTouches[0].clientY : event.clientY);
       this.startTimeOffset = this.timeOffset;
+      this.isDragging = true;
+      clock_view.updateCenter();
     },
     dragmove: function(context) {
       if (this.isDragCanceled)
@@ -537,6 +539,8 @@
         attr(this.center_time_element, 'fill', 'gray');
         attr(this.center_reset_element, 'fill', 'gray');
       }
+      this.isDragging = false;
+      clock_view.updateCenter();
     }
   };
 
@@ -698,7 +702,7 @@
       var m = ('00' + Math.abs(timeOffset % 60)).slice(-2);
       var text = (timeOffset >= 0 ? '+' : '-') + h + ':' + m;
       this.center_time_element.textContent = text;
-      attr(this.element, 'class', (timeOffset ? 'clock spin' : 'clock'));
+      attr(this.element, 'class', (timeOffset || dial_spinner.isDragging ? 'clock spin' : 'clock'));
     },
     globalBBox: function(bb) {
       var stageElement = this.element;
