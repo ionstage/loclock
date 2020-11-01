@@ -12,7 +12,6 @@
   var KEY_CURRENT_LOCATION = 'Current_Location';
 
   var supportsTouch = ('ontouchstart' in window || (typeof DocumentTouch !== 'undefined' && document instanceof DocumentTouch));
-  var isFF = (navigator.userAgent.toLowerCase().indexOf('firefox') !== -1);
 
   if (!window.requestAnimationFrame) {
     window.requestAnimationFrame = function(callback) {
@@ -216,8 +215,8 @@
     var gbb = clock_view.globalBBox(bb);
     var pattern = 0;
 
-    if ((gbb.x < (isFF ? 168 : 0) && (pattern = 1)) ||
-        (gbb.x + gbb.width > width + (isFF ? 168 : 0) && (pattern = 2)) ||
+    if ((gbb.x < 0 && (pattern = 1)) ||
+        (gbb.x + gbb.width > width && (pattern = 2)) ||
         (gbb.y < 0 && (pattern = 3)) ||
         (gbb.y + gbb.height > height && (pattern = 4))) {
       attr(element, 'font-size', +attr(element, 'font-size') / 1.5);
