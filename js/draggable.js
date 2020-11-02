@@ -43,7 +43,7 @@
     this.element.removeEventListener(startType, this['on' + startType], { passive: false });
     document.removeEventListener(moveType, this['on' + moveType]);
     document.removeEventListener(endType, this['on' + endType]);
-  }
+  };
 
   Draggable.prototype.onmousedown = function(event) {
     var offset = Draggable.getOffset(event.target);
