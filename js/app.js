@@ -156,7 +156,7 @@
     timelist.forEach(function(item) {
       var locationName = item[0];
       var date = item[1];
-      var key = date.getTime();
+      var key = date.getTime() % (24 * 60 * 60 * 1000);
       var pointItem = pointItemMap[key];
 
       if (pointItem) {
