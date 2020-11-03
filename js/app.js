@@ -203,11 +203,11 @@
     });
   }
 
-  function isBBoxOverlayed(bb0, bb1) {
-    return ((bb0.x < bb1.x && bb0.x + bb0.width > bb1.x) ||
-              (bb0.x > bb1.x && bb1.x + bb1.width > bb0.x)) &&
-            ((bb0.y < bb1.y && bb0.y + bb0.height > bb1.y) ||
-              (bb0.y > bb1.y && bb1.y + bb1.height > bb0.y));
+  function isBBoxOverlaid(bb0, bb1) {
+    return ((bb0.x <= bb1.x && bb0.x + bb0.width >= bb1.x) ||
+              (bb0.x >= bb1.x && bb1.x + bb1.width >= bb0.x)) &&
+            ((bb0.y <= bb1.y && bb0.y + bb0.height >= bb1.y) ||
+              (bb0.y >= bb1.y && bb1.y + bb1.height >= bb0.y));
   }
 
   function shrinkElement(element, width, height) {
@@ -281,7 +281,7 @@
       for (var j = i + 1; j < ulen; j++) {
         var bb0 = item[1];
         var bb1 = upper_elements[j][1];
-        if (!isBBoxOverlayed(bb0, bb1))
+        if (!isBBoxOverlaid(bb0, bb1))
           continue;
         var dy = +attr(el, 'dy') - ((bb0.y + bb0.height) - bb1.y);
         attr(el, 'dy', dy);
@@ -296,7 +296,7 @@
       for (var j = i + 1; j < dlen; j++) {
         var bb0 = item[1];
         var bb1 = down_elements[j][1];
-        if (!isBBoxOverlayed(bb0, bb1))
+        if (!isBBoxOverlaid(bb0, bb1))
           continue;
         var dy = +attr(el, 'dy') + ((bb1.y + bb1.height) - bb0.y);
         attr(el, 'dy', dy);
