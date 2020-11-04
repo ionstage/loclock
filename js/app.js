@@ -314,6 +314,7 @@
     switch (name) {
       case 'Bahia Banderas': return 'Bahia de Banderas';
       case 'DumontDUrville': return 'Dumont d\'Urville';
+      case 'Ndjamena': return 'N\'Djamena';
       default: return name;
     }
   }
