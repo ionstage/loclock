@@ -70,6 +70,10 @@ body {
   touch-action: none;
 }
 
+#list-container > * {
+  overflow-x: hidden;
+}
+
 .list-item {
   cursor: pointer;
 }

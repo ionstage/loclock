@@ -592,6 +592,10 @@
         var item = el('<div>');
         var key = listitem[0];
         attr(item, {'data-key': key, 'class': 'list-item'});
+        var textLength = listitem[1].length;
+        if (textLength >= 17) {
+          item.style.fontSize = '14px';
+        }
         item.innerHTML = listitem[1];
         element.appendChild(item);
         this.items[key] = item;
