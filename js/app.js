@@ -256,9 +256,11 @@
       var textBBox = element.getBBox();
       var deg = +element.getAttribute('data-deg');
       var dy = +attr(element, 'y') - (textBBox.y + textBBox.height / 2);
+      var sin = Math.sin(deg);
+      var cos = Math.cos(deg);
       var property = {
-        x: x + (r + textBBox.width / 2 + r / 8) * Math.cos(deg),
-        y: y + (r + textBBox.height / 2 + r / 8) * Math.sin(deg),
+        x: x + (r * 1.125 + textBBox.width / 2 + (textBBox.height / 2) * sin * sin) * cos,
+        y: y + (r * 1.125 + textBBox.height / 2 + (textBBox.width / 8) * cos * cos) * sin,
         dy: dy
       };
 
