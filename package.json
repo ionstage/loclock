@@ -21,6 +21,5 @@
     "clean-css-cli": "^4.3.0",
     "eslint": "^7.12.1",
     "uglify-js": "^2.4.21"
-  },
-  "private": true
+  }
 }
