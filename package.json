@@ -1,6 +1,7 @@
 {
   "name": "loclock",
   "version": "0.1.17",
+  "description": "World time clock",
   "scripts": {
     "build": "npm run build:bundle && npm run build:js && npm run build:css",
     "build:bundle": "uglifyjs js/bundle.js -o build/bundle.min.js --comments '/^\\!|^@preserve|^@cc_on|\\bMIT\\b|\\bMPL\\b|\\bGPL\\b|\\(c\\)|License|Copyright/' -c -m",
@@ -21,5 +22,16 @@
     "clean-css-cli": "^4.3.0",
     "eslint": "^7.12.1",
     "uglify-js": "^2.4.21"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ionstage/loclock.git"
+  },
+  "keywords": [
+    "clock",
+    "time",
+    "timezone"
+  ],
+  "author": "iOnStage",
+  "license": "MIT"
 }
