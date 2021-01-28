@@ -22,7 +22,7 @@ Then run:
 npm start
 ```
 
-Works on IE9+, Firefox, Safari, Chrome.
+Works on IE10+, Firefox, Safari, Chrome.
 
 
 ## License
