@@ -8,7 +8,7 @@
 
   var NS_SVG = 'http://www.w3.org/2000/svg';
   var DEFAULT_LOCATIONS = ['America/New_York', 'Europe/London', 'Asia/Tokyo'];
-  var TIMEZONE_NAMES = timezone.names;
+  var DEFAULT_TIMEZONE_NAMES = timezone.names;
   var KEY_CURRENT_LOCATION = 'Current_Location';
 
   var supportsTouch = ('ontouchstart' in window || (typeof DocumentTouch !== 'undefined' && document instanceof DocumentTouch));
@@ -346,7 +346,7 @@
     var data  = {};
     var now = Date.now();
 
-    TIMEZONE_NAMES.forEach(function(name) {
+    DEFAULT_TIMEZONE_NAMES.forEach(function(name) {
       data[name] = moment.tz.zone(name.split('#/')[0]).utcOffset(now) * (-60);
     });
 
@@ -368,10 +368,9 @@
   })();
 
   function initTimezoneData() {
-    var data = createTimezoneData();
-    timelist.data = data;
+    timelist.data = createTimezoneData();
     clock_view.timelist = timelist.get();
-    list_view.setList(Object.keys(data));
+    list_view.setList(Object.keys(timelist.data));
     list_view.selected = timelist.selected;
     list_view.update();
   }
@@ -398,23 +397,23 @@
     var hash = getHashText();
     var list = (hash ? hash.split(',') : DEFAULT_LOCATIONS);
     return list.filter(function(item) {
-      return TIMEZONE_NAMES.indexOf(item) !== -1 || item === KEY_CURRENT_LOCATION;
+      return Object.keys(timelist.data).indexOf(item) !== -1;
     });
   }
 
   function setLocations(list) {
     list = list.filter(function(item) {
-      return TIMEZONE_NAMES.indexOf(item) !== -1 || item === KEY_CURRENT_LOCATION;
+      return Object.keys(timelist.data).indexOf(item) !== -1;
     });
     setHashText(list.join(','));
     selectTimezone(list);
   }
 
   var timelist = {
-    data: null,
+    data: {},
     selected: [],
     get: function() {
-      if (this.data === null || this.selected.length === 0)
+      if (Object.keys(this.data).length === 0 || this.selected.length === 0)
         return [];
 
       var selected_timezone = this.selected.map(function(key) {
