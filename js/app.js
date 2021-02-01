@@ -368,7 +368,7 @@
   })();
 
   function initTimezoneData() {
-    timelist.data = createTimezoneData();
+    timelist.updateData();
     clock_view.timelist = timelist.get();
     list_view.setList(Object.keys(timelist.data));
     list_view.selected = timelist.selected;
@@ -379,7 +379,7 @@
     return setInterval(function() {
       var minutes = new Date().getMinutes();
       if (minutes === 0 || minutes === 15 || minutes === 30 || minutes === 45)
-        timelist.data = createTimezoneData();
+        timelist.updateData();
       clock_view.timelist = timelist.get();
       clock_view.updatePoint();
     }, 30000);
@@ -421,6 +421,9 @@
       }.bind(this));
 
       return getTimelist(selected_timezone);
+    },
+    updateData: function() {
+      this.data = createTimezoneData();
     }
   };
 
