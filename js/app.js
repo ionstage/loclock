@@ -70,6 +70,17 @@
     location.replace('#' + Base64.encodeURI(text));
   }
 
+  function getUrlQuery(key) {
+    var params = location.search.substring(1).split('&');
+    for (var i = 0, len = params.length; i < len; i++) {
+      var items = params[i].split('=');
+      if (decodeURIComponent(items[0] || '') === key) {
+        return decodeURIComponent(items[1] || '');
+      }
+    }
+    return '';
+  }
+
   function createCircle(o) {
     return attr(el('<circle>', NS_SVG), o);
   }
