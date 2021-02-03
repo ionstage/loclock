@@ -70,15 +70,21 @@
     location.replace('#' + Base64.encodeURI(text));
   }
 
-  function getUrlQuery(key) {
-    var params = location.search.substring(1).split('&');
-    for (var i = 0, len = params.length; i < len; i++) {
-      var items = params[i].split('=');
-      if (decodeURIComponent(items[0] || '') === key) {
-        return decodeURIComponent(items[1] || '');
+  function getUrlSearchParams() {
+    var params = {};
+    var pairs = location.search.substring(1).split('&');
+    for (var i = 0, len = pairs.length; i < len; i++) {
+      var pair = pairs[i];
+      var index = pair.indexOf('=');
+      if (index !== -1) {
+        var key = decodeURIComponent(pair.slice(0, index));
+        var value = decodeURIComponent(pair.slice(index + 1));
+        params[key] = value;
+      } else if (pair) {
+        params[decodeURIComponent(pair)] = '';
       }
     }
-    return '';
+    return params;
   }
 
   function createCircle(o) {
