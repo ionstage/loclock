@@ -87,6 +87,15 @@
     return params;
   }
 
+  function setUrlSearchParam(name, value) {
+    var params = getUrlSearchParams();
+    params[name] = value;
+    var search = '?' + Object.keys(params).map(function(name) {
+      return encodeURIComponent(name) + '=' + encodeURIComponent(params[name]);
+    }).join('&');
+    history.replaceState(null, null, search + location.hash);
+  }
+
   function createCircle(o) {
     return attr(el('<circle>', NS_SVG), o);
   }
