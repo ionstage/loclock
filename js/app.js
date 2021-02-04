@@ -77,9 +77,9 @@
       var pair = pairs[i];
       var index = pair.indexOf('=');
       if (index !== -1) {
-        var key = decodeURIComponent(pair.slice(0, index));
+        var name = decodeURIComponent(pair.slice(0, index));
         var value = decodeURIComponent(pair.slice(index + 1));
-        params[key] = value;
+        params[name] = value;
       } else if (pair) {
         params[decodeURIComponent(pair)] = '';
       }
