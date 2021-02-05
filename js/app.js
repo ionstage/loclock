@@ -378,6 +378,31 @@
 
     data[KEY_CURRENT_LOCATION] = new Date().getTimezoneOffset() * (-60);
 
+    return customTimezoneData(data, now);
+  }
+
+  function customTimezoneData(data, now) {
+    var params = getUrlSearchParams();
+    if (!params.tzlist) {
+      return data;
+    }
+    var tzlist = Base64.decode(params.tzlist).split(',');
+    tzlist.forEach(function(s) {
+      var name = s.substring(1);
+      switch (s.charAt(0)) {
+        case '+':
+          var tz = moment.tz.zone(name.split('#/')[0]);
+          if (tz) {
+            data[name] = tz.utcOffset(now) * (-60);
+          }
+          break;
+        case '-':
+          delete data[name];
+          break;
+        default:
+          break;
+      }
+    });
     return data;
   }
 
