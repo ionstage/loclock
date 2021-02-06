@@ -406,6 +406,36 @@
     return data;
   }
 
+  function addTimezone(name) {
+    var params = getUrlSearchParams();
+    var tzlist = (params.tzlist ? Base64.decode(params.tzlist).split(',') : []);
+    var s = '+' + name;
+    if (tzlist.indexOf(s) !== -1) {
+      /* already added */
+      return;
+    }
+
+    var needsUpdate = false;
+    var index = tzlist.indexOf('-' + name);
+    if (index !== -1) {
+      /* no need to remove */
+      tzlist.splice(index, 1);
+      needsUpdate = true;
+    }
+
+    index = DEFAULT_TIMEZONE_NAMES.indexOf(name);
+    if (index === -1) {
+      tzlist.push(s);
+      needsUpdate = true;
+    }
+
+    if (needsUpdate) {
+      setUrlSearchParam('tzlist', Base64.encodeURI(tzlist.join(',')));
+      initTimezoneData();
+      setLocations(timelist.selected);
+    }
+  }
+
   var listToggle = (function() {
     var isOpen = false;
     return function() {
@@ -805,4 +835,8 @@
       event.preventDefault();
     }, { passive: false });
   }
+
+  window.loclock = {
+    addTimezone: addTimezone
+  };
 })(this.app || (this.app = {}));
