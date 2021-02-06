@@ -424,7 +424,7 @@
     }
 
     index = DEFAULT_TIMEZONE_NAMES.indexOf(name);
-    if (index === -1) {
+    if (index === -1 && name !== KEY_CURRENT_LOCATION) {
       tzlist.push(s);
       needsUpdate = true;
     }
@@ -454,7 +454,7 @@
     }
 
     index = DEFAULT_TIMEZONE_NAMES.indexOf(name);
-    if (index !== -1) {
+    if (index !== -1 || name === KEY_CURRENT_LOCATION) {
       tzlist.push(s);
       needsUpdate = true;
     }
@@ -689,10 +689,13 @@
     setList: function(list) {
       var element = el('<div>');
       var listitems = [];
+      var needsCurrentLocation = false;
 
       list.forEach(function(item) {
-        if (item === KEY_CURRENT_LOCATION)
+        if (item === KEY_CURRENT_LOCATION) {
+          needsCurrentLocation = true;
           return;
+        }
         var name = getLocationName(item);
         listitems.push([item, name]);
       });
@@ -701,7 +704,9 @@
         return (a[1] < b[1]) ? -1 : 1;
       });
 
-      listitems.unshift([KEY_CURRENT_LOCATION, 'Current Location']);
+      if (needsCurrentLocation) {
+        listitems.unshift([KEY_CURRENT_LOCATION, 'Current Location']);
+      }
 
       listitems.forEach(function(listitem) {
         var item = el('<div>');
