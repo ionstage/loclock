@@ -383,18 +383,16 @@
 
   function customTimezoneData(data, now) {
     var params = getUrlSearchParams();
-    if (!params.tzlist) {
+    if (!params.tzlist)
       return data;
-    }
     var tzlist = Base64.decode(params.tzlist).split(',');
     tzlist.forEach(function(s) {
       var name = s.substring(1);
       switch (s.charAt(0)) {
         case '+':
           var tz = moment.tz.zone(name.split('#/')[0]);
-          if (tz) {
+          if (tz)
             data[name] = tz.utcOffset(now) * (-60);
-          }
           break;
         case '-':
           delete data[name];
@@ -704,20 +702,18 @@
         return (a[1] < b[1]) ? -1 : 1;
       });
 
-      if (needsCurrentLocation) {
+      if (needsCurrentLocation)
         listitems.unshift([KEY_CURRENT_LOCATION, 'Current Location']);
-      }
 
       listitems.forEach(function(listitem) {
         var item = el('<div>');
         var key = listitem[0];
         attr(item, {'data-key': key, 'class': 'list-item'});
         var textLength = listitem[1].length;
-        if (textLength >= 20) {
+        if (textLength >= 20)
           item.style.fontSize = '11px';
-        } else if (textLength >= 17) {
+        else if (textLength >= 17)
           item.style.fontSize = '14px';
-        }
         item.innerHTML = listitem[1];
         element.appendChild(item);
         this.items[key] = item;
