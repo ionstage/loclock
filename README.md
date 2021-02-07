@@ -2,7 +2,7 @@
 
 World time clock
 
-[![Screen Shot](assets/screenshot.png)](http://www.ionstage.org/loclock/)
+[<img src="assets/screenshot.png" alt="Screen Shot">](http://www.ionstage.org/loclock/)
 
 ## Features
 - Check local time in cities worldwide at one view.
