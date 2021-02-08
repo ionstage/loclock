@@ -378,30 +378,28 @@
 
     data[KEY_CURRENT_LOCATION] = new Date().getTimezoneOffset() * (-60);
 
-    return customTimezoneData(data, now);
+    var params = getUrlSearchParams();
+    getCustomTimezoneList(params).forEach(function(name) {
+      if (name in data)
+        return;
+      var tz = moment.tz.zone(name.split('#/')[0]);
+      if (tz)
+        data[name] = tz.utcOffset(now) * (-60);
+    });
+
+    getHiddenTimezoneList(params).forEach(function(name) {
+      delete data[name];
+    });
+
+    return data;
   }
 
-  function customTimezoneData(data, now) {
-    var params = getUrlSearchParams();
-    if (!params.tzlist)
-      return data;
-    var tzlist = Base64.decode(params.tzlist).split(',');
-    tzlist.forEach(function(s) {
-      var name = s.substring(1);
-      switch (s.charAt(0)) {
-        case '+':
-          var tz = moment.tz.zone(name.split('#/')[0]);
-          if (tz)
-            data[name] = tz.utcOffset(now) * (-60);
-          break;
-        case '-':
-          delete data[name];
-          break;
-        default:
-          break;
-      }
-    });
-    return data;
+  function getCustomTimezoneList(params) {
+    return (params.custom_tzlist ? Base64.decode(params.custom_tzlist).split(',') : []);
+  }
+
+  function getHiddenTimezoneList(params) {
+    return (params.hidden_tzlist ? Base64.decode(params.hidden_tzlist).split(',') : []);
   }
 
   function addTimezone(name) {
