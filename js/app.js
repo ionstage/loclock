@@ -402,64 +402,17 @@
     return (params.hidden_tzlist ? Base64.decode(params.hidden_tzlist).split(',') : []);
   }
 
-  function addTimezone(name) {
-    var params = getUrlSearchParams();
-    var tzlist = (params.tzlist ? Base64.decode(params.tzlist).split(',') : []);
-    var s = '+' + name;
-    if (tzlist.indexOf(s) !== -1) {
-      /* already added */
-      return;
-    }
-
-    var needsUpdate = false;
-    var index = tzlist.indexOf('-' + name);
-    if (index !== -1) {
-      /* no need to remove */
-      tzlist.splice(index, 1);
-      needsUpdate = true;
-    }
-
-    index = DEFAULT_TIMEZONE_NAMES.indexOf(name);
-    if (index === -1 && name !== KEY_CURRENT_LOCATION) {
-      tzlist.push(s);
-      needsUpdate = true;
-    }
-
-    if (needsUpdate) {
-      setUrlSearchParam('tzlist', Base64.encodeURI(tzlist.join(',')));
-      initTimezoneData();
-      setLocations(timelist.selected);
-    }
+  function setCustomTimezoneList(list) {
+    setUrlSearchParam('custom_tzlist', Base64.encodeURI(list.join(',')));
   }
 
-  function removeTimezone(name) {
-    var params = getUrlSearchParams();
-    var tzlist = (params.tzlist ? Base64.decode(params.tzlist).split(',') : []);
-    var s = '-' + name;
-    if (tzlist.indexOf(s) !== -1) {
-      /* already removed */
-      return;
-    }
+  function setHiddenTimezoneList(list) {
+    setUrlSearchParam('hidden_tzlist', Base64.encodeURI(list.join(',')));
+  }
 
-    var needsUpdate = false;
-    var index = tzlist.indexOf('+' + name);
-    if (index !== -1) {
-      /* no need to add */
-      tzlist.splice(index, 1);
-      needsUpdate = true;
-    }
-
-    index = DEFAULT_TIMEZONE_NAMES.indexOf(name);
-    if (index !== -1 || name === KEY_CURRENT_LOCATION) {
-      tzlist.push(s);
-      needsUpdate = true;
-    }
-
-    if (needsUpdate) {
-      setUrlSearchParam('tzlist', Base64.encodeURI(tzlist.join(',')));
-      initTimezoneData();
-      setLocations(timelist.selected);
-    }
+  function updateTimezoneList() {
+    initTimezoneData();
+    setLocations(timelist.selected);
   }
 
   var listToggle = (function() {
@@ -866,7 +819,8 @@
   }
 
   window.loclock = {
-    addTimezone: addTimezone,
-    removeTimezone: removeTimezone
+    setCustomTimezoneList: setCustomTimezoneList,
+    setHiddenTimezoneList: setHiddenTimezoneList,
+    updateTimezoneList: updateTimezoneList
   };
 })(this.app || (this.app = {}));
