@@ -338,13 +338,7 @@
   }
 
   function getLocationName(tzName) {
-    var name = tzName.substring(tzName.lastIndexOf('/') + 1).replace(/_/g, ' ');
-    switch (name) {
-      case 'Bahia Banderas': return 'Bahia de Banderas';
-      case 'DumontDUrville': return 'Dumont d\'Urville';
-      case 'Ndjamena': return 'N\'Djamena';
-      default: return name;
-    }
+    return tzName.substring(tzName.lastIndexOf('/') + 1).replace(/_/g, ' ');
   }
 
   function getTimelist(timezone) {
