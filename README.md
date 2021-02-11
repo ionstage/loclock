@@ -2,7 +2,7 @@
 
 World time clock
 
-[<img src="assets/screenshot.png" alt="Screen Shot">](http://www.ionstage.org/loclock/)
+[<img src="assets/screenshot.png" alt="Screen Shot">](https://www.ionstage.org/loclock/)
 
 ## Features
 - Check local time in cities worldwide at one view.
@@ -29,4 +29,4 @@ Works on IE10+, Firefox, Safari, Chrome.
 Copyright &copy; 2015 iOnStage
 Licensed under the [MIT License][mit].
 
-[MIT]: http://www.opensource.org/licenses/mit-license.php
+[MIT]: https://opensource.org/licenses/mit-license.php
