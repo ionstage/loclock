@@ -9,7 +9,7 @@ World time clock
 - Support daylight saving time (DST).
 
 ## Running Locally
-- Install [Node](https://nodejs.org/download/)
+- Install [Node](https://nodejs.org/en/download/)
 - Install the dependencies
 
 ```
