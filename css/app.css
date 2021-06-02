@@ -26,7 +26,6 @@ body {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-  -o-user-select: none;
   user-select: none;
 }
 
@@ -34,8 +33,6 @@ body {
   -webkit-transform: translateX(-168px);
   -webkit-transition: -webkit-transform 0.3s ease-in-out;
   -ms-transform: translateX(-168px);
-  -o-transform: translateX(-168px);
-  -o-transition: -o-transform 0.3s ease-in-out;
   height: 100%;
   position: absolute;
   transform: translateX(-168px);
@@ -46,7 +43,6 @@ body {
 #container.open {
   -webkit-transform: translateX(0);
   -ms-transform: translateX(0);
-  -o-transform: translateX(0);
   transform: translateX(0);
 }
 
@@ -102,7 +98,6 @@ body {
 #clock-container {
   -webkit-transform: translateX(168px);
   -ms-transform: translateX(168px);
-  -o-transform: translateX(168px);
   height: 100%;
   overflow: hidden;
   position: absolute;
