@@ -31,12 +31,12 @@ body {
 
 #container {
   -webkit-transform: translateX(-168px);
-  -webkit-transition: -webkit-transform 0.3s ease-in-out;
+  -webkit-transition: -webkit-transform .3s ease-in-out;
   -ms-transform: translateX(-168px);
   height: 100%;
   position: absolute;
   transform: translateX(-168px);
-  transition: transform 0.3s ease-in-out;
+  transition: transform .3s ease-in-out;
   width: 100%;
 }
 
