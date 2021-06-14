@@ -25,8 +25,9 @@
     return function() {
       context = this;
       args = arguments;
-      if (updateTimer !== null)
+      if (updateTimer !== null) {
         clearTimeout(updateTimer);
+      }
       updateTimer = setTimeout(function() {
         func.apply(context, args);
       }, wait);
@@ -36,23 +37,26 @@
   function el(selector, namespace) {
     if (selector[0] === '<') {
       selector = selector.match(/<(.+)>/)[1];
-      if (namespace)
+      if (namespace) {
         return document.createElementNS(namespace, selector);
-      else
+      } else {
         return document.createElement(selector);
+      }
     }
     return document.querySelector(selector);
   }
 
   function attr(element, o, value) {
-    if (typeof value === 'undefined' && typeof o === 'string')
+    if (typeof value === 'undefined' && typeof o === 'string') {
       return element.getAttribute(o);
+    }
 
     if (typeof o === 'string') {
-      if (value === null)
+      if (value === null) {
         element.removeAttribute(o);
-      else
+      } else {
         element.setAttribute(o, value);
+      }
     } else {
       for (var key in o) {
         element.setAttribute(key, o[key]);
@@ -225,8 +229,9 @@
   function forEachTextElement(parent, method) {
     var children = Array.prototype.slice.call(parent.childNodes);
     children.forEach(function(element) {
-      if (element.nodeName === 'text')
+      if (element.nodeName === 'text') {
         method(element);
+      }
     });
   }
 
@@ -294,10 +299,11 @@
       attr(element, property);
       textBBox = element.getBBox();
 
-      if (textBBox.y + textBBox.height / 2 < y)
+      if (textBBox.y + textBBox.height / 2 < y) {
         upper_elements.push([element, textBBox]);
-      else
+      } else {
         down_elements.push([element, textBBox]);
+      }
     });
 
     var ulen = upper_elements.length;
@@ -310,8 +316,9 @@
       for (var j = i + 1; j < ulen; j++) {
         var bb0 = item[1];
         var bb1 = upper_elements[j][1];
-        if (!isBBoxOverlaid(bb0, bb1))
+        if (!isBBoxOverlaid(bb0, bb1)) {
           continue;
+        }
         var dy = +attr(el, 'dy') - ((bb0.y + bb0.height) - bb1.y);
         attr(el, 'dy', dy);
       }
@@ -325,8 +332,9 @@
       for (var j = i + 1; j < dlen; j++) {
         var bb0 = item[1];
         var bb1 = down_elements[j][1];
-        if (!isBBoxOverlaid(bb0, bb1))
+        if (!isBBoxOverlaid(bb0, bb1)) {
           continue;
+        }
         var dy = +attr(el, 'dy') + ((bb1.y + bb1.height) - bb0.y);
         attr(el, 'dy', dy);
       }
@@ -375,11 +383,13 @@
 
     var params = getUrlSearchParams();
     getCustomTimezoneList(params).forEach(function(name) {
-      if (name in data)
+      if (name in data) {
         return;
+      }
       var tz = moment.tz.zone(name.split('#/')[0]);
-      if (tz)
+      if (tz) {
         data[name] = tz.utcOffset(now) * (-60);
+      }
     });
 
     getHiddenTimezoneList(params).forEach(function(name) {
@@ -415,10 +425,11 @@
     return function() {
       isOpen = !isOpen;
       attr(el('#container'), 'class', (isOpen ? 'open' : null));
-      if (isOpen)
+      if (isOpen) {
         clock_view.draggable.disable();
-      else
+      } else {
         clock_view.draggable.enable();
+      }
     };
   })();
 
@@ -433,8 +444,9 @@
   function initClockTimer() {
     return setInterval(function() {
       var minutes = new Date().getMinutes();
-      if (minutes === 0 || minutes === 15 || minutes === 30 || minutes === 45)
+      if (minutes === 0 || minutes === 15 || minutes === 30 || minutes === 45) {
         timelist.updateData();
+      }
       clock_view.timelist = timelist.get();
       clock_view.updatePoint();
     }, 30000);
@@ -468,8 +480,9 @@
     data: {},
     selected: [],
     get: function() {
-      if (Object.keys(this.data).length === 0 || this.selected.length === 0)
+      if (Object.keys(this.data).length === 0 || this.selected.length === 0) {
         return [];
+      }
 
       var selected_timezone = this.selected.map(function(key) {
         return [key, this.data[key]];
@@ -497,8 +510,9 @@
     },
     reset: function() {
       var offset = this.timeOffset;
-      if (!offset)
+      if (!offset) {
         return;
+      }
       var dt = (offset >= 0 ? -1 : 1) * Math.ceil(Math.ceil(Math.abs(offset / 6)) / 10) * 10;
       var callback = function() {
         if (dt && Math.abs(this.timeOffset) > Math.abs(dt)) {
@@ -536,8 +550,9 @@
       clock_view.updateCenter();
     },
     dragmove: function(context) {
-      if (this.isDragCanceled)
+      if (this.isDragCanceled) {
         return;
+      }
 
       var rect = this.clock_element.getBoundingClientRect();
       var cx = rect.width / 2;
@@ -556,25 +571,29 @@
       timeOffset = timeOffset % 1440;
 
       /* -720 < timeOffset <= 720 */
-      if (timeOffset > 720)
+      if (timeOffset > 720) {
         timeOffset -= 1440;
-      else if (timeOffset <= -720)
+      } else if (timeOffset <= -720) {
         timeOffset += 1440;
+      }
 
       /* determine rotation direction */
-      if (this.timeOffset <= 0 && this.timeOffset > -360 && timeOffset > 0 && timeOffset < 360)
+      if (this.timeOffset <= 0 && this.timeOffset > -360 && timeOffset > 0 && timeOffset < 360) {
         this.isRightHanded = true;
-      else if (this.timeOffset >= 0 && this.timeOffset < 360 && timeOffset < 0 && timeOffset > -360)
+      } else if (this.timeOffset >= 0 && this.timeOffset < 360 && timeOffset < 0 && timeOffset > -360) {
         this.isRightHanded = false;
+      }
 
       /* -1440 < timeOffset <= 0 or 0 <= timeOffset < 1440 */
-      if (this.isRightHanded && timeOffset < 0)
+      if (this.isRightHanded && timeOffset < 0) {
         timeOffset += 1440;
-      else if (!this.isRightHanded && timeOffset > 0)
+      } else if (!this.isRightHanded && timeOffset > 0) {
         timeOffset -= 1440;
+      }
 
-      if (timeOffset === this.timeOffset)
+      if (timeOffset === this.timeOffset) {
         return;
+      }
 
       this.timeOffset = timeOffset;
       clock_view.updatePoint();
@@ -590,10 +609,11 @@
       }
       var className = attr(target, 'class') || '';
       if (this.startClassName === className) {
-        if (className.indexOf('center-time') !== -1)
+        if (className.indexOf('center-time') !== -1) {
           this.toggleTimeOffset();
-        else if (className.indexOf('center-reset') !== -1)
+        } else if (className.indexOf('center-reset') !== -1) {
           this.reset();
+        }
       }
       if (this.isDragCanceled) {
         attr(this.center_time_element, 'fill', 'gray');
@@ -627,8 +647,9 @@
         this.clickable = !this.scrolling;
       }.bind(this));
 
-      if (supportsTouch)
+      if (supportsTouch) {
         attr(element.parentNode, 'class', 'unscrollable');
+      }
     },
     setList: function(list) {
       var element = el('<div>');
@@ -648,18 +669,20 @@
         return (a[1] < b[1]) ? -1 : 1;
       });
 
-      if (needsCurrentLocation)
+      if (needsCurrentLocation) {
         listitems.unshift([KEY_CURRENT_LOCATION, 'Current Location']);
+      }
 
       listitems.forEach(function(listitem) {
         var item = el('<div>');
         var key = listitem[0];
         attr(item, {'data-key': key, 'class': 'list-item'});
         var textLength = listitem[1].length;
-        if (textLength >= 20)
+        if (textLength >= 20) {
           item.style.fontSize = '11px';
-        else if (textLength >= 17)
+        } else if (textLength >= 17) {
           item.style.fontSize = '14px';
+        }
         item.innerHTML = listitem[1];
         element.appendChild(item);
         this.items[key] = item;
@@ -708,10 +731,11 @@
       var list = timelist.selected;
       var index = list.indexOf(key);
 
-      if (index !== -1)
+      if (index !== -1) {
         list.splice(index, 1);
-      else
+      } else {
         list.push(key);
+      }
 
       setLocations(list);
     }
@@ -748,8 +772,9 @@
 
       this.draggable.enable();
       element.addEventListener((supportsTouch ? 'touchstart' : 'mousedown'), function() {
-        if (attr(this.element.parentNode.parentNode, 'class') === 'open')
+        if (attr(this.element.parentNode.parentNode, 'class') === 'open') {
           listToggle();
+        }
       }.bind(this));
     },
     updateBoard: function() {
