@@ -20,17 +20,22 @@
     };
   }
 
-  function debounce(func, wait) {
-    var updateTimer = null, context, args;
+  function debounce(func, delay) {
+    var t = 0;
+    var ctx = null;
+    var args = null;
     return function() {
-      context = this;
+      ctx = this;
       args = arguments;
-      if (updateTimer !== null) {
-        clearTimeout(updateTimer);
+      if (t) {
+        clearTimeout(t);
       }
-      updateTimer = setTimeout(function() {
-        func.apply(context, args);
-      }, wait);
+      t = setTimeout(function() {
+        func.apply(ctx, args);
+        t = 0;
+        ctx = null;
+        args = null;
+      }, delay);
     };
   }
 
