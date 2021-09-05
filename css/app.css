@@ -27,8 +27,6 @@ body {
 }
 
 #container {
-  -webkit-transform: translateX(-168px);
-  -webkit-transition: -webkit-transform .3s ease-in-out;
   -ms-transform: translateX(-168px);
   height: 100%;
   position: absolute;
@@ -38,7 +36,6 @@ body {
 }
 
 #container.open {
-  -webkit-transform: translateX(0);
   -ms-transform: translateX(0);
   transform: translateX(0);
 }
@@ -93,7 +90,6 @@ body {
 }
 
 #clock-container {
-  -webkit-transform: translateX(168px);
   -ms-transform: translateX(168px);
   height: 100%;
   overflow: hidden;
