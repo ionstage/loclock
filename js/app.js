@@ -842,10 +842,4 @@
       event.preventDefault();
     }, { passive: false });
   }
-
-  window.loclock = {
-    setCustomTimezoneList: setCustomTimezoneList,
-    setHiddenTimezoneList: setHiddenTimezoneList,
-    updateTimezoneList: updateTimezoneList
-  };
 })(this.app || (this.app = {}));
