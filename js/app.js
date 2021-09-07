@@ -124,7 +124,7 @@
       cy: y,
       r: r,
       'stroke-width': (r / 30).toFixed(1),
-      'class': 'circle'
+      'class': 'circle',
     }));
 
     board.appendChild(createCircle({
@@ -132,7 +132,7 @@
       cy: y,
       r: (r / 45).toFixed(1),
       fill: 'black',
-      'class': 'center-point'
+      'class': 'center-point',
     }));
 
     var center_spin = el('<g>', NS_SVG);
@@ -142,14 +142,14 @@
       x: x - 11,
       y: y - 16,
       'font-size': r / 6,
-      'class': 'text center-time'
+      'class': 'text center-time',
     }));
 
     center_spin.appendChild(createText('RESET', {
       x: x,
       y: y + 32,
       'font-size': r / 10,
-      'class': 'text center-reset'
+      'class': 'text center-reset',
     }));
 
     board.appendChild(center_spin);
@@ -168,7 +168,7 @@
         x: (x + dif_x).toFixed(1),
         y: (y + dif_y).toFixed(1),
         'font-size': fontSize.toFixed(),
-        'class': 'text'
+        'class': 'text',
       }));
 
       deg += dif;
@@ -202,7 +202,7 @@
 
       pointItemMap[key] = {
         text: locationName,
-        deg: (date.getHours() + (date.getMinutes() + timeOffset) / 60) / 24 * (Math.PI * 2) + Math.PI / 2
+        deg: (date.getHours() + (date.getMinutes() + timeOffset) / 60) / 24 * (Math.PI * 2) + Math.PI / 2,
       };
     });
 
@@ -216,7 +216,7 @@
         cy: (y + r * Math.sin(deg)).toFixed(1),
         r: (r / 20).toFixed(1),
         'stroke-width': (r / 90).toFixed(1),
-        'class': 'circle'
+        'class': 'circle',
       }));
 
       containerElement.appendChild(createText(text, {
@@ -224,7 +224,7 @@
         y: y + r * Math.sin(deg),
         'font-size': (r / 8).toFixed(),
         'class': 'text',
-        'data-deg': deg
+        'data-deg': deg,
       }));
     }
 
@@ -298,7 +298,7 @@
       var property = {
         x: x + (r * 1.125 + textBBox.width / 2 + (textBBox.height / 2) * sin * sin) * cos,
         y: y + (r * 1.125 + textBBox.height / 2 + (textBBox.width / 8) * cos * cos) * sin,
-        dy: dy
+        dy: dy,
       };
 
       attr(element, property);
@@ -497,7 +497,7 @@
     },
     updateData: function() {
       this.data = createTimezoneData();
-    }
+    },
   };
 
   var dial_spinner = {
@@ -626,7 +626,7 @@
       }
       this.isDragging = false;
       clock_view.updateCenter();
-    }
+    },
   };
 
   var list_view = {
@@ -706,7 +706,7 @@
           click: true,
           scrollbars: true,
           shrinkScrollbars: 'scale',
-          fadeScrollbars: true
+          fadeScrollbars: true,
         });
 
         this.scroll.on('scrollStart', function() {
@@ -743,7 +743,7 @@
       }
 
       setLocations(list);
-    }
+    },
   };
 
   var bars_view = {
@@ -753,7 +753,7 @@
         event.stopPropagation();
         listToggle();
       });
-    }
+    },
   };
 
   var clock_view = {
@@ -772,7 +772,7 @@
         element: element,
         onstart: dial_spinner.dragstart.bind(dial_spinner),
         onmove: dial_spinner.dragmove.bind(dial_spinner),
-        onend: dial_spinner.dragend.bind(dial_spinner)
+        onend: dial_spinner.dragend.bind(dial_spinner),
       });
 
       this.draggable.enable();
@@ -816,9 +816,9 @@
         x: pt0.x,
         y: pt0.y,
         width: pt1.x - pt0.x,
-        height: pt1.y - pt0.y
+        height: pt1.y - pt0.y,
       };
-    }
+    },
   };
 
   document.addEventListener('DOMContentLoaded', function() {
