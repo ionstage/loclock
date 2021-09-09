@@ -4,6 +4,7 @@
   var IScroll = require('iscroll');
   var Base64 = require('js-base64').Base64;
   var moment = require('moment-timezone');
+  var helper = app.helper || require('./helper.js');
   var Draggable = app.Draggable || require('./draggable.js');
   var timezone = app.timezone || require('./timezone.js');
 
@@ -17,25 +18,6 @@
   if (!window.requestAnimationFrame) {
     window.requestAnimationFrame = function(callback) {
       return setTimeout(callback, 1000 / 60);
-    };
-  }
-
-  function debounce(func, delay) {
-    var t = 0;
-    var ctx = null;
-    var args = null;
-    return function() {
-      ctx = this;
-      args = arguments;
-      if (t) {
-        clearTimeout(t);
-      }
-      t = setTimeout(function() {
-        func.apply(ctx, args);
-        t = 0;
-        ctx = null;
-        args = null;
-      }, delay);
     };
   }
 
@@ -833,7 +815,7 @@
     initDialSpinner();
   });
 
-  window.addEventListener('resize', debounce(function() {
+  window.addEventListener('resize', helper.debounce(function() {
     clock_view.updatePoint();
   }, 100));
 
