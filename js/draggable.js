@@ -51,7 +51,7 @@
     var y = event.pageY - offset.y;
     this.startPageX = event.pageX;
     this.startPageY = event.pageY;
-    this.onstart.call(null, { x: x, y: y, event: event });
+    this.onstart.call(null, x, y, event);
     document.addEventListener('mousemove', this.onmousemove);
     document.addEventListener('mouseup', this.onmouseup);
   };
@@ -59,13 +59,13 @@
   Draggable.prototype.onmousemove = function(event) {
     var dx = event.pageX - this.startPageX;
     var dy = event.pageY - this.startPageY;
-    this.onmove.call(null, { dx: dx, dy: dy, event: event });
+    this.onmove.call(null, dx, dy, event);
   };
 
   Draggable.prototype.onmouseup = function(event) {
     document.removeEventListener('mousemove', this.onmousemove);
     document.removeEventListener('mouseup', this.onmouseup);
-    this.onend.call(null, { event: event });
+    this.onend.call(null, event);
   };
 
   Draggable.prototype.ontouchstart = function(event) {
@@ -79,7 +79,7 @@
     this.identifier = touch.identifier;
     this.startPageX = touch.pageX;
     this.startPageY = touch.pageY;
-    this.onstart.call(null, { x: x, y: y, event: event });
+    this.onstart.call(null, x, y, event);
     document.addEventListener('touchmove', this.ontouchmove);
     document.addEventListener('touchend', this.ontouchend);
   };
@@ -91,7 +91,7 @@
     }
     var dx = touch.pageX - this.startPageX;
     var dy = touch.pageY - this.startPageY;
-    this.onmove.call(null, { dx: dx, dy: dy, event: event });
+    this.onmove.call(null, dx, dy, event);
   };
 
   Draggable.prototype.ontouchend = function(event) {
@@ -101,7 +101,7 @@
     }
     document.removeEventListener('touchmove', this.ontouchmove);
     document.removeEventListener('touchend', this.ontouchend);
-    this.onend.call(null, { event: event });
+    this.onend.call(null, event);
   };
 
   if (typeof module !== 'undefined' && module.exports) {

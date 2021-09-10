@@ -515,8 +515,7 @@
       clock_view.draggable.disable();
       requestAnimationFrame(callback);
     },
-    dragstart: function(context) {
-      var event = context.event;
+    dragstart: function(x, y, event) {
       event.preventDefault();
       this.startClassName = attr(event.target, 'class') || '';
       if (this.startClassName.indexOf('center-time') !== -1) {
@@ -536,7 +535,7 @@
       this.isDragging = true;
       clock_view.updateCenter();
     },
-    dragmove: function(context) {
+    dragmove: function(dx, dy, event) {
       if (this.isDragCanceled) {
         return;
       }
@@ -544,8 +543,8 @@
       var rect = this.clock_element.getBoundingClientRect();
       var cx = rect.width / 2;
       var cy = rect.height / 2;
-      var x1 = this.x0 + context.dx;
-      var y1 = this.y0 + context.dy;
+      var x1 = this.x0 + dx;
+      var y1 = this.y0 + dy;
       var a1 = this.x0 - cx;
       var a2 = this.y0 - cy;
       var b1 = x1 - cx;
@@ -586,8 +585,7 @@
       clock_view.updatePoint();
       clock_view.updateCenter();
     },
-    dragend: function(context) {
-      var event = context.event;
+    dragend: function(event) {
       var target = event.target;
       if (supportsTouch) {
         var x = (event.touches ? event.changedTouches[0].clientX : event.clientX);
