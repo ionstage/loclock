@@ -515,7 +515,7 @@
       clock_view.draggable.disable();
       requestAnimationFrame(callback);
     },
-    dragstart: function(x, y, event) {
+    dragstart: function(event) {
       event.preventDefault();
       this.startClassName = attr(event.target, 'class') || '';
       if (this.startClassName.indexOf('center-time') !== -1) {
@@ -535,7 +535,7 @@
       this.isDragging = true;
       clock_view.updateCenter();
     },
-    dragmove: function(dx, dy, event) {
+    dragmove: function(dx, dy) {
       if (this.isDragCanceled) {
         return;
       }
