@@ -21,15 +21,15 @@ body {
 }
 
 .unselectable {
-  -webkit-user-select: none;
   -ms-user-select: none;
+  -webkit-user-select: none;
   user-select: none;
 }
 
 #container {
-  -ms-transform: translateX(-168px);
   height: 100%;
   position: absolute;
+  -ms-transform: translateX(-168px);
   transform: translateX(-168px);
   transition: transform .3s ease-in-out;
   width: 100%;
@@ -90,10 +90,10 @@ body {
 }
 
 #clock-container {
-  -ms-transform: translateX(168px);
   height: 100%;
   overflow: hidden;
   position: absolute;
+  -ms-transform: translateX(168px);
   transform: translateX(168px);
   width: 100%;
 }
