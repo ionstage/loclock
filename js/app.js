@@ -21,18 +21,6 @@
     };
   }
 
-  function el(selector, namespace) {
-    if (selector[0] === '<') {
-      selector = selector.match(/<(.+)>/)[1];
-      if (namespace) {
-        return document.createElementNS(namespace, selector);
-      } else {
-        return document.createElement(selector);
-      }
-    }
-    return document.querySelector(selector);
-  }
-
   function attr(element, o, value) {
     if (typeof value === 'undefined' && typeof o === 'string') {
       return element.getAttribute(o);
@@ -89,17 +77,17 @@
   }
 
   function createCircle(o) {
-    return attr(el('<circle>', NS_SVG), o);
+    return attr(document.createElementNS(NS_SVG, 'circle'), o);
   }
 
   function createText(text, o) {
-    var element = el('<text>', NS_SVG);
+    var element = document.createElementNS(NS_SVG, 'text');
     element.appendChild(document.createTextNode(text));
     return attr(element, o);
   }
 
   function createBoard(x, y, r) {
-    var board = el('<g>', NS_SVG);
+    var board = document.createElementNS(NS_SVG, 'g');
 
     board.appendChild(createCircle({
       cx: x,
@@ -117,7 +105,7 @@
       'class': 'center-point',
     }));
 
-    var center_spin = el('<g>', NS_SVG);
+    var center_spin = document.createElementNS(NS_SVG, 'g');
     attr(center_spin, 'class', 'center-spin');
 
     center_spin.appendChild(createText('+00:00', {
@@ -168,7 +156,7 @@
   }
 
   function createPoint(x, y, r, timelist, timeOffset) {
-    var containerElement = el('<g>', NS_SVG);
+    var containerElement = document.createElementNS(NS_SVG, 'g');
     var pointItemMap = {};
 
     timelist.forEach(function(item) {
@@ -411,7 +399,7 @@
     var isOpen = false;
     return function() {
       isOpen = !isOpen;
-      attr(el('#container'), 'class', (isOpen ? 'open' : null));
+      attr(document.querySelector('#container'), 'class', (isOpen ? 'open' : null));
       if (isOpen) {
         clock_view.draggable.disable();
       } else {
@@ -637,7 +625,7 @@
       }
     },
     setList: function(list) {
-      var element = el('<div>');
+      var element = document.createElement('div');
       var listitems = [];
       var needsCurrentLocation = false;
 
@@ -659,7 +647,7 @@
       }
 
       listitems.forEach(function(listitem) {
-        var item = el('<div>');
+        var item = document.createElement('div');
         var key = listitem[0];
         attr(item, {'data-key': key, 'class': 'list-item'});
         var textLength = listitem[1].length;
@@ -741,8 +729,8 @@
       var width = 720, height = 720;
       this.element = element;
       this.timelist = timelist;
-      this.board_element = el('<g>', NS_SVG);
-      this.point_element = el('<g>', NS_SVG);
+      this.board_element = document.createElementNS(NS_SVG, 'g');
+      this.point_element = document.createElementNS(NS_SVG, 'g');
       this.element.appendChild(this.board_element);
       this.element.appendChild(this.point_element);
       this.x = width / 2;
@@ -802,9 +790,9 @@
   };
 
   document.addEventListener('DOMContentLoaded', function() {
-    list_view.init(el('#list'));
-    bars_view.init(el('#bars'));
-    clock_view.init(el('#clock'), timelist.get());
+    list_view.init(document.querySelector('#list'));
+    bars_view.init(document.querySelector('#bars'));
+    clock_view.init(document.querySelector('#clock'), timelist.get());
     clock_view.updateBoard();
 
     initTimezoneData();
