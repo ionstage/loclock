@@ -21,26 +21,6 @@
     };
   }
 
-  function attr(element, o, value) {
-    if (typeof value === 'undefined' && typeof o === 'string') {
-      return element.getAttribute(o);
-    }
-
-    if (typeof o === 'string') {
-      if (value === null) {
-        element.removeAttribute(o);
-      } else {
-        element.setAttribute(o, value);
-      }
-    } else {
-      for (var key in o) {
-        element.setAttribute(key, o[key]);
-      }
-    }
-
-    return element;
-  }
-
   function getHashText() {
     var text = location.hash.substring(1);
     return (text ? Base64.decode(text) : '');
@@ -77,13 +57,20 @@
   }
 
   function createCircle(o) {
-    return attr(document.createElementNS(NS_SVG, 'circle'), o);
+    var element = document.createElementNS(NS_SVG, 'circle');
+    for (var key in o) {
+      element.setAttribute(key, o[key]);
+    }
+    return element;
   }
 
   function createText(text, o) {
     var element = document.createElementNS(NS_SVG, 'text');
     element.appendChild(document.createTextNode(text));
-    return attr(element, o);
+    for (var key in o) {
+      element.setAttribute(key, o[key]);
+    }
+    return element;
   }
 
   function createBoard(x, y, r) {
@@ -106,7 +93,7 @@
     }));
 
     var center_spin = document.createElementNS(NS_SVG, 'g');
-    attr(center_spin, 'class', 'center-spin');
+    center_spin.setAttribute('class', 'center-spin');
 
     center_spin.appendChild(createText('+00:00', {
       x: x - 11,
@@ -150,8 +137,8 @@
   function adjustBoard(board) {
     forEachTextElement(board, function(element) {
       var textBBox = element.getBBox();
-      var dy = +attr(element, 'y') - (textBBox.y + textBBox.height / 2);
-      attr(element, 'dy', dy);
+      var dy = +element.getAttribute('y') - (textBBox.y + textBBox.height / 2);
+      element.setAttribute('dy', dy);
     });
   }
 
@@ -226,7 +213,7 @@
         (gbb.x + gbb.width > width && (pattern = 2)) ||
         (gbb.y < 0 && (pattern = 3)) ||
         (gbb.y + gbb.height > height && (pattern = 4))) {
-      attr(element, 'font-size', +attr(element, 'font-size') / 1.5);
+      element.setAttribute('font-size', +element.getAttribute('font-size') / 1.5);
 
       var newbb = element.getBBox();
       var value;
@@ -234,19 +221,19 @@
       switch (pattern) {
         case 1:
           value = bb.x + bb.width - (newbb.x + newbb.width);
-          attr(element, 'x', +attr(element, 'x') + value);
+          element.setAttribute('x', +element.getAttribute('x') + value);
           break;
         case 2:
           value = newbb.x - bb.x;
-          attr(element, 'x', +attr(element, 'x') - value);
+          element.setAttribute('x', +element.getAttribute('x') - value);
           break;
         case 3:
           value = bb.y + bb.height - (newbb.y + newbb.height);
-          attr(element, 'y', +attr(element, 'y') + value);
+          element.setAttribute('y', +element.getAttribute('y') + value);
           break;
         case 4:
           value = newbb.y - bb.y;
-          attr(element, 'y', +attr(element, 'y') - value);
+          element.setAttribute('y', +element.getAttribute('y') - value);
           break;
         default:
           break;
@@ -262,16 +249,13 @@
     forEachTextElement(point, function(element) {
       var textBBox = element.getBBox();
       var deg = +element.getAttribute('data-deg');
-      var dy = +attr(element, 'y') - (textBBox.y + textBBox.height / 2);
+      var dy = +element.getAttribute('y') - (textBBox.y + textBBox.height / 2);
       var sin = Math.sin(deg);
       var cos = Math.cos(deg);
-      var property = {
-        x: x + (r * 1.125 + textBBox.width / 2 + (textBBox.height / 2) * sin * sin) * cos,
-        y: y + (r * 1.125 + textBBox.height / 2 + (textBBox.width / 8) * cos * cos) * sin,
-        dy: dy,
-      };
 
-      attr(element, property);
+      element.setAttribute('x', x + (r * 1.125 + textBBox.width / 2 + (textBBox.height / 2) * sin * sin) * cos);
+      element.setAttribute('y', y + (r * 1.125 + textBBox.height / 2 + (textBBox.width / 8) * cos * cos) * sin);
+      element.setAttribute('dy', dy);
       textBBox = element.getBBox();
 
       if (textBBox.y + textBBox.height / 2 < y) {
@@ -294,8 +278,8 @@
         if (!isBBoxOverlaid(bb0, bb1)) {
           continue;
         }
-        var dy = +attr(el, 'dy') - ((bb0.y + bb0.height) - bb1.y);
-        attr(el, 'dy', dy);
+        var dy = +el.getAttribute('dy') - ((bb0.y + bb0.height) - bb1.y);
+        el.setAttribute('dy', dy);
       }
       elements.push(el);
     });
@@ -310,8 +294,8 @@
         if (!isBBoxOverlaid(bb0, bb1)) {
           continue;
         }
-        var dy = +attr(el, 'dy') + ((bb1.y + bb1.height) - bb0.y);
-        attr(el, 'dy', dy);
+        var dy = +el.getAttribute('dy') + ((bb1.y + bb1.height) - bb0.y);
+        el.setAttribute('dy', dy);
       }
       elements.push(el);
     });
@@ -399,7 +383,8 @@
     var isOpen = false;
     return function() {
       isOpen = !isOpen;
-      attr(document.querySelector('#container'), 'class', (isOpen ? 'open' : null));
+      var element = document.querySelector('#container');
+      element.setAttribute('class', (isOpen ? 'open' : null));
       if (isOpen) {
         clock_view.draggable.disable();
       } else {
@@ -505,15 +490,15 @@
     },
     dragstart: function(event) {
       event.preventDefault();
-      this.startClassName = attr(event.target, 'class') || '';
+      this.startClassName = event.target.getAttribute('class') || '';
       if (this.startClassName.indexOf('center-time') !== -1) {
         this.isDragCanceled = true;
-        attr(this.center_time_element, 'fill', 'lightgray');
+        this.center_time_element.setAttribute('fill', 'lightgray');
         return;
       }
       if (this.startClassName.indexOf('center-reset') !== -1) {
         this.isDragCanceled = true;
-        attr(this.center_reset_element, 'fill', 'lightgray');
+        this.center_reset_element.setAttribute('fill', 'lightgray');
         return;
       }
       this.isDragCanceled = false;
@@ -580,7 +565,7 @@
         var y = (event.touches ? event.changedTouches[0].clientY : event.clientY);
         target = document.elementFromPoint(x, y);
       }
-      var className = attr(target, 'class') || '';
+      var className = target.getAttribute('class') || '';
       if (this.startClassName === className) {
         if (className.indexOf('center-time') !== -1) {
           this.toggleTimeOffset();
@@ -589,8 +574,8 @@
         }
       }
       if (this.isDragCanceled) {
-        attr(this.center_time_element, 'fill', 'gray');
-        attr(this.center_reset_element, 'fill', 'gray');
+        this.center_time_element.setAttribute('fill', 'gray');
+        this.center_reset_element.setAttribute('fill', 'gray');
       }
       this.isDragging = false;
       clock_view.updateCenter();
@@ -621,7 +606,7 @@
       }.bind(this));
 
       if (supportsTouch) {
-        attr(element.parentNode, 'class', 'unscrollable');
+        element.parentNode.setAttribute('class', 'unscrollable');
       }
     },
     setList: function(list) {
@@ -649,7 +634,8 @@
       listitems.forEach(function(listitem) {
         var item = document.createElement('div');
         var key = listitem[0];
-        attr(item, {'data-key': key, 'class': 'list-item'});
+        item.setAttribute('data-key', key);
+        item.setAttribute('class', 'list-item');
         var textLength = listitem[1].length;
         if (textLength >= 20) {
           item.style.fontSize = '11px';
@@ -689,18 +675,18 @@
     update: function() {
       if (this.current_selected_items.length > this.selected.length) {
         this.current_selected_items.forEach(function(item) {
-          attr(item, 'class', 'list-item');
+          item.setAttribute('class', 'list-item');
         });
       }
 
       this.current_selected_items = this.selected.map(function(key) {
         var item = this.items[key];
-        attr(item, 'class', 'list-item list-selected');
+        item.setAttribute('class', 'list-item list-selected');
         return item;
       }.bind(this));
     },
     onclick: function(event) {
-      var key = attr(event.target, 'data-key');
+      var key = event.target.getAttribute('data-key');
       var list = timelist.selected;
       var index = list.indexOf(key);
 
@@ -745,7 +731,7 @@
 
       this.draggable.enable();
       element.addEventListener((supportsTouch ? 'touchstart' : 'mousedown'), function() {
-        if (attr(this.element.parentNode.parentNode, 'class') === 'open') {
+        if (this.element.parentNode.parentNode.getAttribute('class') === 'open') {
           listToggle();
         }
       }.bind(this));
@@ -769,7 +755,7 @@
       var m = ('00' + Math.abs(timeOffset % 60)).slice(-2);
       var text = (timeOffset >= 0 ? '+' : '-') + h + ':' + m;
       this.center_time_element.textContent = text;
-      attr(this.element, 'class', (timeOffset || dial_spinner.isDragging ? 'clock spin' : 'clock'));
+      this.element.setAttribute('class', (timeOffset || dial_spinner.isDragging ? 'clock spin' : 'clock'));
     },
     globalBBox: function(bb) {
       var stageElement = this.element;
