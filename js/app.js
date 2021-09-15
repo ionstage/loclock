@@ -21,15 +21,6 @@
     };
   }
 
-  function getHashText() {
-    var text = location.hash.substring(1);
-    return (text ? Base64.decode(text) : '');
-  }
-
-  function setHashText(text) {
-    location.replace('#' + Base64.encodeURI(text));
-  }
-
   function getUrlSearchParams() {
     var params = {};
     var pairs = location.search.substring(1).split('&');
@@ -421,7 +412,8 @@
   }
 
   function getLocations() {
-    var hash = getHashText();
+    var text = location.hash.substring(1);
+    var hash = (text ? Base64.decode(text) : '');
     var list = (hash ? hash.split(',') : DEFAULT_LOCATIONS);
     return list.filter(function(item) {
       return Object.keys(timelist.data).indexOf(item) !== -1;
@@ -432,7 +424,8 @@
     list = list.filter(function(item) {
       return Object.keys(timelist.data).indexOf(item) !== -1;
     });
-    setHashText(list.join(','));
+    var text = list.join(',');
+    location.replace('#' + Base64.encodeURI(text));
     selectTimezone(list);
   }
 
