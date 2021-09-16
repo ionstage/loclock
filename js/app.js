@@ -5,6 +5,7 @@
   var Base64 = require('js-base64').Base64;
   var moment = require('moment-timezone');
   var helper = app.helper || require('./helper.js');
+  var dom = app.dom || require('./dom.js');
   var Draggable = app.Draggable || require('./draggable.js');
   var timezone = app.timezone || require('./timezone.js');
 
@@ -12,8 +13,6 @@
   var DEFAULT_LOCATIONS = ['America/New_York', 'Europe/London', 'Asia/Tokyo'];
   var DEFAULT_TIMEZONE_NAMES = timezone.names;
   var KEY_CURRENT_LOCATION = 'Current_Location';
-
-  var supportsTouch = ('ontouchstart' in window || (typeof DocumentTouch !== 'undefined' && document instanceof DocumentTouch));
 
   if (!window.requestAnimationFrame) {
     window.requestAnimationFrame = function(callback) {
@@ -553,7 +552,7 @@
     },
     dragend: function(event) {
       var target = event.target;
-      if (supportsTouch) {
+      if (dom.supportsTouch()) {
         var x = (event.touches ? event.changedTouches[0].clientX : event.clientX);
         var y = (event.touches ? event.changedTouches[0].clientY : event.clientY);
         target = document.elementFromPoint(x, y);
@@ -598,7 +597,7 @@
         this.clickable = !this.scrolling;
       }.bind(this));
 
-      if (supportsTouch) {
+      if (dom.supportsTouch()) {
         element.parentNode.setAttribute('class', 'unscrollable');
       }
     },
@@ -643,7 +642,7 @@
       this.element.parentNode.replaceChild(element, this.element);
       this.element = element;
 
-      if (supportsTouch) {
+      if (dom.supportsTouch()) {
         if (this.scroll) {
           this.scroll.destroy();
           this.scroll = null;
@@ -695,7 +694,7 @@
 
   var bars_view = {
     init: function(element) {
-      element.addEventListener((supportsTouch ? 'touchend' : 'click'), function(event) {
+      element.addEventListener((dom.supportsTouch() ? 'touchend' : 'click'), function(event) {
         event.preventDefault();
         event.stopPropagation();
         listToggle();
@@ -723,7 +722,7 @@
       });
 
       this.draggable.enable();
-      element.addEventListener((supportsTouch ? 'touchstart' : 'mousedown'), function() {
+      element.addEventListener((dom.supportsTouch() ? 'touchstart' : 'mousedown'), function() {
         if (this.element.parentNode.parentNode.getAttribute('class') === 'open') {
           listToggle();
         }
@@ -784,7 +783,7 @@
     clock_view.updatePoint();
   }, 100));
 
-  if (supportsTouch) {
+  if (dom.supportsTouch()) {
     window.addEventListener('touchmove', function(event) {
       event.preventDefault();
     }, { passive: false });
