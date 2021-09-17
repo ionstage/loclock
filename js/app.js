@@ -14,12 +14,6 @@
   var DEFAULT_TIMEZONE_NAMES = timezone.names;
   var KEY_CURRENT_LOCATION = 'Current_Location';
 
-  if (!window.requestAnimationFrame) {
-    window.requestAnimationFrame = function(callback) {
-      return setTimeout(callback, 1000 / 60);
-    };
-  }
-
   function getUrlSearchParams() {
     var params = {};
     var pairs = location.search.substring(1).split('&');
@@ -469,7 +463,7 @@
       var callback = function() {
         if (dt && Math.abs(this.timeOffset) > Math.abs(dt)) {
           this.timeOffset += dt;
-          requestAnimationFrame(callback);
+          dom.animate(callback);
         } else {
           this.timeOffset = 0;
           clock_view.draggable.enable();
@@ -478,7 +472,7 @@
         clock_view.updateCenter();
       }.bind(this);
       clock_view.draggable.disable();
-      requestAnimationFrame(callback);
+      dom.animate(callback);
     },
     dragstart: function(event) {
       event.preventDefault();
