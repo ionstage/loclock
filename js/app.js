@@ -293,53 +293,12 @@
     return tzName.substring(tzName.lastIndexOf('/') + 1).replace(/_/g, ' ');
   }
 
-  function getTimelist(timezone) {
-    var date = new Date();
-    var currentTime = date.getTime();
-    var currentTimezoneOffset = date.getTimezoneOffset();
-
-    return timezone.map(function(item) {
-      var name = getLocationName(item[0]);
-      var time = parseInt(item[1], 10);
-      time = new Date(currentTime + time * 1000 + currentTimezoneOffset * 60 * 1000);
-      return [name, time];
-    });
-  }
-
   function selectTimezone(list) {
     timelist.selected = list;
     clock_view.timelist = timelist.get();
     list_view.selected = timelist.selected;
     list_view.update();
     clock_view.updatePoint();
-  }
-
-  function createTimezoneData() {
-    var data  = {};
-    var now = Date.now();
-
-    DEFAULT_TIMEZONE_NAMES.forEach(function(name) {
-      data[name] = moment.tz.zone(name.split('#/')[0]).utcOffset(now) * (-60);
-    });
-
-    data[KEY_CURRENT_LOCATION] = new Date().getTimezoneOffset() * (-60);
-
-    var params = getUrlSearchParams();
-    getCustomTimezoneList(params).forEach(function(name) {
-      if (name in data) {
-        return;
-      }
-      var tz = moment.tz.zone(name.split('#/')[0]);
-      if (tz) {
-        data[name] = tz.utcOffset(now) * (-60);
-      }
-    });
-
-    getHiddenTimezoneList(params).forEach(function(name) {
-      delete data[name];
-    });
-
-    return data;
   }
 
   function getCustomTimezoneList(params) {
@@ -434,10 +393,49 @@
         return [key, this.data[key]];
       }.bind(this));
 
-      return getTimelist(selected_timezone);
+      return this._getTimelist(selected_timezone);
     },
     updateData: function() {
-      this.data = createTimezoneData();
+      this.data = this._createTimezoneData();
+    },
+    _getTimelist: function(timezone) {
+      var date = new Date();
+      var currentTime = date.getTime();
+      var currentTimezoneOffset = date.getTimezoneOffset();
+
+      return timezone.map(function(item) {
+        var name = getLocationName(item[0]);
+        var time = parseInt(item[1], 10);
+        time = new Date(currentTime + time * 1000 + currentTimezoneOffset * 60 * 1000);
+        return [name, time];
+      });
+    },
+    _createTimezoneData: function() {
+      var data  = {};
+      var now = Date.now();
+
+      DEFAULT_TIMEZONE_NAMES.forEach(function(name) {
+        data[name] = moment.tz.zone(name.split('#/')[0]).utcOffset(now) * (-60);
+      });
+
+      data[KEY_CURRENT_LOCATION] = new Date().getTimezoneOffset() * (-60);
+
+      var params = getUrlSearchParams();
+      getCustomTimezoneList(params).forEach(function(name) {
+        if (name in data) {
+          return;
+        }
+        var tz = moment.tz.zone(name.split('#/')[0]);
+        if (tz) {
+          data[name] = tz.utcOffset(now) * (-60);
+        }
+      });
+
+      getHiddenTimezoneList(params).forEach(function(name) {
+        delete data[name];
+      });
+
+      return data;
     },
   };
 
