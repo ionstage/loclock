@@ -14,32 +14,6 @@
   var DEFAULT_TIMEZONE_NAMES = timezone.names;
   var KEY_CURRENT_LOCATION = 'Current_Location';
 
-  function getUrlSearchParams() {
-    var params = {};
-    var pairs = location.search.substring(1).split('&');
-    for (var i = 0, len = pairs.length; i < len; i++) {
-      var pair = pairs[i];
-      var index = pair.indexOf('=');
-      if (index !== -1) {
-        var name = decodeURIComponent(pair.slice(0, index));
-        var value = decodeURIComponent(pair.slice(index + 1));
-        params[name] = value;
-      } else if (pair) {
-        params[decodeURIComponent(pair)] = '';
-      }
-    }
-    return params;
-  }
-
-  function setUrlSearchParam(name, value) {
-    var params = getUrlSearchParams();
-    params[name] = value;
-    var search = '?' + Object.keys(params).map(function(name) {
-      return encodeURIComponent(name) + '=' + encodeURIComponent(params[name]);
-    }).join('&');
-    history.replaceState(null, null, search + location.hash);
-  }
-
   function createCircle(o) {
     var element = document.createElementNS(NS_SVG, 'circle');
     for (var key in o) {
@@ -289,32 +263,12 @@
     });
   }
 
-  function getLocationName(tzName) {
-    return tzName.substring(tzName.lastIndexOf('/') + 1).replace(/_/g, ' ');
-  }
-
   function selectTimezone(list) {
     timelist.selected = list;
     clock_view.timelist = timelist.get();
     list_view.selected = timelist.selected;
     list_view.update();
     clock_view.updatePoint();
-  }
-
-  function getCustomTimezoneList(params) {
-    return (params.custom_tzlist ? Base64.decode(params.custom_tzlist).split(',') : []);
-  }
-
-  function getHiddenTimezoneList(params) {
-    return (params.hidden_tzlist ? Base64.decode(params.hidden_tzlist).split(',') : []);
-  }
-
-  function setCustomTimezoneList(list) {
-    setUrlSearchParam('custom_tzlist', Base64.encodeURI(list.join(',')));
-  }
-
-  function setHiddenTimezoneList(list) {
-    setUrlSearchParam('hidden_tzlist', Base64.encodeURI(list.join(',')));
   }
 
   function updateTimezoneList() {
@@ -398,17 +352,26 @@
     updateData: function() {
       this.data = this._createTimezoneData();
     },
+    setCustomTimezoneList: function(list) {
+      this._setUrlSearchParam('custom_tzlist', Base64.encodeURI(list.join(',')));
+    },
+    setHiddenTimezoneList: function(list) {
+      this._setUrlSearchParam('hidden_tzlist', Base64.encodeURI(list.join(',')));
+    },
+    getLocationName: function(tzName) {
+      return tzName.substring(tzName.lastIndexOf('/') + 1).replace(/_/g, ' ');
+    },
     _getTimelist: function(timezone) {
       var date = new Date();
       var currentTime = date.getTime();
       var currentTimezoneOffset = date.getTimezoneOffset();
 
       return timezone.map(function(item) {
-        var name = getLocationName(item[0]);
+        var name = this.getLocationName(item[0]);
         var time = parseInt(item[1], 10);
         time = new Date(currentTime + time * 1000 + currentTimezoneOffset * 60 * 1000);
         return [name, time];
-      });
+      }.bind(this));
     },
     _createTimezoneData: function() {
       var data  = {};
@@ -420,8 +383,8 @@
 
       data[KEY_CURRENT_LOCATION] = new Date().getTimezoneOffset() * (-60);
 
-      var params = getUrlSearchParams();
-      getCustomTimezoneList(params).forEach(function(name) {
+      var params = this._getUrlSearchParams();
+      this._getCustomTimezoneList(params).forEach(function(name) {
         if (name in data) {
           return;
         }
@@ -431,11 +394,41 @@
         }
       });
 
-      getHiddenTimezoneList(params).forEach(function(name) {
+      this._getHiddenTimezoneList(params).forEach(function(name) {
         delete data[name];
       });
 
       return data;
+    },
+    _getCustomTimezoneList: function(params) {
+      return (params.custom_tzlist ? Base64.decode(params.custom_tzlist).split(',') : []);
+    },
+    _getHiddenTimezoneList: function(params) {
+      return (params.hidden_tzlist ? Base64.decode(params.hidden_tzlist).split(',') : []);
+    },
+    _getUrlSearchParams: function() {
+      var params = {};
+      var pairs = location.search.substring(1).split('&');
+      for (var i = 0, len = pairs.length; i < len; i++) {
+        var pair = pairs[i];
+        var index = pair.indexOf('=');
+        if (index !== -1) {
+          var name = decodeURIComponent(pair.slice(0, index));
+          var value = decodeURIComponent(pair.slice(index + 1));
+          params[name] = value;
+        } else if (pair) {
+          params[decodeURIComponent(pair)] = '';
+        }
+      }
+      return params;
+    },
+    _setUrlSearchParam: function(name, value) {
+      var params = this._getUrlSearchParams();
+      params[name] = value;
+      var search = '?' + Object.keys(params).map(function(name) {
+        return encodeURIComponent(name) + '=' + encodeURIComponent(params[name]);
+      }).join('&');
+      history.replaceState(null, null, search + location.hash);
     },
   };
 
@@ -603,7 +596,7 @@
           needsCurrentLocation = true;
           return;
         }
-        var name = getLocationName(item);
+        var name = timelist.getLocationName(item);
         listitems.push([item, name]);
       });
 
