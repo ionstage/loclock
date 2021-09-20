@@ -11,7 +11,6 @@
 
   var NS_SVG = 'http://www.w3.org/2000/svg';
   var DEFAULT_LOCATIONS = ['America/New_York', 'Europe/London', 'Asia/Tokyo'];
-  var DEFAULT_TIMEZONE_NAMES = timezone.names;
   var KEY_CURRENT_LOCATION = 'Current_Location';
 
   function createCircle(o) {
@@ -377,7 +376,7 @@
       var data  = {};
       var now = Date.now();
 
-      DEFAULT_TIMEZONE_NAMES.forEach(function(name) {
+      timezone.names.forEach(function(name) {
         data[name] = moment.tz.zone(name.split('#/')[0]).utcOffset(now) * (-60);
       });
 
