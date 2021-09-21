@@ -11,7 +11,6 @@
 
   var NS_SVG = 'http://www.w3.org/2000/svg';
   var DEFAULT_LOCATIONS = ['America/New_York', 'Europe/London', 'Asia/Tokyo'];
-  var KEY_CURRENT_LOCATION = 'Current_Location';
 
   function createCircle(o) {
     var element = document.createElementNS(NS_SVG, 'circle');
@@ -335,6 +334,7 @@
   }
 
   var timelist = {
+    KEY_CURRENT_LOCATION: 'Current_Location',
     data: {},
     selected: [],
     get: function() {
@@ -380,7 +380,7 @@
         data[name] = moment.tz.zone(name.split('#/')[0]).utcOffset(now) * (-60);
       });
 
-      data[KEY_CURRENT_LOCATION] = new Date().getTimezoneOffset() * (-60);
+      data[this.KEY_CURRENT_LOCATION] = new Date().getTimezoneOffset() * (-60);
 
       var params = this._getUrlSearchParams();
       this._getCustomTimezoneList(params).forEach(function(name) {
@@ -591,7 +591,7 @@
       var needsCurrentLocation = false;
 
       list.forEach(function(item) {
-        if (item === KEY_CURRENT_LOCATION) {
+        if (item === timelist.KEY_CURRENT_LOCATION) {
           needsCurrentLocation = true;
           return;
         }
@@ -604,7 +604,7 @@
       });
 
       if (needsCurrentLocation) {
-        listitems.unshift([KEY_CURRENT_LOCATION, 'Current Location']);
+        listitems.unshift([timelist.KEY_CURRENT_LOCATION, 'Current Location']);
       }
 
       listitems.forEach(function(listitem) {
