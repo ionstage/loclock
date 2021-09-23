@@ -1,8 +1,6 @@
 (function(app) {
   'use strict';
 
-  var timezone = {};
-
   var TZ_TIMEZONE_NAMES = [
     'Europe/Andorra',
     'Asia/Dubai',
@@ -516,6 +514,8 @@
     'Africa/Abidjan#/Yamoussoukro',
     'Africa/Douala#/Yaounde',
   ];
+
+  var timezone = {};
 
   timezone.names = TZ_TIMEZONE_NAMES.concat(ADDITIONAL_TIMEZONE_NAMES);
 
