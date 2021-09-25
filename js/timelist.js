@@ -3,7 +3,7 @@
 
   var Base64 = require('js-base64').Base64;
   var moment = require('moment-timezone');
-  var timezone = app.timezone || require('./timezone.js');
+  var Timezone = app.Timezone || require('./timezone.js');
 
   var TimeList = function() {
     this.KEY_CURRENT_LOCATION = 'Current_Location';
@@ -56,7 +56,7 @@
     var data  = {};
     var now = Date.now();
 
-    timezone.names.forEach(function(name) {
+    Timezone.LOCATION_NAMES.forEach(function(name) {
       data[name] = moment.tz.zone(name.split('#/')[0]).utcOffset(now) * (-60);
     });
 

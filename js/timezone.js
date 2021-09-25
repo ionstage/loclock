@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var TZ_TIMEZONE_NAMES = [
+  var TZ_LOCATION_NAMES = [
     'Europe/Andorra',
     'Asia/Dubai',
     'Asia/Kabul',
@@ -419,7 +419,7 @@
     'Africa/Harare',
   ];
 
-  var ADDITIONAL_TIMEZONE_NAMES = [
+  var ADDITIONAL_LOCATION_NAMES = [
     'Asia/Dubai#/Abu Dhabi',
     'Africa/Lagos#/Abuja',
     'America/Pangnirtung#/Alert',
@@ -515,13 +515,13 @@
     'Africa/Douala#/Yaounde',
   ];
 
-  var timezone = {};
+  var Timezone = {};
 
-  timezone.names = TZ_TIMEZONE_NAMES.concat(ADDITIONAL_TIMEZONE_NAMES);
+  Timezone.LOCATION_NAMES = TZ_LOCATION_NAMES.concat(ADDITIONAL_LOCATION_NAMES);
 
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = timezone;
+    module.exports = Timezone;
   } else {
-    app.timezone = timezone;
+    app.Timezone = Timezone;
   }
 })(this.app || (this.app = {}));
