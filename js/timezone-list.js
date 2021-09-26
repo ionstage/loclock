@@ -5,13 +5,13 @@
   var moment = require('moment-timezone');
   var Timezone = app.Timezone || require('./timezone.js');
 
-  var TimeList = function() {
+  var TimezoneList = function() {
     this.KEY_CURRENT_LOCATION = 'Current_Location';
     this.data = {};
     this.selected = [];
   };
 
-  TimeList.prototype.get = function() {
+  TimezoneList.prototype.get = function() {
     if (Object.keys(this.data).length === 0 || this.selected.length === 0) {
       return [];
     }
@@ -23,23 +23,23 @@
     return this._getTimelist(selected_timezone);
   };
 
-  TimeList.prototype.updateData = function() {
+  TimezoneList.prototype.updateData = function() {
     this.data = this._createTimezoneData();
   };
 
-  TimeList.prototype.setCustomTimezoneList = function(list) {
+  TimezoneList.prototype.setCustomTimezoneList = function(list) {
     this._setUrlSearchParam('custom_tzlist', Base64.encodeURI(list.join(',')));
   };
 
-  TimeList.prototype.setHiddenTimezoneList = function(list) {
+  TimezoneList.prototype.setHiddenTimezoneList = function(list) {
     this._setUrlSearchParam('hidden_tzlist', Base64.encodeURI(list.join(',')));
   };
 
-  TimeList.prototype.getLocationName = function(tzName) {
+  TimezoneList.prototype.getLocationName = function(tzName) {
     return tzName.substring(tzName.lastIndexOf('/') + 1).replace(/_/g, ' ');
   };
 
-  TimeList.prototype._getTimelist = function(timezone) {
+  TimezoneList.prototype._getTimelist = function(timezone) {
     var date = new Date();
     var currentTime = date.getTime();
     var currentTimezoneOffset = date.getTimezoneOffset();
@@ -52,7 +52,7 @@
     }.bind(this));
   };
 
-  TimeList.prototype._createTimezoneData = function() {
+  TimezoneList.prototype._createTimezoneData = function() {
     var data  = {};
     var now = Date.now();
 
@@ -80,15 +80,15 @@
     return data;
   };
 
-  TimeList.prototype._getCustomTimezoneList = function(params) {
+  TimezoneList.prototype._getCustomTimezoneList = function(params) {
     return (params.custom_tzlist ? Base64.decode(params.custom_tzlist).split(',') : []);
   };
 
-  TimeList.prototype._getHiddenTimezoneList = function(params) {
+  TimezoneList.prototype._getHiddenTimezoneList = function(params) {
     return (params.hidden_tzlist ? Base64.decode(params.hidden_tzlist).split(',') : []);
   };
 
-  TimeList.prototype._getUrlSearchParams = function() {
+  TimezoneList.prototype._getUrlSearchParams = function() {
     var params = {};
     var pairs = location.search.substring(1).split('&');
     for (var i = 0, len = pairs.length; i < len; i++) {
@@ -105,7 +105,7 @@
     return params;
   };
 
-  TimeList.prototype._setUrlSearchParam = function(name, value) {
+  TimezoneList.prototype._setUrlSearchParam = function(name, value) {
     var params = this._getUrlSearchParams();
     params[name] = value;
     var search = '?' + Object.keys(params).map(function(name) {
@@ -114,11 +114,9 @@
     history.replaceState(null, null, search + location.hash);
   };
 
-  var timelist = new TimeList();
-
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = timelist;
+    module.exports = TimezoneList;
   } else {
-    app.timelist = timelist;
+    app.TimezoneList = TimezoneList;
   }
 })(this.app || (this.app = {}));
