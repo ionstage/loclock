@@ -63,7 +63,7 @@
     data[this.KEY_CURRENT_LOCATION] = new Date().getTimezoneOffset() * (-60);
 
     var params = this._getUrlSearchParams();
-    this._getCustomTimezoneList(params).forEach(function(name) {
+    this._decodeTimezoneList(params.custom_tzlist).forEach(function(name) {
       if (name in data) {
         return;
       }
@@ -73,19 +73,15 @@
       }
     });
 
-    this._getHiddenTimezoneList(params).forEach(function(name) {
+    this._decodeTimezoneList(params.hidden_tzlist).forEach(function(name) {
       delete data[name];
     });
 
     return data;
   };
 
-  TimezoneList.prototype._getCustomTimezoneList = function(params) {
-    return (params.custom_tzlist ? Base64.decode(params.custom_tzlist).split(',') : []);
-  };
-
-  TimezoneList.prototype._getHiddenTimezoneList = function(params) {
-    return (params.hidden_tzlist ? Base64.decode(params.hidden_tzlist).split(',') : []);
+  TimezoneList.prototype._decodeTimezoneList = function(value) {
+    return (value ? Base64.decode(value).split(',') : []);
   };
 
   TimezoneList.prototype._getUrlSearchParams = function() {
