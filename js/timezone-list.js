@@ -85,20 +85,13 @@
   };
 
   TimezoneList.prototype._getUrlSearchParams = function() {
-    var params = {};
-    var pairs = location.search.substring(1).split('&');
-    for (var i = 0, len = pairs.length; i < len; i++) {
-      var pair = pairs[i];
-      var index = pair.indexOf('=');
-      if (index !== -1) {
-        var name = decodeURIComponent(pair.slice(0, index));
-        var value = decodeURIComponent(pair.slice(index + 1));
-        params[name] = value;
-      } else if (pair) {
-        params[decodeURIComponent(pair)] = '';
-      }
-    }
-    return params;
+    return location.search.substring(1).split('&').reduce(function(ret, pair) {
+      var items = pair.split('=');
+      var key = decodeURIComponent(items[0] || '');
+      var value = decodeURIComponent(items[1] || '');
+      ret[key] = value;
+      return ret;
+    }, {});
   };
 
   TimezoneList.prototype._setUrlSearchParam = function(name, value) {
