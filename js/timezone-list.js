@@ -24,7 +24,10 @@
   };
 
   TimezoneList.prototype.updateData = function() {
-    this.data = this._createTimezoneData();
+    var params = this._getUrlSearchParams();
+    var customList = this._decodeTimezoneList(params.custom_tzlist);
+    var hiddenList = this._decodeTimezoneList(params.hidden_tzlist);
+    this.data = this._createTimezoneData(Timezone.LOCATION_NAMES, customList, hiddenList);
   };
 
   TimezoneList.prototype.setCustomTimezoneList = function(list) {
@@ -52,18 +55,17 @@
     }.bind(this));
   };
 
-  TimezoneList.prototype._createTimezoneData = function() {
+  TimezoneList.prototype._createTimezoneData = function(defaultList, customList, hiddenList) {
     var data  = {};
     var now = Date.now();
 
-    Timezone.LOCATION_NAMES.forEach(function(name) {
+    defaultList.forEach(function(name) {
       data[name] = moment.tz.zone(name.split('#/')[0]).utcOffset(now) * (-60);
     });
 
     data[this.KEY_CURRENT_LOCATION] = new Date().getTimezoneOffset() * (-60);
 
-    var params = this._getUrlSearchParams();
-    this._decodeTimezoneList(params.custom_tzlist).forEach(function(name) {
+    customList.forEach(function(name) {
       if (name in data) {
         return;
       }
@@ -73,7 +75,7 @@
       }
     });
 
-    this._decodeTimezoneList(params.hidden_tzlist).forEach(function(name) {
+    hiddenList.forEach(function(name) {
       delete data[name];
     });
 
