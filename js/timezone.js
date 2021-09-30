@@ -515,9 +515,17 @@
     'Africa/Douala#/Yaounde',
   ];
 
+  var Location = function(fullName) {
+    this.fullName = fullName;
+  };
+
   var Timezone = {};
 
   Timezone.LOCATION_NAMES = TZ_LOCATION_NAMES.concat(ADDITIONAL_LOCATION_NAMES);
+
+  Timezone.LOCATIONS = Timezone.LOCATION_NAMES.map(function(fullName) {
+    return new Location(fullName);
+  });
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = Timezone;
