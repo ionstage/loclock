@@ -517,6 +517,11 @@
 
   var Location = function(fullName) {
     this.fullName = fullName;
+    this.name = this._createName(fullName);
+  };
+
+  Location.prototype._createName = function(fullName) {
+    return fullName.substring(fullName.lastIndexOf('/') + 1).replace(/_/g, ' ');
   };
 
   var Timezone = {};
