@@ -532,6 +532,8 @@
     return new Location(fullName);
   });
 
+  Timezone.Location = Location;
+
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = Timezone;
   } else {
