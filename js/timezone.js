@@ -1,6 +1,8 @@
 (function(app) {
   'use strict';
 
+  var moment = require('moment-timezone');
+
   var TZ_LOCATION_NAMES = [
     'Europe/Andorra',
     'Asia/Dubai',
@@ -515,13 +517,20 @@
     'Africa/Douala#/Yaounde',
   ];
 
-  var Location = function(fullName) {
+  var NOW = Date.now();
+
+  var Location = function(fullName, now) {
     this.fullName = fullName;
     this.name = this._createName(fullName);
+    this.timezoneOffset = this._createTimezoneOffset(fullName, now);
   };
 
   Location.prototype._createName = function(fullName) {
     return fullName.substring(fullName.lastIndexOf('/') + 1).replace(/_/g, ' ');
+  };
+
+  Location.prototype._createTimezoneOffset = function(fullName, now) {
+    return moment.tz.zone(fullName.split('#/')[0]).utcOffset(now) * (-60);
   };
 
   var Timezone = {};
@@ -529,7 +538,7 @@
   Timezone.LOCATION_NAMES = TZ_LOCATION_NAMES.concat(ADDITIONAL_LOCATION_NAMES);
 
   Timezone.LOCATIONS = Timezone.LOCATION_NAMES.map(function(fullName) {
-    return new Location(fullName);
+    return new Location(fullName, NOW);
   });
 
   Timezone.Location = Location;
