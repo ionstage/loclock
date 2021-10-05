@@ -526,12 +526,20 @@
   };
 
   Location.prototype._createName = function(fullName) {
+    if (fullName === Location.KEY_CURRENT_LOCATION) {
+      return 'Current Location';
+    }
     return fullName.substring(fullName.lastIndexOf('/') + 1).replace(/_/g, ' ');
   };
 
   Location.prototype._createTimezoneOffset = function(fullName, now) {
+    if (fullName === Location.KEY_CURRENT_LOCATION) {
+      return new Date(now).getTimezoneOffset() * (-60);
+    }
     return moment.tz.zone(fullName.split('#/')[0]).utcOffset(now) * (-60);
   };
+
+  Location.KEY_CURRENT_LOCATION = 'Current_Location';
 
   var Timezone = {};
 
