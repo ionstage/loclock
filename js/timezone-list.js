@@ -15,11 +15,16 @@
       return [];
     }
 
-    var selected_timezone = this.selected.map(function(key) {
-      return [key, this.data[key]];
-    }.bind(this));
+    var date = new Date();
+    var currentTime = date.getTime();
+    var currentTimezoneOffset = date.getTimezoneOffset();
 
-    return this._getTimelist(selected_timezone);
+    return this.selected.map(function(key) {
+      var name = this.getLocationName(key);
+      var time = parseInt(this.data[key], 10);
+      time = new Date(currentTime + time * 1000 + currentTimezoneOffset * 60 * 1000);
+      return [name, time];
+    }.bind(this));
   };
 
   TimezoneList.prototype.updateData = function() {
@@ -28,19 +33,6 @@
 
   TimezoneList.prototype.getLocationName = function(tzName) {
     return tzName.substring(tzName.lastIndexOf('/') + 1).replace(/_/g, ' ');
-  };
-
-  TimezoneList.prototype._getTimelist = function(timezone) {
-    var date = new Date();
-    var currentTime = date.getTime();
-    var currentTimezoneOffset = date.getTimezoneOffset();
-
-    return timezone.map(function(item) {
-      var name = this.getLocationName(item[0]);
-      var time = parseInt(item[1], 10);
-      time = new Date(currentTime + time * 1000 + currentTimezoneOffset * 60 * 1000);
-      return [name, time];
-    }.bind(this));
   };
 
   TimezoneList.prototype._createTimezoneData = function(defaultList) {
