@@ -517,8 +517,6 @@
     'Africa/Douala#/Yaounde',
   ];
 
-  var NOW = Date.now();
-
   var Timezone = {};
 
   Timezone.Location = (function() {
@@ -552,10 +550,6 @@
   })();
 
   Timezone.LOCATION_NAMES = TZ_LOCATION_NAMES.concat(ADDITIONAL_LOCATION_NAMES);
-
-  Timezone.LOCATIONS = Timezone.LOCATION_NAMES.map(function(fullName) {
-    return new Timezone.Location(fullName, NOW);
-  });
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = Timezone;
