@@ -28,7 +28,7 @@
   };
 
   TimezoneList.prototype.updateData = function() {
-    this.data = this._createTimezoneData(Timezone.LOCATION_NAMES);
+    this.data = this._createTimezoneData(Timezone.DEFAULT_LOCATION_NAMES);
   };
 
   TimezoneList.prototype.getLocationName = function(tzName) {

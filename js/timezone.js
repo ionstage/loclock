@@ -519,6 +519,8 @@
 
   var Timezone = {};
 
+  Timezone.DEFAULT_LOCATION_NAMES = TZ_LOCATION_NAMES.concat(ADDITIONAL_LOCATION_NAMES);
+
   Timezone.Location = (function() {
     var Location = function(fullName, now) {
       this.fullName = fullName;
@@ -548,8 +550,6 @@
 
     return Location;
   })();
-
-  Timezone.LOCATION_NAMES = TZ_LOCATION_NAMES.concat(ADDITIONAL_LOCATION_NAMES);
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = Timezone;
