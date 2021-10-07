@@ -519,41 +519,43 @@
 
   var NOW = Date.now();
 
-  var Location = function(fullName, now) {
-    this.fullName = fullName;
-    this.name = this._createName(fullName);
-    this.timezoneOffset = this._createTimezoneOffset(fullName, now);
-  };
-
-  Location.prototype.updateTimezoneOffset = function(now) {
-    this.timezoneOffset = this._createTimezoneOffset(this.fullName, now);
-  };
-
-  Location.prototype._createName = function(fullName) {
-    if (fullName === Location.KEY_CURRENT_LOCATION) {
-      return 'Current Location';
-    }
-    return fullName.substring(fullName.lastIndexOf('/') + 1).replace(/_/g, ' ');
-  };
-
-  Location.prototype._createTimezoneOffset = function(fullName, now) {
-    if (fullName === Location.KEY_CURRENT_LOCATION) {
-      return new Date(now).getTimezoneOffset() * (-60);
-    }
-    return moment.tz.zone(fullName.split('#/')[0]).utcOffset(now) * (-60);
-  };
-
-  Location.KEY_CURRENT_LOCATION = 'Current_Location';
-
   var Timezone = {};
+
+  Timezone.Location = (function() {
+    var Location = function(fullName, now) {
+      this.fullName = fullName;
+      this.name = this._createName(fullName);
+      this.timezoneOffset = this._createTimezoneOffset(fullName, now);
+    };
+
+    Location.prototype.updateTimezoneOffset = function(now) {
+      this.timezoneOffset = this._createTimezoneOffset(this.fullName, now);
+    };
+
+    Location.prototype._createName = function(fullName) {
+      if (fullName === Location.KEY_CURRENT_LOCATION) {
+        return 'Current Location';
+      }
+      return fullName.substring(fullName.lastIndexOf('/') + 1).replace(/_/g, ' ');
+    };
+
+    Location.prototype._createTimezoneOffset = function(fullName, now) {
+      if (fullName === Location.KEY_CURRENT_LOCATION) {
+        return new Date(now).getTimezoneOffset() * (-60);
+      }
+      return moment.tz.zone(fullName.split('#/')[0]).utcOffset(now) * (-60);
+    };
+
+    Location.KEY_CURRENT_LOCATION = 'Current_Location';
+
+    return Location;
+  })();
 
   Timezone.LOCATION_NAMES = TZ_LOCATION_NAMES.concat(ADDITIONAL_LOCATION_NAMES);
 
   Timezone.LOCATIONS = Timezone.LOCATION_NAMES.map(function(fullName) {
-    return new Location(fullName, NOW);
+    return new Timezone.Location(fullName, NOW);
   });
-
-  Timezone.Location = Location;
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = Timezone;
