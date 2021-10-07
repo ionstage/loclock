@@ -3,7 +3,7 @@
 
   var moment = require('moment-timezone');
 
-  var TZ_LOCATION_NAMES = [
+  var TZ_LOCATION_KEYS = [
     'Europe/Andorra',
     'Asia/Dubai',
     'Asia/Kabul',
@@ -421,7 +421,7 @@
     'Africa/Harare',
   ];
 
-  var ADDITIONAL_LOCATION_NAMES = [
+  var ADDITIONAL_LOCATION_KEYS = [
     'Asia/Dubai#/Abu Dhabi',
     'Africa/Lagos#/Abuja',
     'America/Pangnirtung#/Alert',
@@ -519,31 +519,31 @@
 
   var Timezone = {};
 
-  Timezone.DEFAULT_LOCATION_NAMES = TZ_LOCATION_NAMES.concat(ADDITIONAL_LOCATION_NAMES);
+  Timezone.DEFAULT_LOCATION_KEYS = TZ_LOCATION_KEYS.concat(ADDITIONAL_LOCATION_KEYS);
 
   Timezone.Location = (function() {
-    var Location = function(fullName, now) {
-      this.fullName = fullName;
-      this.name = this._createName(fullName);
-      this.timezoneOffset = this._createTimezoneOffset(fullName, now);
+    var Location = function(key, now) {
+      this.key = key;
+      this.name = this._createName(key);
+      this.timezoneOffset = this._createTimezoneOffset(key, now);
     };
 
     Location.prototype.updateTimezoneOffset = function(now) {
-      this.timezoneOffset = this._createTimezoneOffset(this.fullName, now);
+      this.timezoneOffset = this._createTimezoneOffset(this.key, now);
     };
 
-    Location.prototype._createName = function(fullName) {
-      if (fullName === Location.KEY_CURRENT_LOCATION) {
+    Location.prototype._createName = function(key) {
+      if (key === Location.KEY_CURRENT_LOCATION) {
         return 'Current Location';
       }
-      return fullName.substring(fullName.lastIndexOf('/') + 1).replace(/_/g, ' ');
+      return key.substring(key.lastIndexOf('/') + 1).replace(/_/g, ' ');
     };
 
-    Location.prototype._createTimezoneOffset = function(fullName, now) {
-      if (fullName === Location.KEY_CURRENT_LOCATION) {
+    Location.prototype._createTimezoneOffset = function(key, now) {
+      if (key === Location.KEY_CURRENT_LOCATION) {
         return new Date(now).getTimezoneOffset() * (-60);
       }
-      return moment.tz.zone(fullName.split('#/')[0]).utcOffset(now) * (-60);
+      return moment.tz.zone(key.split('#/')[0]).utcOffset(now) * (-60);
     };
 
     Location.KEY_CURRENT_LOCATION = 'Current_Location';
