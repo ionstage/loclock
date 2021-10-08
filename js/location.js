@@ -517,43 +517,37 @@
     'Africa/Douala#/Yaounde',
   ];
 
-  var Timezone = {};
+  var Location = function(key, now) {
+    this.key = key;
+    this.name = this._createName(key);
+    this.timezoneOffset = this._createTimezoneOffset(key, now);
+  };
 
-  Timezone.DEFAULT_LOCATION_KEYS = TZ_LOCATION_KEYS.concat(ADDITIONAL_LOCATION_KEYS);
+  Location.prototype.updateTimezoneOffset = function(now) {
+    this.timezoneOffset = this._createTimezoneOffset(this.key, now);
+  };
 
-  Timezone.Location = (function() {
-    var Location = function(key, now) {
-      this.key = key;
-      this.name = this._createName(key);
-      this.timezoneOffset = this._createTimezoneOffset(key, now);
-    };
+  Location.prototype._createName = function(key) {
+    if (key === Location.KEY_CURRENT_LOCATION) {
+      return 'Current Location';
+    }
+    return key.substring(key.lastIndexOf('/') + 1).replace(/_/g, ' ');
+  };
 
-    Location.prototype.updateTimezoneOffset = function(now) {
-      this.timezoneOffset = this._createTimezoneOffset(this.key, now);
-    };
+  Location.prototype._createTimezoneOffset = function(key, now) {
+    if (key === Location.KEY_CURRENT_LOCATION) {
+      return new Date(now).getTimezoneOffset() * (-60);
+    }
+    return moment.tz.zone(key.split('#/')[0]).utcOffset(now) * (-60);
+  };
 
-    Location.prototype._createName = function(key) {
-      if (key === Location.KEY_CURRENT_LOCATION) {
-        return 'Current Location';
-      }
-      return key.substring(key.lastIndexOf('/') + 1).replace(/_/g, ' ');
-    };
+  Location.KEY_CURRENT_LOCATION = 'Current_Location';
 
-    Location.prototype._createTimezoneOffset = function(key, now) {
-      if (key === Location.KEY_CURRENT_LOCATION) {
-        return new Date(now).getTimezoneOffset() * (-60);
-      }
-      return moment.tz.zone(key.split('#/')[0]).utcOffset(now) * (-60);
-    };
-
-    Location.KEY_CURRENT_LOCATION = 'Current_Location';
-
-    return Location;
-  })();
+  Location.DEFAULT_KEYS = TZ_LOCATION_KEYS.concat(ADDITIONAL_LOCATION_KEYS);
 
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = Timezone;
+    module.exports = Location;
   } else {
-    app.Timezone = Timezone;
+    app.Location = Location;
   }
 })(this.app || (this.app = {}));

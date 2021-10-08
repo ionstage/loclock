@@ -2,7 +2,7 @@
   'use strict';
 
   var moment = require('moment-timezone');
-  var Timezone = app.Timezone || require('./timezone.js');
+  var Location = app.Location || require('./location.js');
 
   var TimezoneList = function() {
     this.KEY_CURRENT_LOCATION = 'Current_Location';
@@ -28,7 +28,7 @@
   };
 
   TimezoneList.prototype.updateData = function() {
-    this.data = this._createTimezoneData(Timezone.DEFAULT_LOCATION_KEYS);
+    this.data = this._createTimezoneData(Location.DEFAULT_KEYS);
   };
 
   TimezoneList.prototype.getLocationName = function(tzName) {
