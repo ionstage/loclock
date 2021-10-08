@@ -543,7 +543,7 @@
 
   Location.KEY_CURRENT_LOCATION = 'Current_Location';
 
-  Location.DEFAULT_KEYS = TZ_LOCATION_KEYS.concat(ADDITIONAL_LOCATION_KEYS);
+  Location.DEFAULT_KEYS = TZ_LOCATION_KEYS.concat(ADDITIONAL_LOCATION_KEYS, [Location.KEY_CURRENT_LOCATION]);
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = Location;

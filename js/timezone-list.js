@@ -40,11 +40,12 @@
     var now = Date.now();
 
     defaultList.forEach(function(name) {
-      data[name] = moment.tz.zone(name.split('#/')[0]).utcOffset(now) * (-60);
+      if (name === Location.KEY_CURRENT_LOCATION) {
+        data[Location.KEY_CURRENT_LOCATION] = new Date().getTimezoneOffset() * (-60);
+      } else {
+        data[name] = moment.tz.zone(name.split('#/')[0]).utcOffset(now) * (-60);
+      }
     });
-
-    data[this.KEY_CURRENT_LOCATION] = new Date().getTimezoneOffset() * (-60);
-
     return data;
   };
 
