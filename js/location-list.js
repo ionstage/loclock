@@ -4,13 +4,13 @@
   var moment = require('moment-timezone');
   var Location = app.Location || require('./location.js');
 
-  var TimezoneList = function() {
+  var LocationList = function() {
     this.KEY_CURRENT_LOCATION = 'Current_Location';
     this.data = {};
     this.selected = [];
   };
 
-  TimezoneList.prototype.get = function() {
+  LocationList.prototype.get = function() {
     if (Object.keys(this.data).length === 0 || this.selected.length === 0) {
       return [];
     }
@@ -27,15 +27,15 @@
     }.bind(this));
   };
 
-  TimezoneList.prototype.updateData = function() {
+  LocationList.prototype.updateData = function() {
     this.data = this._createTimezoneData(Location.DEFAULT_KEYS);
   };
 
-  TimezoneList.prototype.getLocationName = function(tzName) {
+  LocationList.prototype.getLocationName = function(tzName) {
     return tzName.substring(tzName.lastIndexOf('/') + 1).replace(/_/g, ' ');
   };
 
-  TimezoneList.prototype._createTimezoneData = function(defaultList) {
+  LocationList.prototype._createTimezoneData = function(defaultList) {
     var data  = {};
     var now = Date.now();
 
@@ -50,8 +50,8 @@
   };
 
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = TimezoneList;
+    module.exports = LocationList;
   } else {
-    app.TimezoneList = TimezoneList;
+    app.LocationList = LocationList;
   }
 })(this.app || (this.app = {}));

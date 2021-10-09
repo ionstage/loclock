@@ -6,7 +6,7 @@
   var helper = app.helper || require('./helper.js');
   var dom = app.dom || require('./dom.js');
   var Draggable = app.Draggable || require('./draggable.js');
-  var TimezoneList = app.TimezoneList || require('./timezone-list.js');
+  var LocationList = app.LocationList || require('./location-list.js');
 
   var NS_SVG = 'http://www.w3.org/2000/svg';
   var DEFAULT_LOCATIONS = ['America/New_York', 'Europe/London', 'Asia/Tokyo'];
@@ -273,7 +273,7 @@
     setLocations(timelist.selected);
   }
 
-  var timelist = new TimezoneList();
+  var timelist = new LocationList();
 
   var listToggle = (function() {
     var isOpen = false;
