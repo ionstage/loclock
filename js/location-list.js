@@ -35,15 +35,15 @@
     return tzName.substring(tzName.lastIndexOf('/') + 1).replace(/_/g, ' ');
   };
 
-  LocationList.prototype._createTimezoneData = function(defaultList) {
+  LocationList.prototype._createTimezoneData = function(keys) {
     var data  = {};
     var now = Date.now();
 
-    defaultList.forEach(function(name) {
-      if (name === Location.KEY_CURRENT_LOCATION) {
+    keys.forEach(function(key) {
+      if (key === Location.KEY_CURRENT_LOCATION) {
         data[Location.KEY_CURRENT_LOCATION] = new Date().getTimezoneOffset() * (-60);
       } else {
-        data[name] = moment.tz.zone(name.split('#/')[0]).utcOffset(now) * (-60);
+        data[key] = moment.tz.zone(key.split('#/')[0]).utcOffset(now) * (-60);
       }
     });
     return data;
