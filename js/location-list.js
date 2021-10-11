@@ -8,6 +8,7 @@
     this.KEY_CURRENT_LOCATION = 'Current_Location';
     this.data = {};
     this.selected = [];
+    this.locations = this._createLocations(Location.DEFAULT_KEYS, Date.now());
   };
 
   LocationList.prototype.get = function() {
@@ -47,6 +48,12 @@
       }
     });
     return data;
+  };
+
+  LocationList.prototype._createLocations = function(keys, now) {
+    return keys.map(function(key) {
+      return new Location(key, now);
+    });
   };
 
   if (typeof module !== 'undefined' && module.exports) {
