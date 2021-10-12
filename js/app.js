@@ -6,6 +6,7 @@
   var helper = app.helper || require('./helper.js');
   var dom = app.dom || require('./dom.js');
   var Draggable = app.Draggable || require('./draggable.js');
+  var Location = app.Location || require('./location.js');
   var LocationList = app.LocationList || require('./location-list.js');
 
   var NS_SVG = 'http://www.w3.org/2000/svg';
@@ -494,7 +495,7 @@
       var needsCurrentLocation = false;
 
       list.forEach(function(item) {
-        if (item === timelist.KEY_CURRENT_LOCATION) {
+        if (item === Location.KEY_CURRENT_LOCATION) {
           needsCurrentLocation = true;
           return;
         }
@@ -507,7 +508,7 @@
       });
 
       if (needsCurrentLocation) {
-        listitems.unshift([timelist.KEY_CURRENT_LOCATION, 'Current Location']);
+        listitems.unshift([Location.KEY_CURRENT_LOCATION, 'Current Location']);
       }
 
       listitems.forEach(function(listitem) {

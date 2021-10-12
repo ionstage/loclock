@@ -5,7 +5,6 @@
   var Location = app.Location || require('./location.js');
 
   var LocationList = function() {
-    this.KEY_CURRENT_LOCATION = 'Current_Location';
     this.data = {};
     this.selected = [];
     this.locations = this._createLocations(Location.DEFAULT_KEYS, Date.now());
