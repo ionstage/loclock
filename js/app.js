@@ -98,11 +98,11 @@
     });
   }
 
-  function createPoint(x, y, r, timelist, timeOffset) {
+  function createPoint(x, y, r, items, timeOffset) {
     var containerElement = document.createElementNS(NS_SVG, 'g');
     var pointItemMap = {};
 
-    timelist.forEach(function(item) {
+    items.forEach(function(item) {
       var locationName = item[0];
       var date = item[1];
       var key = date.getTime() % (24 * 60 * 60 * 1000);
@@ -263,7 +263,6 @@
 
   function selectTimezone(list) {
     timelist.selected = list;
-    clock_view.timelist = timelist.get();
     list_view.selected = timelist.selected;
     list_view.update();
     clock_view.updatePoint();
@@ -292,7 +291,6 @@
 
   function initTimezoneData() {
     timelist.updateData();
-    clock_view.timelist = timelist.get();
     list_view.setList(Object.keys(timelist.data));
     list_view.selected = timelist.selected;
     list_view.update();
@@ -304,7 +302,6 @@
       if (minutes === 0 || minutes === 15 || minutes === 30 || minutes === 45) {
         timelist.updateData();
       }
-      clock_view.timelist = timelist.get();
       clock_view.updatePoint();
     }, 30000);
   }
@@ -591,10 +588,9 @@
   };
 
   var clock_view = {
-    init: function(element, timelist) {
+    init: function(element) {
       var width = 720, height = 720;
       this.element = element;
-      this.timelist = timelist;
       this.board_element = document.createElementNS(NS_SVG, 'g');
       this.point_element = document.createElementNS(NS_SVG, 'g');
       this.element.appendChild(this.board_element);
@@ -624,7 +620,7 @@
       this.center_time_element = this.board_element.querySelector('.center-time');
     },
     updatePoint: function() {
-      var new_point = createPoint(this.x, this.y, this.r, this.timelist, dial_spinner.timeOffset);
+      var new_point = createPoint(this.x, this.y, this.r, timelist.getSelectedItems(), dial_spinner.timeOffset);
       this.element.replaceChild(new_point, this.point_element);
       adjustPointText(new_point, this.x, this.y, this.r, window.innerWidth, window.innerHeight);
       this.point_element = new_point;
@@ -658,7 +654,7 @@
   document.addEventListener('DOMContentLoaded', function() {
     list_view.init(document.querySelector('#list'));
     bars_view.init(document.querySelector('#bars'));
-    clock_view.init(document.querySelector('#clock'), timelist.get());
+    clock_view.init(document.querySelector('#clock'));
     clock_view.updateBoard();
 
     initTimezoneData();

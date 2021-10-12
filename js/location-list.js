@@ -10,7 +10,7 @@
     this.locations = this._createLocations(Location.DEFAULT_KEYS, Date.now());
   };
 
-  LocationList.prototype.get = function() {
+  LocationList.prototype.getSelectedItems = function() {
     if (Object.keys(this.data).length === 0 || this.selected.length === 0) {
       return [];
     }
