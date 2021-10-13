@@ -7,7 +7,7 @@
   var LocationList = function() {
     this.data = {};
     this.selected = [];
-    this.locations = this._createLocations(Location.DEFAULT_KEYS, Date.now());
+    this.locations = this._createLocations(Location.DEFAULT_KEYS);
   };
 
   LocationList.prototype.getSelectedItems = function() {
@@ -49,9 +49,9 @@
     return data;
   };
 
-  LocationList.prototype._createLocations = function(keys, now) {
+  LocationList.prototype._createLocations = function(keys) {
     return keys.map(function(key) {
-      return new Location(key, now);
+      return new Location(key);
     });
   };
 

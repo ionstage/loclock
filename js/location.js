@@ -517,14 +517,14 @@
     'Africa/Douala#/Yaounde',
   ];
 
-  var Location = function(key, now) {
+  var Location = function(key) {
     this.key = key;
     this.name = this._createName(key);
-    this.timezoneOffset = this._createTimezoneOffset(key, now);
+    this.timezoneOffset = NaN;
   };
 
   Location.prototype.updateTimezoneOffset = function(now) {
-    this.timezoneOffset = this._createTimezoneOffset(this.key, now);
+    this.timezoneOffset = this._createTimezoneOffset(now);
   };
 
   Location.prototype._createName = function(key) {
@@ -534,11 +534,11 @@
     return key.substring(key.lastIndexOf('/') + 1).replace(/_/g, ' ');
   };
 
-  Location.prototype._createTimezoneOffset = function(key, now) {
-    if (key === Location.KEY_CURRENT_LOCATION) {
+  Location.prototype._createTimezoneOffset = function(now) {
+    if (this.key === Location.KEY_CURRENT_LOCATION) {
       return new Date(now).getTimezoneOffset() * (-60);
     }
-    return moment.tz.zone(key.split('#/')[0]).utcOffset(now) * (-60);
+    return moment.tz.zone(this.key.split('#/')[0]).utcOffset(now) * (-60);
   };
 
   Location.KEY_CURRENT_LOCATION = 'Current_Location';
