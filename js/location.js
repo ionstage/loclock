@@ -520,10 +520,12 @@
   var Location = function(key) {
     this.key = key;
     this.name = this._createName(key);
+    this.currentTimezoneOffset = NaN;
     this.timezoneOffset = NaN;
   };
 
   Location.prototype.updateTimezoneOffset = function(now) {
+    this.currentTimezoneOffset = new Date(now).getTimezoneOffset();
     this.timezoneOffset = this._createTimezoneOffset(now);
   };
 
@@ -536,7 +538,7 @@
 
   Location.prototype._createTimezoneOffset = function(now) {
     if (this.key === Location.KEY_CURRENT_LOCATION) {
-      return new Date(now).getTimezoneOffset() * (-60);
+      return this.currentTimezoneOffset * (-60);
     }
     return moment.tz.zone(this.key.split('#/')[0]).utcOffset(now) * (-60);
   };
