@@ -291,7 +291,7 @@
 
   function initTimezoneData() {
     timelist.updateData();
-    list_view.setList(Object.keys(timelist.data));
+    list_view.setList(Location.DEFAULT_KEYS);
     list_view.selected = timelist.selected;
     list_view.update();
   }
@@ -319,13 +319,13 @@
     var hash = (text ? Base64.decode(text) : '');
     var list = (hash ? hash.split(',') : DEFAULT_LOCATIONS);
     return list.filter(function(item) {
-      return Object.keys(timelist.data).indexOf(item) !== -1;
+      return Location.DEFAULT_KEYS.indexOf(item) !== -1;
     });
   }
 
   function setLocations(list) {
     list = list.filter(function(item) {
-      return Object.keys(timelist.data).indexOf(item) !== -1;
+      return Location.DEFAULT_KEYS.indexOf(item) !== -1;
     });
     var text = list.join(',');
     location.replace('#' + Base64.encodeURI(text));
