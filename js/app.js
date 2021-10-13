@@ -263,7 +263,6 @@
 
   function selectTimezone(list) {
     timelist.selected = list;
-    list_view.selected = timelist.selected;
     list_view.update();
     clock_view.updatePoint();
   }
@@ -292,7 +291,6 @@
   function initTimezoneData() {
     timelist.updateData();
     list_view.setList(Location.DEFAULT_KEYS);
-    list_view.selected = timelist.selected;
     list_view.update();
   }
 
@@ -461,7 +459,6 @@
 
   var list_view = {
     items: {},
-    selected: [],
     current_selected_items: [],
     init: function(element) {
       this.element = element;
@@ -550,13 +547,13 @@
       }
     },
     update: function() {
-      if (this.current_selected_items.length > this.selected.length) {
+      if (this.current_selected_items.length > timelist.selected.length) {
         this.current_selected_items.forEach(function(item) {
           item.setAttribute('class', 'list-item');
         });
       }
 
-      this.current_selected_items = this.selected.map(function(key) {
+      this.current_selected_items = timelist.selected.map(function(key) {
         var item = this.items[key];
         item.setAttribute('class', 'list-item list-selected');
         return item;
