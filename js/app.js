@@ -262,17 +262,18 @@
   }
 
   function selectTimezone(list) {
-    timelist.selected = list;
+    selectedKeys = list;
     list_view.update();
     clock_view.updatePoint();
   }
 
   function updateTimezoneList() {
     initTimezoneData();
-    setLocations(timelist.selected);
+    setLocations(selectedKeys);
   }
 
   var timelist = new LocationList();
+  var selectedKeys = [];
 
   var listToggle = (function() {
     var isOpen = false;
@@ -547,13 +548,13 @@
       }
     },
     update: function() {
-      if (this.current_selected_items.length > timelist.selected.length) {
+      if (this.current_selected_items.length > selectedKeys.length) {
         this.current_selected_items.forEach(function(item) {
           item.setAttribute('class', 'list-item');
         });
       }
 
-      this.current_selected_items = timelist.selected.map(function(key) {
+      this.current_selected_items = selectedKeys.map(function(key) {
         var item = this.items[key];
         item.setAttribute('class', 'list-item list-selected');
         return item;
@@ -561,7 +562,7 @@
     },
     onclick: function(event) {
       var key = event.target.getAttribute('data-key');
-      var list = timelist.selected;
+      var list = selectedKeys;
       var index = list.indexOf(key);
 
       if (index !== -1) {
@@ -617,7 +618,7 @@
       this.center_time_element = this.board_element.querySelector('.center-time');
     },
     updatePoint: function() {
-      var new_point = createPoint(this.x, this.y, this.r, timelist.getSelectedItems(), dial_spinner.timeOffset);
+      var new_point = createPoint(this.x, this.y, this.r, timelist.getItems(selectedKeys), dial_spinner.timeOffset);
       this.element.replaceChild(new_point, this.point_element);
       adjustPointText(new_point, this.x, this.y, this.r, window.innerWidth, window.innerHeight);
       this.point_element = new_point;

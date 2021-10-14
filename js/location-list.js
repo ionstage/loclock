@@ -6,12 +6,11 @@
 
   var LocationList = function() {
     this.data = {};
-    this.selected = [];
     this.locations = this._createLocations(Location.DEFAULT_KEYS);
   };
 
-  LocationList.prototype.getSelectedItems = function() {
-    if (Object.keys(this.data).length === 0 || this.selected.length === 0) {
+  LocationList.prototype.getItems = function(keys) {
+    if (Object.keys(this.data).length === 0 || keys.length === 0) {
       return [];
     }
 
@@ -19,7 +18,7 @@
     var currentTime = date.getTime();
     var currentTimezoneOffset = date.getTimezoneOffset();
 
-    return this.selected.map(function(key) {
+    return keys.map(function(key) {
       var name = this.getLocationName(key);
       var time = parseInt(this.data[key], 10);
       time = new Date(currentTime + time * 1000 + currentTimezoneOffset * 60 * 1000);
