@@ -16,15 +16,6 @@
     }.bind(this));
   };
 
-  LocationList.prototype.getItems = function(locations) {
-    var now = Date.now();
-    return locations.map(function(location) {
-      var name = location.name;
-      var time = new Date(location.getLocalTime(now));
-      return [name, time];
-    }.bind(this));
-  };
-
   LocationList.prototype.updateData = function() {
     var now = Date.now();
     this.locations.forEach(function(location) {

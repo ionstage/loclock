@@ -98,13 +98,14 @@
     });
   }
 
-  function createPoint(x, y, r, items, timeOffset) {
+  function createPoint(x, y, r, locations, timeOffset) {
     var containerElement = document.createElementNS(NS_SVG, 'g');
     var pointItemMap = {};
+    var now = Date.now();
 
-    items.forEach(function(item) {
-      var locationName = item[0];
-      var date = item[1];
+    locations.forEach(function(location) {
+      var locationName = location.name;
+      var date = new Date(location.getLocalTime(now));
       var key = date.getTime() % (24 * 60 * 60 * 1000);
       var pointItem = pointItemMap[key];
 
@@ -625,7 +626,7 @@
       this.center_time_element = this.board_element.querySelector('.center-time');
     },
     updatePoint: function() {
-      var new_point = createPoint(this.x, this.y, this.r, timelist.getItems(selectedLocations), dial_spinner.timeOffset);
+      var new_point = createPoint(this.x, this.y, this.r, selectedLocations, dial_spinner.timeOffset);
       this.element.replaceChild(new_point, this.point_element);
       adjustPointText(new_point, this.x, this.y, this.r, window.innerWidth, window.innerHeight);
       this.point_element = new_point;
