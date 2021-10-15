@@ -20,8 +20,7 @@
 
     return keys.map(function(key) {
       var name = this.getLocationName(key);
-      var time = parseInt(this.data[key], 10);
-      time = new Date(currentTime + time * 1000 + currentTimezoneOffset * 60 * 1000);
+      var time = new Date(currentTime + this.data[key] * 1000 + currentTimezoneOffset * 60 * 1000);
       return [name, time];
     }.bind(this));
   };
