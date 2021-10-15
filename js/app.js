@@ -286,10 +286,11 @@
     return function() {
       isOpen = !isOpen;
       var element = document.querySelector('#container');
-      element.setAttribute('class', (isOpen ? 'open' : null));
       if (isOpen) {
+        element.setAttribute('class', 'open');
         clock_view.draggable.disable();
       } else {
+        element.removeAttribute('class');
         clock_view.draggable.enable();
       }
     };
