@@ -261,19 +261,25 @@
     });
   }
 
-  function selectTimezone(list) {
-    selectedKeys = list;
+  function selectTimezone(keys) {
+    selectedLocations = timelist.findLocations(keys);
     list_view.update();
     clock_view.updatePoint();
   }
 
   function updateTimezoneList() {
     initTimezoneData();
-    setLocations(selectedKeys);
+    setLocations(getSelectedKeys());
+  }
+
+  function getSelectedKeys() {
+    return selectedLocations.map(function(location) {
+      return location.key;
+    });
   }
 
   var timelist = new LocationList();
-  var selectedKeys = [];
+  var selectedLocations = [];
 
   var listToggle = (function() {
     var isOpen = false;
@@ -548,21 +554,21 @@
       }
     },
     update: function() {
-      if (this.current_selected_items.length > selectedKeys.length) {
+      if (this.current_selected_items.length > selectedLocations.length) {
         this.current_selected_items.forEach(function(item) {
           item.setAttribute('class', 'list-item');
         });
       }
 
-      this.current_selected_items = selectedKeys.map(function(key) {
-        var item = this.items[key];
+      this.current_selected_items = selectedLocations.map(function(location) {
+        var item = this.items[location.key];
         item.setAttribute('class', 'list-item list-selected');
         return item;
       }.bind(this));
     },
     onclick: function(event) {
       var key = event.target.getAttribute('data-key');
-      var list = selectedKeys;
+      var list = getSelectedKeys();
       var index = list.indexOf(key);
 
       if (index !== -1) {
@@ -618,7 +624,7 @@
       this.center_time_element = this.board_element.querySelector('.center-time');
     },
     updatePoint: function() {
-      var new_point = createPoint(this.x, this.y, this.r, timelist.getItems(selectedKeys), dial_spinner.timeOffset);
+      var new_point = createPoint(this.x, this.y, this.r, timelist.getItems(getSelectedKeys()), dial_spinner.timeOffset);
       this.element.replaceChild(new_point, this.point_element);
       adjustPointText(new_point, this.x, this.y, this.r, window.innerWidth, window.innerHeight);
       this.point_element = new_point;
