@@ -529,6 +529,10 @@
     this.timezoneOffset = this._createTimezoneOffset(now);
   };
 
+  Location.prototype.getLocalTime = function(now) {
+    return now + this.timezoneOffset * 1000 + this.currentTimezoneOffset * 60 * 1000;
+  };
+
   Location.prototype._createName = function(key) {
     if (key === Location.KEY_CURRENT_LOCATION) {
       return 'Current Location';
