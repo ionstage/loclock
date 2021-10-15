@@ -1,12 +1,10 @@
 (function(app) {
   'use strict';
 
-  var moment = require('moment-timezone');
   var helper = app.helper || require('./helper.js');
   var Location = app.Location || require('./location.js');
 
   var LocationList = function() {
-    this.data = {};
     this.locations = this._createLocations(Location.DEFAULT_KEYS);
   };
 
@@ -18,42 +16,24 @@
     }.bind(this));
   };
 
-  LocationList.prototype.getItems = function(keys) {
-    if (Object.keys(this.data).length === 0 || keys.length === 0) {
-      return [];
-    }
-
-    var date = new Date();
-    var currentTime = date.getTime();
-    var currentTimezoneOffset = date.getTimezoneOffset();
-
-    return keys.map(function(key) {
-      var name = this.getLocationName(key);
-      var time = new Date(currentTime + this.data[key] * 1000 + currentTimezoneOffset * 60 * 1000);
+  LocationList.prototype.getItems = function(locations) {
+    var now = Date.now();
+    return locations.map(function(location) {
+      var name = location.name;
+      var time = new Date(location.getLocalTime(now));
       return [name, time];
     }.bind(this));
   };
 
   LocationList.prototype.updateData = function() {
-    this.data = this._createTimezoneData(Location.DEFAULT_KEYS);
+    var now = Date.now();
+    this.locations.forEach(function(location) {
+      location.updateTimezoneOffset(now);
+    });
   };
 
   LocationList.prototype.getLocationName = function(tzName) {
     return tzName.substring(tzName.lastIndexOf('/') + 1).replace(/_/g, ' ');
-  };
-
-  LocationList.prototype._createTimezoneData = function(keys) {
-    var data  = {};
-    var now = Date.now();
-
-    keys.forEach(function(key) {
-      if (key === Location.KEY_CURRENT_LOCATION) {
-        data[Location.KEY_CURRENT_LOCATION] = new Date().getTimezoneOffset() * (-60);
-      } else {
-        data[key] = moment.tz.zone(key.split('#/')[0]).utcOffset(now) * (-60);
-      }
-    });
-    return data;
   };
 
   LocationList.prototype._createLocations = function(keys) {

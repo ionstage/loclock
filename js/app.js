@@ -624,7 +624,7 @@
       this.center_time_element = this.board_element.querySelector('.center-time');
     },
     updatePoint: function() {
-      var new_point = createPoint(this.x, this.y, this.r, timelist.getItems(getSelectedKeys()), dial_spinner.timeOffset);
+      var new_point = createPoint(this.x, this.y, this.r, timelist.getItems(selectedLocations), dial_spinner.timeOffset);
       this.element.replaceChild(new_point, this.point_element);
       adjustPointText(new_point, this.x, this.y, this.r, window.innerWidth, window.innerHeight);
       this.point_element = new_point;
