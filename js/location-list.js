@@ -16,8 +16,7 @@
     }.bind(this));
   };
 
-  LocationList.prototype.updateData = function() {
-    var now = Date.now();
+  LocationList.prototype.updateTimezoneOffset = function(now) {
     this.locations.forEach(function(location) {
       location.updateTimezoneOffset(now);
     });

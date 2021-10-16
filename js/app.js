@@ -298,7 +298,7 @@
   })();
 
   function initTimezoneData() {
-    timelist.updateData();
+    timelist.updateTimezoneOffset(Date.now());
     list_view.setList(timelist.locations);
     list_view.update();
   }
@@ -307,7 +307,7 @@
     return setInterval(function() {
       var minutes = new Date().getMinutes();
       if (minutes === 0 || minutes === 15 || minutes === 30 || minutes === 45) {
-        timelist.updateData();
+        timelist.updateTimezoneOffset(Date.now());
       }
       clock_view.updatePoint();
     }, 30000);
