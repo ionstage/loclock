@@ -520,17 +520,17 @@
   var Location = function(key) {
     this.key = key;
     this.name = this._createName(key);
-    this.currentTimezoneOffset = NaN;
-    this.timezoneOffset = NaN;
+    this._currentTimezoneOffset = NaN;
+    this._timezoneOffset = NaN;
   };
 
   Location.prototype.updateTimezoneOffset = function(now) {
-    this.currentTimezoneOffset = new Date(now).getTimezoneOffset();
-    this.timezoneOffset = this._createTimezoneOffset(now);
+    this._currentTimezoneOffset = new Date(now).getTimezoneOffset();
+    this._timezoneOffset = this._createTimezoneOffset(now);
   };
 
   Location.prototype.getLocalTime = function(now) {
-    return now + this.timezoneOffset * 1000 + this.currentTimezoneOffset * 60 * 1000;
+    return now + this._timezoneOffset * 1000 + this._currentTimezoneOffset * 60 * 1000;
   };
 
   Location.prototype._createName = function(key) {
@@ -542,7 +542,7 @@
 
   Location.prototype._createTimezoneOffset = function(now) {
     if (this.key === Location.KEY_CURRENT_LOCATION) {
-      return this.currentTimezoneOffset * (-60);
+      return this._currentTimezoneOffset * (-60);
     }
     return moment.tz.zone(Location._keyToTzname(this.key)).utcOffset(now) * (-60);
   };
