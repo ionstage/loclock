@@ -299,7 +299,7 @@
 
   function initTimezoneData() {
     timelist.updateData();
-    list_view.setList(Location.DEFAULT_KEYS);
+    list_view.setList(timelist.locations);
     list_view.update();
   }
 
@@ -492,18 +492,19 @@
         element.parentNode.setAttribute('class', 'unscrollable');
       }
     },
-    setList: function(list) {
+    setList: function(locations) {
       var element = document.createElement('div');
       var listitems = [];
       var needsCurrentLocation = false;
 
-      list.forEach(function(item) {
-        if (item === Location.KEY_CURRENT_LOCATION) {
+      locations.forEach(function(location) {
+        var key = location.key;
+        if (key === Location.KEY_CURRENT_LOCATION) {
           needsCurrentLocation = true;
           return;
         }
-        var name = timelist.getLocationName(item);
-        listitems.push([item, name]);
+        var name = location.name;
+        listitems.push([key, name]);
       });
 
       listitems.sort(function(a, b) {

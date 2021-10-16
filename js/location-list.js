@@ -23,10 +23,6 @@
     });
   };
 
-  LocationList.prototype.getLocationName = function(tzName) {
-    return tzName.substring(tzName.lastIndexOf('/') + 1).replace(/_/g, ' ');
-  };
-
   LocationList.prototype._createLocations = function(keys) {
     return keys.map(function(key) {
       return new Location(key);
