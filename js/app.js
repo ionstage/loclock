@@ -98,10 +98,9 @@
     });
   }
 
-  function createPoint(x, y, r, locations, timeOffset) {
+  function createPoint(x, y, r, locations, now, timeOffset) {
     var containerElement = document.createElementNS(NS_SVG, 'g');
     var pointItemMap = {};
-    var now = Date.now();
 
     locations.forEach(function(location) {
       var locationName = location.name;
@@ -265,7 +264,7 @@
   function selectTimezone(keys) {
     selectedLocations = timelist.findLocations(keys);
     list_view.update();
-    clock_view.updatePoint();
+    clock_view.updatePoint(Date.now());
   }
 
   function updateTimezoneList() {
@@ -305,11 +304,12 @@
 
   function initClockTimer() {
     return setInterval(function() {
+      var now = Date.now();
       var minutes = new Date().getMinutes();
       if (minutes === 0 || minutes === 15 || minutes === 30 || minutes === 45) {
-        timelist.updateTimezoneOffset(Date.now());
+        timelist.updateTimezoneOffset(now);
       }
-      clock_view.updatePoint();
+      clock_view.updatePoint(now);
     }, 30000);
   }
 
@@ -366,7 +366,7 @@
           this.timeOffset = 0;
           clock_view.draggable.enable();
         }
-        clock_view.updatePoint();
+        clock_view.updatePoint(Date.now());
         clock_view.updateCenter();
       }.bind(this);
       clock_view.draggable.disable();
@@ -439,7 +439,7 @@
       }
 
       this.timeOffset = timeOffset;
-      clock_view.updatePoint();
+      clock_view.updatePoint(Date.now());
       clock_view.updateCenter();
     },
     dragend: function(event) {
@@ -626,8 +626,8 @@
       this.board_element = new_board;
       this.center_time_element = this.board_element.querySelector('.center-time');
     },
-    updatePoint: function() {
-      var new_point = createPoint(this.x, this.y, this.r, selectedLocations, dial_spinner.timeOffset);
+    updatePoint: function(now) {
+      var new_point = createPoint(this.x, this.y, this.r, selectedLocations, now, dial_spinner.timeOffset);
       this.element.replaceChild(new_point, this.point_element);
       adjustPointText(new_point, this.x, this.y, this.r, window.innerWidth, window.innerHeight);
       this.point_element = new_point;
@@ -671,7 +671,7 @@
   });
 
   window.addEventListener('resize', helper.debounce(function() {
-    clock_view.updatePoint();
+    clock_view.updatePoint(Date.now());
   }, 100));
 
   if (dom.supportsTouch()) {
