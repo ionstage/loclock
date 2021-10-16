@@ -544,7 +544,15 @@
     if (this.key === Location.KEY_CURRENT_LOCATION) {
       return this.currentTimezoneOffset * (-60);
     }
-    return moment.tz.zone(this.key.split('#/')[0]).utcOffset(now) * (-60);
+    return moment.tz.zone(Location._keyToTzname(this.key)).utcOffset(now) * (-60);
+  };
+
+  Location.isValidKey = function(key) {
+    return (key === Location.KEY_CURRENT_LOCATION) || (moment.tz.zone(Location._keyToTzname(key)) !== null);
+  };
+
+  Location._keyToTzname = function(key) {
+    return key.split('#/')[0];
   };
 
   Location.KEY_CURRENT_LOCATION = 'Current_Location';

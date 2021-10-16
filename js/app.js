@@ -325,14 +325,14 @@
     var text = location.hash.substring(1);
     var hash = (text ? Base64.decode(text) : '');
     var list = (hash ? hash.split(',') : DEFAULT_LOCATIONS);
-    return list.filter(function(item) {
-      return Location.DEFAULT_KEYS.indexOf(item) !== -1;
+    return list.filter(function(key) {
+      return Location.isValidKey(key);
     });
   }
 
   function setLocations(list) {
-    list = list.filter(function(item) {
-      return Location.DEFAULT_KEYS.indexOf(item) !== -1;
+    list = list.filter(function(key) {
+      return Location.isValidKey(key);
     });
     var text = list.join(',');
     location.replace('#' + Base64.encodeURI(text));
