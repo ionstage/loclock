@@ -2,33 +2,24 @@
   box-sizing: border-box;
 }
 
-html, body {
+body {
   -webkit-tap-highlight-color: transparent;
   -webkit-text-size-adjust: 100%;
   -webkit-touch-callout: none;
-}
-
-body {
-  height: 100%;
   margin: 0;
   overflow: hidden;
-  position: fixed;
-  width: 100%;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .hide {
   display: none;
 }
 
-.unselectable {
-  -ms-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
 #container {
   height: 100%;
-  position: absolute;
+  position: fixed;
   -ms-transform: translateX(-168px);
   transform: translateX(-168px);
   transition: transform .3s ease-in-out;
