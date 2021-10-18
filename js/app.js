@@ -658,7 +658,26 @@
     },
   };
 
-  document.addEventListener('DOMContentLoaded', function() {
+  var Body = function(el) {
+    this.el = el;
+  };
+
+  Body.prototype.load = function() {
+    document.addEventListener('DOMContentLoaded', this._onready.bind(this));
+    window.addEventListener('resize', helper.debounce(this._onresize.bind(this), 100));
+    this._disableTouchScrolling();
+  };
+
+  Body.prototype._disableTouchScrolling = function() {
+    if (!dom.supportsTouch()) {
+      return;
+    }
+    window.addEventListener('touchmove', function(event) {
+      event.preventDefault();
+    }, { passive: false });
+  };
+
+  Body.prototype._onready = function() {
     list_view.init(document.querySelector('#list'));
     bars_view.init(document.querySelector('#bars'));
     clock_view.init(document.querySelector('#clock'));
@@ -668,15 +687,12 @@
     initClockTimer();
     initLocations();
     initDialSpinner();
-  });
+  };
 
-  window.addEventListener('resize', helper.debounce(function() {
+  Body.prototype._onresize = function() {
     clock_view.updatePoint(Date.now());
-  }, 100));
+  };
 
-  if (dom.supportsTouch()) {
-    window.addEventListener('touchmove', function(event) {
-      event.preventDefault();
-    }, { passive: false });
-  }
+  var body = new Body(document.body);
+  body.load();
 })(this.app || (this.app = {}));
