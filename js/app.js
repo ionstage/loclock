@@ -261,23 +261,6 @@
     });
   }
 
-  function selectTimezone(keys) {
-    selectedLocations = timelist.findLocations(keys);
-    list_view.update();
-    clock_view.updatePoint(Date.now());
-  }
-
-  function updateTimezoneList() {
-    initTimezoneData();
-    setLocations(getSelectedKeys());
-  }
-
-  function getSelectedKeys() {
-    return selectedLocations.map(function(location) {
-      return location.key;
-    });
-  }
-
   var timelist = new LocationList();
   var selectedLocations = [];
 
@@ -295,49 +278,6 @@
       }
     };
   })();
-
-  function initTimezoneData() {
-    timelist.updateTimezoneOffset(Date.now());
-    list_view.setList(timelist.locations);
-    list_view.update();
-  }
-
-  function initClockTimer() {
-    return setInterval(function() {
-      var now = Date.now();
-      var minutes = new Date().getMinutes();
-      if (minutes === 0 || minutes === 15 || minutes === 30 || minutes === 45) {
-        timelist.updateTimezoneOffset(now);
-      }
-      clock_view.updatePoint(now);
-    }, 30000);
-  }
-
-  function initLocations() {
-    setLocations(getLocations());
-  }
-
-  function initDialSpinner() {
-    dial_spinner.init(clock_view.element);
-  }
-
-  function getLocations() {
-    var text = location.hash.substring(1);
-    var hash = (text ? Base64.decode(text) : '');
-    var list = (hash ? hash.split(',') : DEFAULT_LOCATIONS);
-    return list.filter(function(key) {
-      return Location.isValidKey(key);
-    });
-  }
-
-  function setLocations(list) {
-    list = list.filter(function(key) {
-      return Location.isValidKey(key);
-    });
-    var text = list.join(',');
-    location.replace('#' + Base64.encodeURI(text));
-    selectTimezone(list);
-  }
 
   var dial_spinner = {
     timeOffset: 0,
@@ -571,7 +511,7 @@
     },
     onclick: function(event) {
       var key = event.target.getAttribute('data-key');
-      var list = getSelectedKeys();
+      var list = body.getSelectedKeys();
       var index = list.indexOf(key);
 
       if (index !== -1) {
@@ -580,7 +520,7 @@
         list.push(key);
       }
 
-      setLocations(list);
+      body.setLocations(list);
     },
   };
 
@@ -668,6 +608,21 @@
     this._disableTouchScrolling();
   };
 
+  Body.prototype.setLocations = function(list) {
+    list = list.filter(function(key) {
+      return Location.isValidKey(key);
+    });
+    var text = list.join(',');
+    location.replace('#' + Base64.encodeURI(text));
+    this._selectTimezone(list);
+  };
+
+  Body.prototype.getSelectedKeys = function() {
+    return selectedLocations.map(function(location) {
+      return location.key;
+    });
+  };
+
   Body.prototype._disableTouchScrolling = function() {
     if (!dom.supportsTouch()) {
       return;
@@ -677,16 +632,61 @@
     }, { passive: false });
   };
 
+  Body.prototype._initTimezoneData = function() {
+    timelist.updateTimezoneOffset(Date.now());
+    list_view.setList(timelist.locations);
+    list_view.update();
+  };
+
+  Body.prototype._initClockTimer = function() {
+    return setInterval(function() {
+      var now = Date.now();
+      var minutes = new Date().getMinutes();
+      if (minutes === 0 || minutes === 15 || minutes === 30 || minutes === 45) {
+        timelist.updateTimezoneOffset(now);
+      }
+      clock_view.updatePoint(now);
+    }, 30000);
+  };
+
+  Body.prototype._initLocations = function() {
+    this.setLocations(this._getLocations());
+  };
+
+  Body.prototype._initDialSpinner = function() {
+    dial_spinner.init(clock_view.element);
+  };
+
+  Body.prototype._updateTimezoneList = function() {
+    this._initTimezoneData();
+    this.setLocations(this.getSelectedKeys());
+  };
+
+  Body.prototype._getLocations = function() {
+    var text = location.hash.substring(1);
+    var hash = (text ? Base64.decode(text) : '');
+    var list = (hash ? hash.split(',') : DEFAULT_LOCATIONS);
+    return list.filter(function(key) {
+      return Location.isValidKey(key);
+    });
+  };
+
+  Body.prototype._selectTimezone = function(keys) {
+    selectedLocations = timelist.findLocations(keys);
+    list_view.update();
+    clock_view.updatePoint(Date.now());
+  };
+
   Body.prototype._onready = function() {
     list_view.init(document.querySelector('#list'));
     bars_view.init(document.querySelector('#bars'));
     clock_view.init(document.querySelector('#clock'));
     clock_view.updateBoard();
 
-    initTimezoneData();
-    initClockTimer();
-    initLocations();
-    initDialSpinner();
+    this._initTimezoneData();
+    this._initClockTimer();
+    this._initLocations();
+    this._initDialSpinner();
   };
 
   Body.prototype._onresize = function() {
