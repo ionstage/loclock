@@ -261,7 +261,6 @@
     });
   }
 
-  var timelist = new LocationList();
   var selectedLocations = [];
 
   var listToggle = (function() {
@@ -600,6 +599,7 @@
 
   var Body = function(el) {
     this.el = el;
+    this.locationList = new LocationList();
   };
 
   Body.prototype.load = function() {
@@ -633,8 +633,8 @@
   };
 
   Body.prototype._initTimezoneData = function() {
-    timelist.updateTimezoneOffset(Date.now());
-    list_view.setList(timelist.locations);
+    this.locationList.updateTimezoneOffset(Date.now());
+    list_view.setList(this.locationList.locations);
     list_view.update();
   };
 
@@ -643,10 +643,10 @@
       var now = Date.now();
       var minutes = new Date().getMinutes();
       if (minutes === 0 || minutes === 15 || minutes === 30 || minutes === 45) {
-        timelist.updateTimezoneOffset(now);
+        this.locationList.updateTimezoneOffset(now);
       }
       clock_view.updatePoint(now);
-    }, 30000);
+    }.bind(this), 30000);
   };
 
   Body.prototype._initLocations = function() {
@@ -672,7 +672,7 @@
   };
 
   Body.prototype._selectTimezone = function(keys) {
-    selectedLocations = timelist.findLocations(keys);
+    selectedLocations = this.locationList.findLocations(keys);
     list_view.update();
     clock_view.updatePoint(Date.now());
   };
