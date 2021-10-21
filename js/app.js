@@ -12,8 +12,6 @@
   var NS_SVG = 'http://www.w3.org/2000/svg';
   var DEFAULT_LOCATIONS = ['America/New_York', 'Europe/London', 'Asia/Tokyo'];
 
-  var selectedLocations = [];
-
   var listToggle = (function() {
     var isOpen = false;
     return function() {
@@ -247,13 +245,13 @@
       }
     },
     update: function() {
-      if (this.current_selected_items.length > selectedLocations.length) {
+      if (this.current_selected_items.length > body.selectedLocations.length) {
         this.current_selected_items.forEach(function(item) {
           item.setAttribute('class', 'list-item');
         });
       }
 
-      this.current_selected_items = selectedLocations.map(function(location) {
+      this.current_selected_items = body.selectedLocations.map(function(location) {
         var item = this.items[location.key];
         item.setAttribute('class', 'list-item list-selected');
         return item;
@@ -317,7 +315,7 @@
       this.center_time_element = this.board_element.querySelector('.center-time');
     },
     updatePoint: function(now) {
-      var new_point = this.createPoint(this.x, this.y, this.r, selectedLocations, now, dial_spinner.timeOffset);
+      var new_point = this.createPoint(this.x, this.y, this.r, body.selectedLocations, now, dial_spinner.timeOffset);
       this.element.replaceChild(new_point, this.point_element);
       this.adjustPointText(new_point, this.x, this.y, this.r, window.innerWidth, window.innerHeight);
       this.point_element = new_point;
@@ -591,6 +589,7 @@
   var Body = function(el) {
     this.el = el;
     this.locationList = new LocationList();
+    this.selectedLocations = [];
   };
 
   Body.prototype.load = function() {
@@ -609,7 +608,7 @@
   };
 
   Body.prototype.getSelectedKeys = function() {
-    return selectedLocations.map(function(location) {
+    return this.selectedLocations.map(function(location) {
       return location.key;
     });
   };
@@ -663,7 +662,7 @@
   };
 
   Body.prototype._selectTimezone = function(keys) {
-    selectedLocations = this.locationList.findLocations(keys);
+    this.selectedLocations = this.locationList.findLocations(keys);
     list_view.update();
     clock_view.updatePoint(Date.now());
   };
