@@ -12,21 +12,6 @@
   var NS_SVG = 'http://www.w3.org/2000/svg';
   var DEFAULT_LOCATIONS = ['America/New_York', 'Europe/London', 'Asia/Tokyo'];
 
-  var listToggle = (function() {
-    var isOpen = false;
-    return function() {
-      isOpen = !isOpen;
-      var element = document.querySelector('#container');
-      if (isOpen) {
-        element.setAttribute('class', 'open');
-        clock_view.draggable.disable();
-      } else {
-        element.removeAttribute('class');
-        clock_view.draggable.enable();
-      }
-    };
-  })();
-
   var dial_spinner = {
     timeOffset: 0,
     isRightHanded: true,
@@ -277,7 +262,7 @@
       element.addEventListener((dom.supportsTouch() ? 'touchend' : 'click'), function(event) {
         event.preventDefault();
         event.stopPropagation();
-        listToggle();
+        body.listToggle();
       });
     },
   };
@@ -303,7 +288,7 @@
       this.draggable.enable();
       element.addEventListener((dom.supportsTouch() ? 'touchstart' : 'mousedown'), function() {
         if (this.element.parentNode.parentNode.getAttribute('class') === 'open') {
-          listToggle();
+          body.listToggle();
         }
       }.bind(this));
     },
@@ -590,6 +575,7 @@
     this.el = el;
     this.locationList = new LocationList();
     this.selectedLocations = [];
+    this.isOpen = false;
   };
 
   Body.prototype.load = function() {
@@ -611,6 +597,18 @@
     return this.selectedLocations.map(function(location) {
       return location.key;
     });
+  };
+
+  Body.prototype.listToggle = function() {
+    this.isOpen = !this.isOpen;
+    var element = document.querySelector('#container');
+    if (this.isOpen) {
+      element.setAttribute('class', 'open');
+      clock_view.draggable.disable();
+    } else {
+      element.removeAttribute('class');
+      clock_view.draggable.enable();
+    }
   };
 
   Body.prototype._disableTouchScrolling = function() {
