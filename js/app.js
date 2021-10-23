@@ -244,16 +244,16 @@
     },
     onclick: function(event) {
       var key = event.target.getAttribute('data-key');
-      var list = body.getSelectedKeys();
-      var index = list.indexOf(key);
+      var keys = body.getSelectedKeys();
+      var index = keys.indexOf(key);
 
       if (index !== -1) {
-        list.splice(index, 1);
+        keys.splice(index, 1);
       } else {
-        list.push(key);
+        keys.push(key);
       }
 
-      body.setLocations(list);
+      body.setLocations(keys);
     },
   };
 
@@ -584,13 +584,13 @@
     this._disableTouchScrolling();
   };
 
-  Body.prototype.setLocations = function(list) {
-    list = list.filter(function(key) {
+  Body.prototype.setLocations = function(keys) {
+    keys = keys.filter(function(key) {
       return Location.isValidKey(key);
     });
-    var text = list.join(',');
+    var text = keys.join(',');
     location.replace('#' + Base64.encodeURI(text));
-    this._selectTimezone(list);
+    this._selectTimezone(keys);
   };
 
   Body.prototype.getSelectedKeys = function() {
@@ -653,8 +653,8 @@
   Body.prototype._getLocations = function() {
     var text = location.hash.substring(1);
     var hash = (text ? Base64.decode(text) : '');
-    var list = (hash ? hash.split(',') : DEFAULT_LOCATIONS);
-    return list.filter(function(key) {
+    var keys = (hash ? hash.split(',') : DEFAULT_LOCATIONS);
+    return keys.filter(function(key) {
       return Location.isValidKey(key);
     });
   };
