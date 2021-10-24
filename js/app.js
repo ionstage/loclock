@@ -601,7 +601,7 @@
 
   Body.prototype.listToggle = function() {
     this.isOpen = !this.isOpen;
-    var element = document.querySelector('#container');
+    var element = document.querySelector('.main');
     if (this.isOpen) {
       element.setAttribute('class', 'open');
       clock_view.draggable.disable();

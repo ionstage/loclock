@@ -17,7 +17,7 @@ body {
   display: none;
 }
 
-#container {
+.main {
   height: 100%;
   position: fixed;
   -ms-transform: translateX(-168px);
@@ -26,7 +26,7 @@ body {
   width: 100%;
 }
 
-#container.open {
+.main.open {
   -ms-transform: translateX(0);
   transform: translateX(0);
 }
