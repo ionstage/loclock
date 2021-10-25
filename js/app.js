@@ -287,7 +287,7 @@
 
       this.draggable.enable();
       element.addEventListener((dom.supportsTouch() ? 'touchstart' : 'mousedown'), function() {
-        if (this.element.parentNode.parentNode.getAttribute('class') === 'open') {
+        if (body.isOpen) {
           body.listToggle();
         }
       }.bind(this));
@@ -603,10 +603,10 @@
     this.isOpen = !this.isOpen;
     var element = document.querySelector('.main');
     if (this.isOpen) {
-      element.setAttribute('class', 'open');
+      element.setAttribute('class', 'main open');
       clock_view.draggable.disable();
     } else {
-      element.removeAttribute('class');
+      element.setAttribute('class', 'main');
       clock_view.draggable.enable();
     }
   };
