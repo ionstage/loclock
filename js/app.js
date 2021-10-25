@@ -259,7 +259,7 @@
 
   var bars_view = {
     init: function(element) {
-      element.addEventListener((dom.supportsTouch() ? 'touchend' : 'click'), function(event) {
+      element.addEventListener('click', function(event) {
         event.preventDefault();
         event.stopPropagation();
         body.listToggle();

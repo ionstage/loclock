@@ -67,6 +67,7 @@ body {
   cursor: pointer;
   height: 48px;
   position: absolute;
+  touch-action: manipulation;
   width: 48px;
 }
 
