@@ -257,7 +257,7 @@
     },
   };
 
-  var bars_view = {
+  var menuButton = {
     init: function(element) {
       element.addEventListener('click', function(event) {
         event.preventDefault();
@@ -667,7 +667,7 @@
 
   Body.prototype._onready = function() {
     list_view.init(document.querySelector('#list'));
-    bars_view.init(document.querySelector('#bars'));
+    menuButton.init(document.querySelector('.menu-button'));
     clock_view.init(document.querySelector('#clock'));
     clock_view.updateBoard();
 

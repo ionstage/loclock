@@ -63,7 +63,7 @@ body {
   color: black;
 }
 
-#bars {
+.menu-button {
   cursor: pointer;
   height: 48px;
   position: absolute;
@@ -71,13 +71,13 @@ body {
   width: 48px;
 }
 
-#bars g {
+.menu-button g {
   stroke: black;
   stroke-linecap: round;
   stroke-width: 3px;
 }
 
-#bars:active g, .open #bars g {
+.menu-button:active g, .open .menu-button g {
   stroke: lightgray;
 }
 
