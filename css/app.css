@@ -71,12 +71,6 @@ body {
   width: 48px;
 }
 
-.menu-button g {
-  stroke: black;
-  stroke-linecap: round;
-  stroke-width: 3px;
-}
-
 .menu-button:active g, .open .menu-button g {
   stroke: lightgray;
 }
