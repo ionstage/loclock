@@ -69,6 +69,7 @@ body {
   position: absolute;
   touch-action: manipulation;
   width: 48px;
+  z-index: 1;
 }
 
 .menu-button:active g, .open .menu-button g {
