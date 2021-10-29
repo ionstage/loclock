@@ -76,19 +76,12 @@ body {
   stroke: lightgray;
 }
 
-#clock-container {
-  height: 100%;
-  overflow: hidden;
-  position: absolute;
-  -ms-transform: translateX(168px);
-  transform: translateX(168px);
-  width: 100%;
-}
-
 #clock {
   cursor: default;
   font-family: Helvetica;
   height: 100%;
+  overflow: hidden;
+  position: absolute;
   width: 100%;
 }
 
