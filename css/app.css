@@ -76,7 +76,7 @@ body {
   stroke: lightgray;
 }
 
-#clock {
+.clock {
   cursor: default;
   font-family: Helvetica;
   height: 100%;
@@ -85,43 +85,43 @@ body {
   width: 100%;
 }
 
-#clock > * {
+.clock > * {
   pointer-events: none;
 }
 
-#clock .center-time,
-#clock .center-reset {
+.clock .center-time,
+.clock .center-reset {
   pointer-events: auto;
 }
 
-#clock .text {
+.clock .text {
   dominant-baseline: central;
   text-anchor: middle;
 }
 
-#clock .circle {
+.clock .circle {
   fill: white;
   stroke: black;
 }
 
-#clock .center-spin {
+.clock .center-spin {
   fill: gray;
   font-family: 'Courier New';
   visibility: hidden;
 }
 
-#clock .center-reset {
+.clock .center-reset {
   cursor: pointer;
 }
 
-#clock.spin .circle {
+.clock.spin .circle {
   stroke: gray;
 }
 
-#clock.spin .center-point {
+.clock.spin .center-point {
   visibility: hidden;
 }
 
-#clock.spin .center-spin {
+.clock.spin .center-spin {
   visibility: visible;
 }
