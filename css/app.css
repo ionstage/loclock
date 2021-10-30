@@ -29,7 +29,7 @@ body {
   transform: translateX(168px);
 }
 
-#list-container {
+.list {
   border-right: 1px solid lightgray;
   color: lightgray;
   float: left;
@@ -46,12 +46,12 @@ body {
   width: 168px;
 }
 
-#list-container.unscrollable {
+.list.unscrollable {
   overflow-y: hidden;
   touch-action: none;
 }
 
-#list-container > * {
+.list > * {
   overflow-x: hidden;
 }
 

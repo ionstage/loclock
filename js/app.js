@@ -666,7 +666,7 @@
   };
 
   Body.prototype._onready = function() {
-    list_view.init(document.querySelector('#list'));
+    list_view.init(document.querySelector('.list-content'));
     menuButton.init(document.querySelector('.menu-button'));
     clock_view.init(document.querySelector('.clock'));
     clock_view.updateBoard();
