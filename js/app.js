@@ -257,15 +257,21 @@
     },
   };
 
-  var menuButton = {
-    init: function(element) {
-      element.addEventListener('click', function(event) {
-        event.preventDefault();
-        event.stopPropagation();
-        body.listToggle();
-      });
-    },
+  var Button = function(el, onclick) {
+    this.el = el;
+    this.onclick = onclick;
+    this.el.addEventListener('click', this._onclick.bind(this));
   };
+
+  Button.prototype._onclick = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.onclick();
+  };
+
+  new Button(document.querySelector('.menu-button'), function() {
+    body.listToggle();
+  });
 
   var clock_view = {
     init: function(element) {
@@ -667,7 +673,6 @@
 
   Body.prototype._onready = function() {
     list_view.init(document.querySelector('.list-content'));
-    menuButton.init(document.querySelector('.menu-button'));
     clock_view.init(document.querySelector('.clock'));
     clock_view.updateBoard();
 
