@@ -13,10 +13,6 @@ body {
   user-select: none;
 }
 
-.hide {
-  display: none;
-}
-
 .main {
   height: 100%;
   position: fixed;
