@@ -28,7 +28,6 @@ body {
 .list {
   border-right: 1px solid lightgray;
   color: lightgray;
-  float: left;
   font-family: Helvetica;
   height: 100%;
   line-height: 26px;
@@ -37,7 +36,6 @@ body {
   position: absolute;
   -ms-transform: translateX(-168px);
   transform: translateX(-168px);
-  vertical-align: text-bottom;
   white-space: nowrap;
   width: 168px;
 }
