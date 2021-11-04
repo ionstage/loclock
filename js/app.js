@@ -577,8 +577,13 @@
     },
   };
 
+  var Main = function(el) {
+    this.el = el;
+  };
+
   var Body = function(el) {
     this.el = el;
+    this.main = new Main(this.el.querySelector('.main'));
     this.locationList = new LocationList();
     this.selectedLocations = [];
     this.isOpen = false;
