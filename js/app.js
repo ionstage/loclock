@@ -293,10 +293,8 @@
 
       this.draggable.enable();
       element.addEventListener((dom.supportsTouch() ? 'touchstart' : 'mousedown'), function() {
-        if (body.isOpen) {
-          body.listToggle();
-        }
-      }.bind(this));
+        body.closeList();
+      });
     },
     updateBoard: function() {
       var new_board = this.createBoard(this.x, this.y, this.r);
@@ -619,6 +617,12 @@
     } else {
       element.setAttribute('class', 'main');
       clock_view.draggable.enable();
+    }
+  };
+
+  Body.prototype.closeList = function() {
+    if (this.isOpen) {
+      this.listToggle();
     }
   };
 
