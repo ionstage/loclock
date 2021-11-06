@@ -230,13 +230,13 @@
       }
     },
     update: function() {
-      if (this.current_selected_items.length > body.selectedLocations.length) {
+      if (this.current_selected_items.length > main.selectedLocations.length) {
         this.current_selected_items.forEach(function(item) {
           item.setAttribute('class', 'list-item');
         });
       }
 
-      this.current_selected_items = body.selectedLocations.map(function(location) {
+      this.current_selected_items = main.selectedLocations.map(function(location) {
         var item = this.items[location.key];
         item.setAttribute('class', 'list-item list-selected');
         return item;
@@ -244,7 +244,7 @@
     },
     onclick: function(event) {
       var key = event.target.getAttribute('data-key');
-      var keys = body.getSelectedKeys();
+      var keys = main.getSelectedKeys();
       var index = keys.indexOf(key);
 
       if (index !== -1) {
@@ -253,7 +253,7 @@
         keys.push(key);
       }
 
-      body.setLocations(keys);
+      main.setLocations(keys);
     },
   };
 
@@ -270,7 +270,7 @@
   };
 
   new Button(document.querySelector('.menu-button'), function() {
-    body.listToggle();
+    main.listToggle();
   });
 
   var clock_view = {
@@ -293,7 +293,7 @@
 
       this.draggable.enable();
       element.addEventListener((dom.supportsTouch() ? 'touchstart' : 'mousedown'), function() {
-        body.closeList();
+        main.closeList();
       });
     },
     updateBoard: function() {
@@ -304,7 +304,7 @@
       this.center_time_element = this.board_element.querySelector('.center-time');
     },
     updatePoint: function(now) {
-      var new_point = this.createPoint(this.x, this.y, this.r, body.selectedLocations, now, dial_spinner.timeOffset);
+      var new_point = this.createPoint(this.x, this.y, this.r, main.selectedLocations, now, dial_spinner.timeOffset);
       this.element.replaceChild(new_point, this.point_element);
       this.adjustPointText(new_point, this.x, this.y, this.r, window.innerWidth, window.innerHeight);
       this.point_element = new_point;
@@ -577,23 +577,18 @@
 
   var Main = function(el) {
     this.el = el;
-  };
-
-  var Body = function(el) {
-    this.el = el;
-    this.main = new Main(this.el.querySelector('.main'));
     this.locationList = new LocationList();
     this.selectedLocations = [];
     this.isOpen = false;
   };
 
-  Body.prototype.init = function() {
+  Main.prototype.init = function() {
     document.addEventListener('DOMContentLoaded', this._onready.bind(this));
     window.addEventListener('resize', helper.debounce(this._onresize.bind(this), 100));
     this._disableTouchScrolling();
   };
 
-  Body.prototype.setLocations = function(keys) {
+  Main.prototype.setLocations = function(keys) {
     keys = keys.filter(function(key) {
       return Location.isValidKey(key);
     });
@@ -602,13 +597,13 @@
     this._selectTimezone(keys);
   };
 
-  Body.prototype.getSelectedKeys = function() {
+  Main.prototype.getSelectedKeys = function() {
     return this.selectedLocations.map(function(location) {
       return location.key;
     });
   };
 
-  Body.prototype.listToggle = function() {
+  Main.prototype.listToggle = function() {
     this.isOpen = !this.isOpen;
     var element = document.querySelector('.main');
     if (this.isOpen) {
@@ -620,13 +615,13 @@
     }
   };
 
-  Body.prototype.closeList = function() {
+  Main.prototype.closeList = function() {
     if (this.isOpen) {
       this.listToggle();
     }
   };
 
-  Body.prototype._disableTouchScrolling = function() {
+  Main.prototype._disableTouchScrolling = function() {
     if (!dom.supportsTouch()) {
       return;
     }
@@ -635,13 +630,13 @@
     }, { passive: false });
   };
 
-  Body.prototype._initTimezoneData = function() {
+  Main.prototype._initTimezoneData = function() {
     this.locationList.updateTimezoneOffset(Date.now());
     list_view.setList(this.locationList.locations);
     list_view.update();
   };
 
-  Body.prototype._initClockTimer = function() {
+  Main.prototype._initClockTimer = function() {
     return setInterval(function() {
       var now = Date.now();
       var minutes = new Date().getMinutes();
@@ -652,20 +647,20 @@
     }.bind(this), 30000);
   };
 
-  Body.prototype._initLocations = function() {
+  Main.prototype._initLocations = function() {
     this.setLocations(this._getLocations());
   };
 
-  Body.prototype._initDialSpinner = function() {
+  Main.prototype._initDialSpinner = function() {
     dial_spinner.init(clock_view.element);
   };
 
-  Body.prototype._updateTimezoneList = function() {
+  Main.prototype._updateTimezoneList = function() {
     this._initTimezoneData();
     this.setLocations(this.getSelectedKeys());
   };
 
-  Body.prototype._getLocations = function() {
+  Main.prototype._getLocations = function() {
     var text = location.hash.substring(1);
     var hash = (text ? Base64.decode(text) : '');
     var keys = (hash ? hash.split(',') : DEFAULT_LOCATIONS);
@@ -674,13 +669,13 @@
     });
   };
 
-  Body.prototype._selectTimezone = function(keys) {
+  Main.prototype._selectTimezone = function(keys) {
     this.selectedLocations = this.locationList.findLocations(keys);
     list_view.update();
     clock_view.updatePoint(Date.now());
   };
 
-  Body.prototype._onready = function() {
+  Main.prototype._onready = function() {
     list_view.init(document.querySelector('.list-content'));
     clock_view.init(document.querySelector('.clock'));
     clock_view.updateBoard();
@@ -691,10 +686,10 @@
     this._initDialSpinner();
   };
 
-  Body.prototype._onresize = function() {
+  Main.prototype._onresize = function() {
     clock_view.updatePoint(Date.now());
   };
 
-  var body = new Body(document.body);
-  body.init();
+  var main = new Main(document.querySelector('.main'));
+  main.init();
 })(this.app || (this.app = {}));
