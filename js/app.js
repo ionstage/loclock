@@ -257,22 +257,6 @@
     },
   };
 
-  var Button = function(el, onclick) {
-    this.el = el;
-    this.onclick = onclick;
-    this.el.addEventListener('click', this._onclick.bind(this));
-  };
-
-  Button.prototype._onclick = function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    this.onclick();
-  };
-
-  new Button(document.querySelector('.menu-button'), function() {
-    main.listToggle();
-  });
-
   var clock_view = {
     init: function(element) {
       var width = 720, height = 720;
@@ -575,8 +559,24 @@
     },
   };
 
+  var Button = function(el, onclick) {
+    this.el = el;
+    this.onclick = onclick;
+  };
+
+  Button.prototype.init = function() {
+    this.el.addEventListener('click', this._onclick.bind(this));
+  };
+
+  Button.prototype._onclick = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.onclick();
+  };
+
   var Main = function(el) {
     this.el = el;
+    this.menuButton = new Button(this.el.querySelector('.menu-button'), this.listToggle.bind(this));
     this.locationList = new LocationList();
     this.selectedLocations = [];
     this.isOpen = false;
@@ -586,6 +586,7 @@
     document.addEventListener('DOMContentLoaded', this._onready.bind(this));
     window.addEventListener('resize', helper.debounce(this._onresize.bind(this), 100));
     this._disableTouchScrolling();
+    this.menuButton.init();
   };
 
   Main.prototype.setLocations = function(keys) {
