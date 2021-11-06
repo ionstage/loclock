@@ -587,7 +587,7 @@
     this.isOpen = false;
   };
 
-  Body.prototype.load = function() {
+  Body.prototype.init = function() {
     document.addEventListener('DOMContentLoaded', this._onready.bind(this));
     window.addEventListener('resize', helper.debounce(this._onresize.bind(this), 100));
     this._disableTouchScrolling();
@@ -696,5 +696,5 @@
   };
 
   var body = new Body(document.body);
-  body.load();
+  body.init();
 })(this.app || (this.app = {}));
