@@ -576,7 +576,7 @@
 
   var Main = function(el) {
     this.el = el;
-    this.menuButton = new Button(this.el.querySelector('.menu-button'), this.listToggle.bind(this));
+    this.menuButton = new Button(this.el.querySelector('.menu-button'), this._toggleList.bind(this));
     this.locationList = new LocationList();
     this.selectedLocations = [];
     this.isOpen = false;
@@ -604,7 +604,13 @@
     });
   };
 
-  Main.prototype.listToggle = function() {
+  Main.prototype.closeList = function() {
+    if (this.isOpen) {
+      this._toggleList();
+    }
+  };
+
+  Main.prototype._toggleList = function() {
     this.isOpen = !this.isOpen;
     var element = document.querySelector('.main');
     if (this.isOpen) {
@@ -613,12 +619,6 @@
     } else {
       element.setAttribute('class', 'main');
       clock_view.draggable.enable();
-    }
-  };
-
-  Main.prototype.closeList = function() {
-    if (this.isOpen) {
-      this.listToggle();
     }
   };
 
