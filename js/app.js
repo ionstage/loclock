@@ -612,12 +612,11 @@
 
   Main.prototype._toggleList = function() {
     this.isOpen = !this.isOpen;
-    var element = document.querySelector('.main');
     if (this.isOpen) {
-      element.setAttribute('class', 'main open');
+      this.el.setAttribute('class', 'main open');
       clock_view.draggable.disable();
     } else {
-      element.setAttribute('class', 'main');
+      this.el.setAttribute('class', 'main');
       clock_view.draggable.enable();
     }
   };
