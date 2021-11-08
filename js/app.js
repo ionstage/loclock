@@ -10,7 +10,7 @@
   var LocationList = app.LocationList || require('./location-list.js');
 
   var NS_SVG = 'http://www.w3.org/2000/svg';
-  var DEFAULT_LOCATIONS = ['America/New_York', 'Europe/London', 'Asia/Tokyo'];
+  var DEFAULT_LOCATION_KEYS = ['America/New_York', 'Europe/London', 'Asia/Tokyo'];
 
   var dial_spinner = {
     timeOffset: 0,
@@ -664,7 +664,7 @@
   Main.prototype._getLocations = function() {
     var text = location.hash.substring(1);
     var hash = (text ? Base64.decode(text) : '');
-    var keys = (hash ? hash.split(',') : DEFAULT_LOCATIONS);
+    var keys = (hash ? hash.split(',') : DEFAULT_LOCATION_KEYS);
     return keys.filter(function(key) {
       return Location.isValidKey(key);
     });
