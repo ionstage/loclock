@@ -649,7 +649,9 @@
   };
 
   Main.prototype._initLocations = function() {
-    this.setLocations(this._getLocations());
+    var fragment = location.hash.substring(1);
+    var keys = (fragment ? this._decodeLocationKeys(fragment) : DEFAULT_LOCATION_KEYS);
+    this.setLocations(keys);
   };
 
   Main.prototype._initDialSpinner = function() {
@@ -661,13 +663,8 @@
     this.setLocations(this.getSelectedKeys());
   };
 
-  Main.prototype._getLocations = function() {
-    var text = location.hash.substring(1);
-    var hash = (text ? Base64.decode(text) : '');
-    var keys = (hash ? hash.split(',') : DEFAULT_LOCATION_KEYS);
-    return keys.filter(function(key) {
-      return Location.isValidKey(key);
-    });
+  Main.prototype._decodeLocationKeys = function(s) {
+    return Base64.decode(s).split(',');
   };
 
   Main.prototype._selectTimezone = function(keys) {
