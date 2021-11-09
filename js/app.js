@@ -593,8 +593,7 @@
     keys = keys.filter(function(key) {
       return Location.isValidKey(key);
     });
-    var text = keys.join(',');
-    location.replace('#' + Base64.encodeURI(text));
+    location.replace('#' + this._encodeLocationKeys(keys));
     this._selectTimezone(keys);
   };
 
@@ -660,6 +659,10 @@
   Main.prototype._updateTimezoneList = function() {
     this._initTimezoneData();
     this.setLocations(this.getSelectedKeys());
+  };
+
+  Main.prototype._encodeLocationKeys = function(keys) {
+    return Base64.encodeURI(keys.join(','))
   };
 
   Main.prototype._decodeLocationKeys = function(s) {
