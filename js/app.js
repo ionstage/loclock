@@ -279,6 +279,8 @@
       element.addEventListener((dom.supportsTouch() ? 'touchstart' : 'mousedown'), function() {
         main.closeList();
       });
+
+      this.updateBoard();
     },
     updateBoard: function() {
       var new_board = this.createBoard(this.x, this.y, this.r);
@@ -678,7 +680,6 @@
   Main.prototype._onready = function() {
     list_view.init(document.querySelector('.list-content'));
     clock_view.init(document.querySelector('.clock'));
-    clock_view.updateBoard();
 
     this._initTimezoneData();
     this._initClockTimer();
