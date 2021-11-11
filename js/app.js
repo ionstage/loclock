@@ -654,10 +654,6 @@
     this.setLocations(keys);
   };
 
-  Main.prototype._initDialSpinner = function() {
-    dial_spinner.init(clock_view.element);
-  };
-
   Main.prototype._updateTimezoneList = function() {
     this._initTimezoneData();
     this.setLocations(this.getSelectedKeys());
@@ -680,11 +676,11 @@
   Main.prototype._onready = function() {
     list_view.init(document.querySelector('.list-content'));
     clock_view.init(document.querySelector('.clock'));
+    dial_spinner.init(clock_view.element);
 
     this._initTimezoneData();
     this._initClockTimer();
     this._initLocations();
-    this._initDialSpinner();
   };
 
   Main.prototype._onresize = function() {
