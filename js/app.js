@@ -462,7 +462,7 @@
     },
     shrinkElement: function(element, width, height) {
       var bb = element.getBBox();
-      var gbb = clock_view.globalBBox(bb);
+      var gbb = this.globalBBox(bb);
       var pattern = 0;
 
       if ((gbb.x < 0 && (pattern = 1)) ||
