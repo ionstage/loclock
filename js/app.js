@@ -229,14 +229,14 @@
         }.bind(this));
       }
     },
-    update: function() {
-      if (this.current_selected_items.length > main.selectedLocations.length) {
+    update: function(selectedLocations) {
+      if (this.current_selected_items.length > selectedLocations.length) {
         this.current_selected_items.forEach(function(item) {
           item.setAttribute('class', 'list-item');
         });
       }
 
-      this.current_selected_items = main.selectedLocations.map(function(location) {
+      this.current_selected_items = selectedLocations.map(function(location) {
         var item = this.items[location.key];
         item.setAttribute('class', 'list-item list-selected');
         return item;
@@ -634,7 +634,7 @@
   Main.prototype._initTimezoneData = function() {
     this.locationList.updateTimezoneOffset(Date.now());
     list_view.setList(this.locationList.locations);
-    list_view.update();
+    list_view.update(this.selectedLocations);
   };
 
   Main.prototype._initClockTimer = function() {
@@ -669,7 +669,7 @@
 
   Main.prototype._selectTimezone = function(keys) {
     this.selectedLocations = this.locationList.findLocations(keys);
-    list_view.update();
+    list_view.update(this.selectedLocations);
     clock_view.updatePoint(Date.now());
   };
 
