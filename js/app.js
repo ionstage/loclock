@@ -13,9 +13,9 @@
   var DEFAULT_LOCATION_KEYS = ['America/New_York', 'Europe/London', 'Asia/Tokyo'];
 
   var dial_spinner = {
-    timeOffset: 0,
-    isRightHanded: true,
     init: function(clock_element) {
+      this.timeOffset = 0;
+      this.isRightHanded = true;
       this.clock_element = clock_element;
       this.center_time_element = clock_element.querySelector('.center-time');
       this.center_reset_element = clock_element.querySelector('.center-reset');
@@ -140,9 +140,9 @@
   };
 
   var list_view = {
-    items: {},
-    current_selected_items: [],
     init: function(element) {
+      this.items = {};
+      this.current_selected_items = [];
       this.element = element;
       this.scrolling = false;
       this.clickable = true;
