@@ -258,7 +258,7 @@
   };
 
   var clock_view = {
-    init: function(element) {
+    init: function(element, onpointerdown) {
       var width = 720, height = 720;
       this.element = element;
       this.board_element = document.createElementNS(NS_SVG, 'g');
@@ -276,9 +276,7 @@
       });
 
       this.draggable.enable();
-      element.addEventListener((dom.supportsTouch() ? 'touchstart' : 'mousedown'), function() {
-        main.closeList();
-      });
+      element.addEventListener((dom.supportsTouch() ? 'touchstart' : 'mousedown'), onpointerdown);
 
       this.updateBoard();
     },
@@ -605,7 +603,7 @@
     });
   };
 
-  Main.prototype.closeList = function() {
+  Main.prototype._closeList = function() {
     if (this.isOpen) {
       this._toggleList();
     }
@@ -675,7 +673,7 @@
 
   Main.prototype._onready = function() {
     list_view.init(document.querySelector('.list-content'));
-    clock_view.init(document.querySelector('.clock'));
+    clock_view.init(document.querySelector('.clock'), this._closeList.bind(this));
     dial_spinner.init(clock_view.element);
 
     this._initTimezoneData();
