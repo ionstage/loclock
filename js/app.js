@@ -274,11 +274,15 @@
         onmove: dial_spinner.dragmove.bind(dial_spinner),
         onend: dial_spinner.dragend.bind(dial_spinner),
       });
+      this.locations = [];
 
       this.draggable.enable();
       element.addEventListener((dom.supportsTouch() ? 'touchstart' : 'mousedown'), onpointerdown);
 
       this.updateBoard();
+    },
+    setLocations: function(locations) {
+      this.locations = locations;
     },
     updateBoard: function() {
       var new_board = this.createBoard(this.x, this.y, this.r);
@@ -288,7 +292,7 @@
       this.center_time_element = this.board_element.querySelector('.center-time');
     },
     updatePoint: function(now) {
-      var new_point = this.createPoint(this.x, this.y, this.r, main.selectedLocations, now, dial_spinner.timeOffset);
+      var new_point = this.createPoint(this.x, this.y, this.r, this.locations, now, dial_spinner.timeOffset);
       this.element.replaceChild(new_point, this.point_element);
       this.adjustPointText(new_point, this.x, this.y, this.r, window.innerWidth, window.innerHeight);
       this.point_element = new_point;
@@ -668,6 +672,7 @@
   Main.prototype._selectTimezone = function(keys) {
     this.selectedLocations = this.locationList.findLocations(keys);
     list_view.update(this.selectedLocations);
+    clock_view.setLocations(this.selectedLocations);
     clock_view.updatePoint(Date.now());
   };
 
