@@ -140,12 +140,13 @@
   };
 
   var list_view = {
-    init: function(element) {
+    init: function(element, ontoggle) {
       this.items = {};
       this.current_selected_items = [];
       this.element = element;
       this.scrolling = false;
       this.clickable = true;
+      this.ontoggle = ontoggle;
 
       element.parentNode.addEventListener('click', function(event) {
         event.preventDefault();
@@ -244,16 +245,7 @@
     },
     onclick: function(event) {
       var key = event.target.getAttribute('data-key');
-      var keys = main.getSelectedKeys();
-      var index = keys.indexOf(key);
-
-      if (index !== -1) {
-        keys.splice(index, 1);
-      } else {
-        keys.push(key);
-      }
-
-      main.setLocations(keys);
+      this.ontoggle(key);
     },
   };
 
@@ -593,7 +585,7 @@
     this.menuButton.init();
   };
 
-  Main.prototype.setLocations = function(keys) {
+  Main.prototype._setLocations = function(keys) {
     keys = keys.filter(function(key) {
       return Location.isValidKey(key);
     });
@@ -601,7 +593,7 @@
     this._selectTimezone(keys);
   };
 
-  Main.prototype.getSelectedKeys = function() {
+  Main.prototype._getSelectedKeys = function() {
     return this.selectedLocations.map(function(location) {
       return location.key;
     });
@@ -633,6 +625,19 @@
     }, { passive: false });
   };
 
+  Main.prototype._toggleLocation = function(key) {
+    var keys = this._getSelectedKeys();
+    var index = keys.indexOf(key);
+
+    if (index !== -1) {
+      keys.splice(index, 1);
+    } else {
+      keys.push(key);
+    }
+
+    this._setLocations(keys);
+  };
+
   Main.prototype._initTimezoneData = function() {
     this.locationList.updateTimezoneOffset(Date.now());
     list_view.setList(this.locationList.locations);
@@ -653,12 +658,12 @@
   Main.prototype._initLocations = function() {
     var fragment = location.hash.substring(1);
     var keys = (fragment ? this._decodeLocationKeys(fragment) : DEFAULT_LOCATION_KEYS);
-    this.setLocations(keys);
+    this._setLocations(keys);
   };
 
   Main.prototype._updateTimezoneList = function() {
     this._initTimezoneData();
-    this.setLocations(this.getSelectedKeys());
+    this._setLocations(this._getSelectedKeys());
   };
 
   Main.prototype._encodeLocationKeys = function(keys) {
@@ -677,7 +682,7 @@
   };
 
   Main.prototype._onready = function() {
-    list_view.init(document.querySelector('.list-content'));
+    list_view.init(document.querySelector('.list-content'), this._toggleLocation.bind(this));
     clock_view.init(document.querySelector('.clock'), this._closeList.bind(this));
     dial_spinner.init(clock_view.element);
 
