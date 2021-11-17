@@ -23,6 +23,7 @@
     toggleTimeOffset: function() {
       this.timeOffset = (this.timeOffset + (this.timeOffset >= 0 ? -1 : 1) * 1440) % 1440;
       this.isRightHanded = (this.timeOffset >= 0);
+      clock_view.setTimeoffset(this.timeOffset);
       clock_view.updateCenter();
     },
     reset: function() {
@@ -39,6 +40,7 @@
           this.timeOffset = 0;
           clock_view.draggable.enable();
         }
+        clock_view.setTimeoffset(this.timeOffset);
         clock_view.updatePoint(Date.now());
         clock_view.updateCenter();
       }.bind(this);
@@ -112,6 +114,7 @@
       }
 
       this.timeOffset = timeOffset;
+      clock_view.setTimeoffset(this.timeOffset);
       clock_view.updatePoint(Date.now());
       clock_view.updateCenter();
     },
@@ -267,6 +270,7 @@
         onend: dial_spinner.dragend.bind(dial_spinner),
       });
       this.locations = [];
+      this.timeOffset = 0;
 
       this.draggable.enable();
       element.addEventListener((dom.supportsTouch() ? 'touchstart' : 'mousedown'), onpointerdown);
@@ -276,6 +280,9 @@
     setLocations: function(locations) {
       this.locations = locations;
     },
+    setTimeoffset: function(offset) {
+      this.timeOffset = offset;
+    },
     updateBoard: function() {
       var new_board = this.createBoard(this.x, this.y, this.r);
       this.element.replaceChild(new_board, this.board_element);
@@ -284,13 +291,13 @@
       this.center_time_element = this.board_element.querySelector('.center-time');
     },
     updatePoint: function(now) {
-      var new_point = this.createPoint(this.x, this.y, this.r, this.locations, now, dial_spinner.timeOffset);
+      var new_point = this.createPoint(this.x, this.y, this.r, this.locations, now, this.timeOffset);
       this.element.replaceChild(new_point, this.point_element);
       this.adjustPointText(new_point, this.x, this.y, this.r, window.innerWidth, window.innerHeight);
       this.point_element = new_point;
     },
     updateCenter: function() {
-      var timeOffset = dial_spinner.timeOffset;
+      var timeOffset = this.timeOffset;
       var h = ('00' + Math.abs((timeOffset - timeOffset % 60) / 60)).slice(-2);
       var m = ('00' + Math.abs(timeOffset % 60)).slice(-2);
       var text = (timeOffset >= 0 ? '+' : '-') + h + ':' + m;
