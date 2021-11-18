@@ -64,7 +64,7 @@
       this.x0 = (event.touches ? event.changedTouches[0].clientX : event.clientX);
       this.y0 = (event.touches ? event.changedTouches[0].clientY : event.clientY);
       this.startTimeOffset = this.timeOffset;
-      this.isDragging = true;
+      clock_view.isDragging = true;
       clock_view.updateCenter();
     },
     dragmove: function(dx, dy) {
@@ -137,7 +137,7 @@
         this.center_time_element.setAttribute('fill', 'gray');
         this.center_reset_element.setAttribute('fill', 'gray');
       }
-      this.isDragging = false;
+      clock_view.isDragging = false;
       clock_view.updateCenter();
     },
   };
@@ -271,6 +271,7 @@
       });
       this.locations = [];
       this.timeOffset = 0;
+      this.isDragging = false;
 
       this.draggable.enable();
       element.addEventListener((dom.supportsTouch() ? 'touchstart' : 'mousedown'), onpointerdown);
@@ -302,7 +303,7 @@
       var m = ('00' + Math.abs(timeOffset % 60)).slice(-2);
       var text = (timeOffset >= 0 ? '+' : '-') + h + ':' + m;
       this.center_time_element.textContent = text;
-      this.element.setAttribute('class', (timeOffset || dial_spinner.isDragging ? 'clock spin' : 'clock'));
+      this.element.setAttribute('class', (timeOffset || this.isDragging ? 'clock spin' : 'clock'));
     },
     globalBBox: function(bb) {
       var stageElement = this.element;
