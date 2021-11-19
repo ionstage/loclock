@@ -253,7 +253,7 @@
   };
 
   var clock_view = {
-    init: function(element, onpointerdown) {
+    init: function(element, props) {
       var width = 720, height = 720;
       this.element = element;
       this.board_element = document.createElementNS(NS_SVG, 'g');
@@ -265,16 +265,16 @@
       this.r = Math.min(width, height) / 2 * 0.6;
       this.draggable = new Draggable({
         element: element,
-        onstart: dial_spinner.dragstart.bind(dial_spinner),
-        onmove: dial_spinner.dragmove.bind(dial_spinner),
-        onend: dial_spinner.dragend.bind(dial_spinner),
+        onstart: props.ondragstart,
+        onmove: props.ondragmove,
+        onend: props.ondragend,
       });
       this.locations = [];
       this.timeOffset = 0;
       this.isDragging = false;
 
       this.draggable.enable();
-      element.addEventListener((dom.supportsTouch() ? 'touchstart' : 'mousedown'), onpointerdown);
+      element.addEventListener((dom.supportsTouch() ? 'touchstart' : 'mousedown'), props.onpointerdown);
 
       this.updateBoard();
     },
@@ -691,7 +691,12 @@
 
   Main.prototype._onready = function() {
     list_view.init(document.querySelector('.list-content'), this._toggleLocation.bind(this));
-    clock_view.init(document.querySelector('.clock'), this._closeList.bind(this));
+    clock_view.init(document.querySelector('.clock'), {
+      ondragstart: dial_spinner.dragstart.bind(dial_spinner),
+      ondragmove: dial_spinner.dragmove.bind(dial_spinner),
+      ondragend: dial_spinner.dragend.bind(dial_spinner),
+      onpointerdown: this._closeList.bind(this),
+    });
     dial_spinner.init(clock_view.element);
 
     this._initTimezoneData();
