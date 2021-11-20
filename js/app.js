@@ -13,18 +13,23 @@
   var DEFAULT_LOCATION_KEYS = ['America/New_York', 'Europe/London', 'Asia/Tokyo'];
 
   var dial_spinner = {
-    init: function(clock_element) {
+    init: function(clock_element, props) {
       this.timeOffset = 0;
       this.isRightHanded = true;
       this.clock_element = clock_element;
       this.center_time_element = clock_element.querySelector('.center-time');
       this.center_reset_element = clock_element.querySelector('.center-reset');
+      this.ontimeoffsetinvert = props.ontimeoffsetinvert;
+      this.ontimeoffsetupdate = props.ontimeoffsetupdate;
+      this.onresetstart = props.onresetstart;
+      this.onresetend = props.onresetend;
+      this.ondragstart = props.ondragstart;
+      this.ondragend = props.ondragend;
     },
     toggleTimeOffset: function() {
       this.timeOffset = (this.timeOffset + (this.timeOffset >= 0 ? -1 : 1) * 1440) % 1440;
       this.isRightHanded = (this.timeOffset >= 0);
-      clock_view.setTimeoffset(this.timeOffset);
-      clock_view.updateCenter();
+      this.ontimeoffsetinvert(this.timeOffset);
     },
     reset: function() {
       var offset = this.timeOffset;
@@ -38,13 +43,11 @@
           dom.animate(callback);
         } else {
           this.timeOffset = 0;
-          clock_view.draggable.enable();
+          this.onresetend();
         }
-        clock_view.setTimeoffset(this.timeOffset);
-        clock_view.updatePoint(Date.now());
-        clock_view.updateCenter();
+        this.ontimeoffsetupdate(this.timeOffset);
       }.bind(this);
-      clock_view.draggable.disable();
+      this.onresetstart();
       dom.animate(callback);
     },
     dragstart: function(event) {
@@ -64,8 +67,7 @@
       this.x0 = (event.touches ? event.changedTouches[0].clientX : event.clientX);
       this.y0 = (event.touches ? event.changedTouches[0].clientY : event.clientY);
       this.startTimeOffset = this.timeOffset;
-      clock_view.isDragging = true;
-      clock_view.updateCenter();
+      this.ondragstart();
     },
     dragmove: function(dx, dy) {
       if (this.isDragCanceled) {
@@ -114,9 +116,7 @@
       }
 
       this.timeOffset = timeOffset;
-      clock_view.setTimeoffset(this.timeOffset);
-      clock_view.updatePoint(Date.now());
-      clock_view.updateCenter();
+      this.ontimeoffsetupdate(this.timeOffset);
     },
     dragend: function(event) {
       var target = event.target;
@@ -137,8 +137,7 @@
         this.center_time_element.setAttribute('fill', 'gray');
         this.center_reset_element.setAttribute('fill', 'gray');
       }
-      clock_view.isDragging = false;
-      clock_view.updateCenter();
+      this.ondragend();
     },
   };
 
@@ -697,7 +696,31 @@
       ondragend: dial_spinner.dragend.bind(dial_spinner),
       onpointerdown: this._closeList.bind(this),
     });
-    dial_spinner.init(clock_view.element);
+    dial_spinner.init(clock_view.element, {
+      ontimeoffsetinvert: function(timeOffset) {
+        clock_view.setTimeoffset(timeOffset);
+        clock_view.updateCenter();
+      },
+      ontimeoffsetupdate: function(timeOffset) {
+        clock_view.setTimeoffset(timeOffset);
+        clock_view.updatePoint(Date.now());
+        clock_view.updateCenter();
+      },
+      onresetstart: function() {
+        clock_view.draggable.disable();
+      },
+      onresetend: function() {
+        clock_view.draggable.enable();
+      },
+      ondragstart: function() {
+        clock_view.isDragging = true;
+        clock_view.updateCenter();
+      },
+      ondragend: function() {
+        clock_view.isDragging = false;
+        clock_view.updateCenter();
+      },
+    });
 
     this._initTimezoneData();
     this._initClockTimer();
