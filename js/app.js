@@ -12,13 +12,13 @@
   var NS_SVG = 'http://www.w3.org/2000/svg';
   var DEFAULT_LOCATION_KEYS = ['America/New_York', 'Europe/London', 'Asia/Tokyo'];
 
-  var dial_spinner = {
-    init: function(clock_element, props) {
+  var dialSpinner = {
+    init: function(clockElement, props) {
       this.timeOffset = 0;
       this.isRightHanded = true;
-      this.clock_element = clock_element;
-      this.center_time_element = clock_element.querySelector('.center-time');
-      this.center_reset_element = clock_element.querySelector('.center-reset');
+      this.clockElement = clockElement;
+      this.centerTimeElement = clockElement.querySelector('.center-time');
+      this.centerResetElement = clockElement.querySelector('.center-reset');
       this.ontimeoffsetinvert = props.ontimeoffsetinvert;
       this.ontimeoffsetupdate = props.ontimeoffsetupdate;
       this.onresetstart = props.onresetstart;
@@ -55,12 +55,12 @@
       this.startClassName = event.target.getAttribute('class') || '';
       if (this.startClassName.indexOf('center-time') !== -1) {
         this.isDragCanceled = true;
-        this.center_time_element.setAttribute('fill', 'lightgray');
+        this.centerTimeElement.setAttribute('fill', 'lightgray');
         return;
       }
       if (this.startClassName.indexOf('center-reset') !== -1) {
         this.isDragCanceled = true;
-        this.center_reset_element.setAttribute('fill', 'lightgray');
+        this.centerResetElement.setAttribute('fill', 'lightgray');
         return;
       }
       this.isDragCanceled = false;
@@ -74,7 +74,7 @@
         return;
       }
 
-      var rect = this.clock_element.getBoundingClientRect();
+      var rect = this.clockElement.getBoundingClientRect();
       var cx = rect.width / 2;
       var cy = rect.height / 2;
       var x1 = this.x0 + dx;
@@ -134,17 +134,17 @@
         }
       }
       if (this.isDragCanceled) {
-        this.center_time_element.setAttribute('fill', 'gray');
-        this.center_reset_element.setAttribute('fill', 'gray');
+        this.centerTimeElement.setAttribute('fill', 'gray');
+        this.centerResetElement.setAttribute('fill', 'gray');
       }
       this.ondragend();
     },
   };
 
-  var list_view = {
+  var list = {
     init: function(element, ontoggle) {
       this.items = {};
-      this.current_selected_items = [];
+      this.currentSelectedItems = [];
       this.element = element;
       this.scrolling = false;
       this.clickable = true;
@@ -170,7 +170,7 @@
     },
     setList: function(locations) {
       var element = document.createElement('div');
-      var listitems = [];
+      var listItems = [];
       var needsCurrentLocation = false;
 
       locations.forEach(function(location) {
@@ -180,18 +180,18 @@
           return;
         }
         var name = location.name;
-        listitems.push([key, name]);
+        listItems.push([key, name]);
       });
 
-      listitems.sort(function(a, b) {
+      listItems.sort(function(a, b) {
         return (a[1] < b[1]) ? -1 : 1;
       });
 
       if (needsCurrentLocation) {
-        listitems.unshift([Location.KEY_CURRENT_LOCATION, 'Current Location']);
+        listItems.unshift([Location.KEY_CURRENT_LOCATION, 'Current Location']);
       }
 
-      listitems.forEach(function(listitem) {
+      listItems.forEach(function(listitem) {
         var item = document.createElement('div');
         var key = listitem[0];
         item.setAttribute('data-key', key);
@@ -233,13 +233,13 @@
       }
     },
     update: function(selectedLocations) {
-      if (this.current_selected_items.length > selectedLocations.length) {
-        this.current_selected_items.forEach(function(item) {
+      if (this.currentSelectedItems.length > selectedLocations.length) {
+        this.currentSelectedItems.forEach(function(item) {
           item.setAttribute('class', 'list-item');
         });
       }
 
-      this.current_selected_items = selectedLocations.map(function(location) {
+      this.currentSelectedItems = selectedLocations.map(function(location) {
         var item = this.items[location.key];
         item.setAttribute('class', 'list-item list-selected');
         return item;
@@ -251,14 +251,14 @@
     },
   };
 
-  var clock_view = {
+  var clock = {
     init: function(element, props) {
       var width = 720, height = 720;
       this.element = element;
-      this.board_element = document.createElementNS(NS_SVG, 'g');
-      this.point_element = document.createElementNS(NS_SVG, 'g');
-      this.element.appendChild(this.board_element);
-      this.element.appendChild(this.point_element);
+      this.boardElement = document.createElementNS(NS_SVG, 'g');
+      this.pointElement = document.createElementNS(NS_SVG, 'g');
+      this.element.appendChild(this.boardElement);
+      this.element.appendChild(this.pointElement);
       this.x = width / 2;
       this.y = height / 2;
       this.r = Math.min(width, height) / 2 * 0.6;
@@ -284,24 +284,24 @@
       this.timeOffset = offset;
     },
     updateBoard: function() {
-      var new_board = this.createBoard(this.x, this.y, this.r);
-      this.element.replaceChild(new_board, this.board_element);
-      this.adjustBoard(new_board);
-      this.board_element = new_board;
-      this.center_time_element = this.board_element.querySelector('.center-time');
+      var newBoard = this.createBoard(this.x, this.y, this.r);
+      this.element.replaceChild(newBoard, this.boardElement);
+      this.adjustBoard(newBoard);
+      this.boardElement = newBoard;
+      this.centerTimeElement = this.boardElement.querySelector('.center-time');
     },
     updatePoint: function(now) {
-      var new_point = this.createPoint(this.x, this.y, this.r, this.locations, now, this.timeOffset);
-      this.element.replaceChild(new_point, this.point_element);
-      this.adjustPointText(new_point, this.x, this.y, this.r, window.innerWidth, window.innerHeight);
-      this.point_element = new_point;
+      var newPoint = this.createPoint(this.x, this.y, this.r, this.locations, now, this.timeOffset);
+      this.element.replaceChild(newPoint, this.pointElement);
+      this.adjustPointText(newPoint, this.x, this.y, this.r, window.innerWidth, window.innerHeight);
+      this.pointElement = newPoint;
     },
     updateCenter: function() {
       var timeOffset = this.timeOffset;
       var h = ('00' + Math.abs((timeOffset - timeOffset % 60) / 60)).slice(-2);
       var m = ('00' + Math.abs(timeOffset % 60)).slice(-2);
       var text = (timeOffset >= 0 ? '+' : '-') + h + ':' + m;
-      this.center_time_element.textContent = text;
+      this.centerTimeElement.textContent = text;
       this.element.setAttribute('class', (timeOffset || this.isDragging ? 'clock spin' : 'clock'));
     },
     globalBBox: function(bb) {
@@ -354,24 +354,24 @@
         'class': 'center-point',
       }));
 
-      var center_spin = document.createElementNS(NS_SVG, 'g');
-      center_spin.setAttribute('class', 'center-spin');
+      var centerSpin = document.createElementNS(NS_SVG, 'g');
+      centerSpin.setAttribute('class', 'center-spin');
 
-      center_spin.appendChild(this.createText('+00:00', {
+      centerSpin.appendChild(this.createText('+00:00', {
         x: x - 11,
         y: y - 16,
         'font-size': r / 6,
         'class': 'text center-time',
       }));
 
-      center_spin.appendChild(this.createText('RESET', {
+      centerSpin.appendChild(this.createText('RESET', {
         x: x,
         y: y + 32,
         'font-size': r / 10,
         'class': 'text center-reset',
       }));
 
-      board.appendChild(center_spin);
+      board.appendChild(centerSpin);
 
       var dif = Math.PI / 12;
       var deg = 0;
@@ -380,12 +380,12 @@
         var text = (i % 3 === 0) ? String((i - 6 >= 0) ? i - 6 : i + 18) : '・';
         var fontSize = (text === '・') ? r / 12 : r / 4.5;
         var rate = (text === '18' || text === '15' || text === '21') ? 0.04 : 0;
-        var dif_x = r * (0.8 - Math.abs(rate * Math.cos(deg))) * Math.cos(deg);
-        var dif_y = r * (0.8 - Math.abs(rate * Math.sin(deg))) * Math.sin(deg);
+        var difX = r * (0.8 - Math.abs(rate * Math.cos(deg))) * Math.cos(deg);
+        var difY = r * (0.8 - Math.abs(rate * Math.sin(deg))) * Math.sin(deg);
 
         board.appendChild(this.createText(text, {
-          x: (x + dif_x).toFixed(1),
-          y: (y + dif_y).toFixed(1),
+          x: (x + difX).toFixed(1),
+          y: (y + difY).toFixed(1),
           'font-size': fontSize.toFixed(),
           'class': 'text',
         }));
@@ -498,8 +498,8 @@
       }
     },
     adjustPointText: function(point, x, y, r, width, height) {
-      var upper_elements = [];
-      var down_elements = [];
+      var upperElements = [];
+      var downElements = [];
       var elements = [];
 
       this.forEachTextElement(point, function(element) {
@@ -515,22 +515,22 @@
         textBBox = element.getBBox();
 
         if (textBBox.y + textBBox.height / 2 < y) {
-          upper_elements.push([element, textBBox]);
+          upperElements.push([element, textBBox]);
         } else {
-          down_elements.push([element, textBBox]);
+          downElements.push([element, textBBox]);
         }
       });
 
-      var ulen = upper_elements.length;
-      var dlen = down_elements.length;
+      var ulen = upperElements.length;
+      var dlen = downElements.length;
 
-      upper_elements.sort(function(a, b) {
+      upperElements.sort(function(a, b) {
         return (a[1].y < b[1].y) ? -1 : 1;
       }).forEach(function(item, i) {
         var el = item[0];
         for (var j = i + 1; j < ulen; j++) {
           var bb0 = item[1];
-          var bb1 = upper_elements[j][1];
+          var bb1 = upperElements[j][1];
           if (!this.isBBoxOverlaid(bb0, bb1)) {
             continue;
           }
@@ -540,13 +540,13 @@
         elements.push(el);
       }.bind(this));
 
-      down_elements.sort(function(a, b) {
+      downElements.sort(function(a, b) {
         return (a[1].y > b[1].y) ? -1 : 1;
       }).forEach(function(item, i) {
         var el = item[0];
         for (var j = i + 1; j < dlen; j++) {
           var bb0 = item[1];
-          var bb1 = down_elements[j][1];
+          var bb1 = downElements[j][1];
           if (!this.isBBoxOverlaid(bb0, bb1)) {
             continue;
           }
@@ -616,10 +616,10 @@
     this.isOpen = !this.isOpen;
     if (this.isOpen) {
       this.el.setAttribute('class', 'main open');
-      clock_view.draggable.disable();
+      clock.draggable.disable();
     } else {
       this.el.setAttribute('class', 'main');
-      clock_view.draggable.enable();
+      clock.draggable.enable();
     }
   };
 
@@ -647,8 +647,8 @@
 
   Main.prototype._initTimezoneData = function() {
     this.locationList.updateTimezoneOffset(Date.now());
-    list_view.setList(this.locationList.locations);
-    list_view.update(this.selectedLocations);
+    list.setList(this.locationList.locations);
+    list.update(this.selectedLocations);
   };
 
   Main.prototype._initClockTimer = function() {
@@ -658,7 +658,7 @@
       if (minutes === 0 || minutes === 15 || minutes === 30 || minutes === 45) {
         this.locationList.updateTimezoneOffset(now);
       }
-      clock_view.updatePoint(now);
+      clock.updatePoint(now);
     }.bind(this), 30000);
   };
 
@@ -683,42 +683,42 @@
 
   Main.prototype._selectTimezone = function(keys) {
     this.selectedLocations = this.locationList.findLocations(keys);
-    list_view.update(this.selectedLocations);
-    clock_view.setLocations(this.selectedLocations);
-    clock_view.updatePoint(Date.now());
+    list.update(this.selectedLocations);
+    clock.setLocations(this.selectedLocations);
+    clock.updatePoint(Date.now());
   };
 
   Main.prototype._onready = function() {
-    list_view.init(document.querySelector('.list-content'), this._toggleLocation.bind(this));
-    clock_view.init(document.querySelector('.clock'), {
-      ondragstart: dial_spinner.dragstart.bind(dial_spinner),
-      ondragmove: dial_spinner.dragmove.bind(dial_spinner),
-      ondragend: dial_spinner.dragend.bind(dial_spinner),
+    list.init(document.querySelector('.list-content'), this._toggleLocation.bind(this));
+    clock.init(document.querySelector('.clock'), {
+      ondragstart: dialSpinner.dragstart.bind(dialSpinner),
+      ondragmove: dialSpinner.dragmove.bind(dialSpinner),
+      ondragend: dialSpinner.dragend.bind(dialSpinner),
       onpointerdown: this._closeList.bind(this),
     });
-    dial_spinner.init(clock_view.element, {
+    dialSpinner.init(clock.element, {
       ontimeoffsetinvert: function(timeOffset) {
-        clock_view.setTimeoffset(timeOffset);
-        clock_view.updateCenter();
+        clock.setTimeoffset(timeOffset);
+        clock.updateCenter();
       },
       ontimeoffsetupdate: function(timeOffset) {
-        clock_view.setTimeoffset(timeOffset);
-        clock_view.updatePoint(Date.now());
-        clock_view.updateCenter();
+        clock.setTimeoffset(timeOffset);
+        clock.updatePoint(Date.now());
+        clock.updateCenter();
       },
       onresetstart: function() {
-        clock_view.draggable.disable();
+        clock.draggable.disable();
       },
       onresetend: function() {
-        clock_view.draggable.enable();
+        clock.draggable.enable();
       },
       ondragstart: function() {
-        clock_view.isDragging = true;
-        clock_view.updateCenter();
+        clock.isDragging = true;
+        clock.updateCenter();
       },
       ondragend: function() {
-        clock_view.isDragging = false;
-        clock_view.updateCenter();
+        clock.isDragging = false;
+        clock.updateCenter();
       },
     });
 
@@ -728,7 +728,7 @@
   };
 
   Main.prototype._onresize = function() {
-    clock_view.updatePoint(Date.now());
+    clock.updatePoint(Date.now());
   };
 
   var main = new Main(document.querySelector('.main'));
