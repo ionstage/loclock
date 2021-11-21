@@ -252,7 +252,7 @@
   };
 
   var clock = {
-    init: function(element, props) {
+    init: function(element, onpointerdown) {
       var width = 720, height = 720;
       this.element = element;
       this.boardElement = document.createElementNS(NS_SVG, 'g');
@@ -264,18 +264,44 @@
       this.r = Math.min(width, height) / 2 * 0.6;
       this.draggable = new Draggable({
         element: element,
-        onstart: props.ondragstart,
-        onmove: props.ondragmove,
-        onend: props.ondragend,
+        onstart: dialSpinner.dragstart.bind(dialSpinner),
+        onmove: dialSpinner.dragmove.bind(dialSpinner),
+        onend: dialSpinner.dragend.bind(dialSpinner),
       });
       this.locations = [];
       this.timeOffset = 0;
       this.isDragging = false;
 
       this.draggable.enable();
-      element.addEventListener((dom.supportsTouch() ? 'touchstart' : 'mousedown'), props.onpointerdown);
+      element.addEventListener((dom.supportsTouch() ? 'touchstart' : 'mousedown'), onpointerdown);
 
       this.updateBoard();
+
+      dialSpinner.init(this.element, {
+        ontimeoffsetinvert: function(timeOffset) {
+          this.setTimeoffset(timeOffset);
+          this.updateCenter();
+        }.bind(this),
+        ontimeoffsetupdate: function(timeOffset) {
+          this.setTimeoffset(timeOffset);
+          this.updatePoint(Date.now());
+          this.updateCenter();
+        }.bind(this),
+        onresetstart: function() {
+          this.draggable.disable();
+        }.bind(this),
+        onresetend: function() {
+          this.draggable.enable();
+        }.bind(this),
+        ondragstart: function() {
+          this.isDragging = true;
+          this.updateCenter();
+        }.bind(this),
+        ondragend: function() {
+          this.isDragging = false;
+          this.updateCenter();
+        }.bind(this),
+      });
     },
     setLocations: function(locations) {
       this.locations = locations;
@@ -690,37 +716,7 @@
 
   Main.prototype._onready = function() {
     list.init(document.querySelector('.list-content'), this._toggleLocation.bind(this));
-    clock.init(document.querySelector('.clock'), {
-      ondragstart: dialSpinner.dragstart.bind(dialSpinner),
-      ondragmove: dialSpinner.dragmove.bind(dialSpinner),
-      ondragend: dialSpinner.dragend.bind(dialSpinner),
-      onpointerdown: this._closeList.bind(this),
-    });
-    dialSpinner.init(clock.element, {
-      ontimeoffsetinvert: function(timeOffset) {
-        clock.setTimeoffset(timeOffset);
-        clock.updateCenter();
-      },
-      ontimeoffsetupdate: function(timeOffset) {
-        clock.setTimeoffset(timeOffset);
-        clock.updatePoint(Date.now());
-        clock.updateCenter();
-      },
-      onresetstart: function() {
-        clock.draggable.disable();
-      },
-      onresetend: function() {
-        clock.draggable.enable();
-      },
-      ondragstart: function() {
-        clock.isDragging = true;
-        clock.updateCenter();
-      },
-      ondragend: function() {
-        clock.isDragging = false;
-        clock.updateCenter();
-      },
-    });
+    clock.init(document.querySelector('.clock'), this._closeList.bind(this));
 
     this._initTimezoneData();
     this._initClockTimer();
