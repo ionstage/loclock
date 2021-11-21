@@ -40,7 +40,7 @@
       var callback = function() {
         if (dt && Math.abs(this.timeOffset) > Math.abs(dt)) {
           this.timeOffset += dt;
-          dom.animate(callback);
+          requestAnimationFrame(callback);
         } else {
           this.timeOffset = 0;
           this.onresetend();
@@ -48,7 +48,7 @@
         this.ontimeoffsetupdate(this.timeOffset);
       }.bind(this);
       this.onresetstart();
-      dom.animate(callback);
+      requestAnimationFrame(callback);
     },
     dragstart: function(event) {
       event.preventDefault();
