@@ -165,7 +165,7 @@
       }.bind(this));
 
       if (dom.supportsTouch()) {
-        element.parentNode.setAttribute('class', 'unscrollable');
+        element.parentNode.classList.add('unscrollable');
       }
     },
     setList: function(locations) {
@@ -195,7 +195,7 @@
         var item = document.createElement('div');
         var key = listitem[0];
         item.setAttribute('data-key', key);
-        item.setAttribute('class', 'list-item');
+        item.classList.add('list-item');
         var textLength = listitem[1].length;
         if (textLength >= 20) {
           item.style.fontSize = '11px';
@@ -235,13 +235,13 @@
     update: function(selectedLocations) {
       if (this.currentSelectedItems.length > selectedLocations.length) {
         this.currentSelectedItems.forEach(function(item) {
-          item.setAttribute('class', 'list-item');
+          item.classList.remove('list-selected');
         });
       }
 
       this.currentSelectedItems = selectedLocations.map(function(location) {
         var item = this.items[location.key];
-        item.setAttribute('class', 'list-item list-selected');
+        item.classList.add('list-selected');
         return item;
       }.bind(this));
     },
@@ -641,10 +641,10 @@
   Main.prototype._toggleList = function() {
     this.isOpen = !this.isOpen;
     if (this.isOpen) {
-      this.el.setAttribute('class', 'main open');
+      this.el.classList.add('open');
       clock.draggable.disable();
     } else {
-      this.el.setAttribute('class', 'main');
+      this.el.classList.remove('open');
       clock.draggable.enable();
     }
   };
