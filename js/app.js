@@ -150,7 +150,7 @@
       this.clickable = true;
       this.ontoggle = ontoggle;
 
-      element.parentNode.addEventListener('click', function(event) {
+      element.addEventListener('click', function(event) {
         event.preventDefault();
         if (this.scrolling || !this.clickable) {
           this.scrolling = false;
@@ -160,12 +160,12 @@
         this.onclick(event);
       }.bind(this));
 
-      element.parentNode.addEventListener('touchstart', function() {
+      element.addEventListener('touchstart', function() {
         this.clickable = !this.scrolling;
       }.bind(this));
 
       if (dom.supportsTouch()) {
-        element.parentNode.classList.add('unscrollable');
+        element.classList.add('unscrollable');
       }
     },
     setList: function(locations) {
@@ -207,8 +207,7 @@
         this.items[key] = item;
       }.bind(this));
 
-      this.element.parentNode.replaceChild(element, this.element);
-      this.element = element;
+      this.element.replaceChild(element, this.element.firstElementChild);
 
       if (dom.supportsTouch()) {
         if (this.scroll) {
@@ -216,7 +215,7 @@
           this.scroll = null;
         }
 
-        this.scroll = new IScroll(element.parentNode, {
+        this.scroll = new IScroll(this.element, {
           click: true,
           scrollbars: true,
           shrinkScrollbars: 'scale',
@@ -715,7 +714,7 @@
   };
 
   Main.prototype._onready = function() {
-    list.init(document.querySelector('.list-content'), this._toggleLocation.bind(this));
+    list.init(document.querySelector('.list'), this._toggleLocation.bind(this));
     clock.init(document.querySelector('.clock'), this._closeList.bind(this));
 
     this._initTimezoneData();
