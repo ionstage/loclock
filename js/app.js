@@ -617,7 +617,7 @@
     this.menuButton.init();
   };
 
-  Main.prototype._setLocations = function(keys) {
+  Main.prototype._setSelectedKeys = function(keys) {
     keys = keys.filter(function(key) {
       return Location.isValidKey(key);
     });
@@ -667,7 +667,7 @@
       keys.push(key);
     }
 
-    this._setLocations(keys);
+    this._setSelectedKeys(keys);
   };
 
   Main.prototype._initTimezoneData = function() {
@@ -690,12 +690,12 @@
   Main.prototype._initLocations = function() {
     var fragment = location.hash.substring(1);
     var keys = (fragment ? this._decodeLocationKeys(fragment) : DEFAULT_LOCATION_KEYS);
-    this._setLocations(keys);
+    this._setSelectedKeys(keys);
   };
 
   Main.prototype._updateTimezoneList = function() {
     this._initTimezoneData();
-    this._setLocations(this._getSelectedKeys());
+    this._setSelectedKeys(this._getSelectedKeys());
   };
 
   Main.prototype._encodeLocationKeys = function(keys) {
