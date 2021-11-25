@@ -7,7 +7,6 @@
   var dom = app.dom || require('./dom.js');
   var Draggable = app.Draggable || require('./draggable.js');
   var Location = app.Location || require('./location.js');
-  var LocationList = app.LocationList || require('./location-list.js');
 
   var NS_SVG = 'http://www.w3.org/2000/svg';
   var DEFAULT_LOCATION_KEYS = ['America/New_York', 'Europe/London', 'Asia/Tokyo'];
@@ -605,7 +604,7 @@
   var Main = function(el) {
     this.el = el;
     this.menuButton = new Button(this.el.querySelector('.menu-button'), this._toggleList.bind(this));
-    this.locationList = new LocationList();
+    this.locations = this._createLocations(Location.DEFAULT_KEYS);
     this.selectedLocations = [];
     this.isOpen = false;
   };
@@ -615,6 +614,26 @@
     window.addEventListener('resize', helper.debounce(this._onresize.bind(this), 100));
     this._disableTouchScrolling();
     this.menuButton.init();
+  };
+
+  Main.prototype._createLocations = function(keys) {
+    return keys.map(function(key) {
+      return new Location(key);
+    });
+  };
+
+  Main.prototype._findLocations = function(keys) {
+    return keys.map(function(key) {
+      return helper.find(this.locations, function(location) {
+        return (location.key === key);
+      });
+    }.bind(this));
+  };
+
+  Main.prototype._updateTimezoneOffset = function(now) {
+    this.locations.forEach(function(location) {
+      location.updateTimezoneOffset(now);
+    });
   };
 
   Main.prototype._setSelectedKeys = function(keys) {
@@ -671,8 +690,8 @@
   };
 
   Main.prototype._initTimezoneData = function() {
-    this.locationList.updateTimezoneOffset(Date.now());
-    list.setList(this.locationList.locations);
+    this._updateTimezoneOffset(Date.now());
+    list.setList(this.locations);
     list.update(this.selectedLocations);
   };
 
@@ -681,7 +700,7 @@
       var now = Date.now();
       var minutes = new Date().getMinutes();
       if (minutes === 0 || minutes === 15 || minutes === 30 || minutes === 45) {
-        this.locationList.updateTimezoneOffset(now);
+        this._updateTimezoneOffset(now);
       }
       clock.updatePoint(now);
     }.bind(this), 30000);
@@ -707,7 +726,7 @@
   };
 
   Main.prototype._selectTimezone = function(keys) {
-    this.selectedLocations = this.locationList.findLocations(keys);
+    this.selectedLocations = this._findLocations(keys);
     list.update(this.selectedLocations);
     clock.setLocations(this.selectedLocations);
     clock.updatePoint(Date.now());
