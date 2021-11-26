@@ -604,7 +604,7 @@
   var Main = function(el) {
     this.el = el;
     this.menuButton = new Button(this.el.querySelector('.menu-button'), this._toggleList.bind(this));
-    this.locations = this._createLocations(Location.DEFAULT_KEYS);
+    this.locations = this._createLocations(Location.PRESET_KEYS);
     this.selectedLocations = [];
     this.isOpen = false;
   };
