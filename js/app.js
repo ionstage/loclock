@@ -650,21 +650,30 @@
     });
   };
 
-  Main.prototype._closeList = function() {
+  Main.prototype._toggleList = function() {
     if (this.isOpen) {
-      this._toggleList();
+      this._closeList();
+    } else {
+      this._openList();
     }
   };
 
-  Main.prototype._toggleList = function() {
-    this.isOpen = !this.isOpen;
+  Main.prototype._openList = function() {
     if (this.isOpen) {
-      this.el.classList.add('open');
-      clock.draggable.disable();
-    } else {
-      this.el.classList.remove('open');
-      clock.draggable.enable();
+      return;
     }
+    this.el.classList.add('open');
+    clock.draggable.disable();
+    this.isOpen = true;
+  };
+
+  Main.prototype._closeList = function() {
+    if (!this.isOpen) {
+      return;
+    }
+    this.el.classList.remove('open');
+    clock.draggable.enable();
+    this.isOpen = false;
   };
 
   Main.prototype._disableTouchScrolling = function() {
