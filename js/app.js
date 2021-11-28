@@ -6,7 +6,7 @@
   var helper = app.helper || require('./helper.js');
   var dom = app.dom || require('./dom.js');
   var Draggable = app.Draggable || require('./draggable.js');
-  var Location = app.Location || require('./location.js');
+  var Location = app.Location || require('./models/location.js');
 
   var NS_SVG = 'http://www.w3.org/2000/svg';
   var DEFAULT_LOCATION_KEYS = ['America/New_York', 'Europe/London', 'Asia/Tokyo'];
