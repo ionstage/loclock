@@ -245,7 +245,11 @@
       }.bind(this));
     },
     onclick: function(event) {
-      var key = event.target.getAttribute('data-key');
+      var target = event.target;
+      if (!target.classList.contains('list-item')) {
+        return;
+      }
+      var key = target.getAttribute('data-key');
       this.ontoggle(key);
     },
   };
