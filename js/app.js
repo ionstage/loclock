@@ -5,6 +5,7 @@
   var Base64 = require('js-base64').Base64;
   var helper = app.helper || require('./helper.js');
   var dom = app.dom || require('./dom.js');
+  var Button = app.Button || require('./components/button.js');
   var Draggable = app.Draggable || require('./draggable.js');
   var Location = app.Location || require('./models/location.js');
 
@@ -584,21 +585,6 @@
         this.shrinkElement(element, width, height);
       }.bind(this));
     },
-  };
-
-  var Button = function(el, onclick) {
-    this.el = el;
-    this.onclick = onclick;
-  };
-
-  Button.prototype.init = function() {
-    this.el.addEventListener('click', this._onclick.bind(this));
-  };
-
-  Button.prototype._onclick = function(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    this.onclick();
   };
 
   var Main = function(el) {
