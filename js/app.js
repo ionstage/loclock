@@ -591,10 +591,12 @@
     },
   };
 
-  var Main = function(el) {
+  var Main = function(el, list, clock) {
     this.el = el;
     this.menuButton = new Button(this.el.querySelector('.menu-button'), this._toggleList.bind(this));
     this.locations = this._createLocations(Location.PRESET_KEYS);
+    this.list = list;
+    this.clock = clock;
     this.selectedLocations = [];
     this.isOpen = false;
   };
@@ -653,7 +655,7 @@
       return;
     }
     this.el.classList.add('open');
-    clock.draggable.disable();
+    this.clock.draggable.disable();
     this.isOpen = true;
   };
 
@@ -662,7 +664,7 @@
       return;
     }
     this.el.classList.remove('open');
-    clock.draggable.enable();
+    this.clock.draggable.enable();
     this.isOpen = false;
   };
 
@@ -690,8 +692,8 @@
 
   Main.prototype._initTimezoneData = function() {
     this._updateTimezoneOffset(Date.now());
-    list.setList(this.locations);
-    list.update(this.selectedLocations);
+    this.list.setList(this.locations);
+    this.list.update(this.selectedLocations);
   };
 
   Main.prototype._initClockTimer = function() {
@@ -701,7 +703,7 @@
       if (minutes === 0 || minutes === 15 || minutes === 30 || minutes === 45) {
         this._updateTimezoneOffset(now);
       }
-      clock.updatePoint(now);
+      this.clock.updatePoint(now);
     }.bind(this), 30000);
   };
 
@@ -726,14 +728,14 @@
 
   Main.prototype._selectTimezone = function(keys) {
     this.selectedLocations = this._findLocations(keys);
-    list.update(this.selectedLocations);
-    clock.setLocations(this.selectedLocations);
-    clock.updatePoint(Date.now());
+    this.list.update(this.selectedLocations);
+    this.clock.setLocations(this.selectedLocations);
+    this.clock.updatePoint(Date.now());
   };
 
   Main.prototype._onready = function() {
-    list.init(document.querySelector('.list'), this._toggleLocation.bind(this));
-    clock.init(document.querySelector('.clock'), this._closeList.bind(this));
+    this.list.init(document.querySelector('.list'), this._toggleLocation.bind(this));
+    this.clock.init(document.querySelector('.clock'), this._closeList.bind(this));
 
     this._initTimezoneData();
     this._initClockTimer();
@@ -741,9 +743,9 @@
   };
 
   Main.prototype._onresize = function() {
-    clock.updatePoint(Date.now());
+    this.clock.updatePoint(Date.now());
   };
 
-  var main = new Main(document.querySelector('.main'));
+  var main = new Main(document.querySelector('.main'), list, clock);
   main.init();
 })(this.app || (this.app = {}));
