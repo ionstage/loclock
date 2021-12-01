@@ -1,12 +1,12 @@
 (function(app) {
   'use strict';
 
-  var IScroll = require('iscroll');
   var Base64 = require('js-base64').Base64;
   var helper = app.helper || require('./helper.js');
   var dom = app.dom || require('./dom.js');
-  var Button = app.Button || require('./components/button.js');
   var Draggable = app.Draggable || require('./draggable.js');
+  var Button = app.Button || require('./components/button.js');
+  var List = app.List || require('./components/list.js');
   var Location = app.Location || require('./models/location.js');
 
   var NS_SVG = 'http://www.w3.org/2000/svg';
@@ -138,119 +138,6 @@
         this.centerResetElement.setAttribute('fill', 'gray');
       }
       this.ondragend();
-    },
-  };
-
-  var list = {
-    init: function(element, ontoggle) {
-      this.items = {};
-      this.currentSelectedItems = [];
-      this.element = element;
-      this.scrolling = false;
-      this.clickable = true;
-      this.ontoggle = ontoggle;
-
-      element.addEventListener('click', function(event) {
-        event.preventDefault();
-        if (this.scrolling || !this.clickable) {
-          this.scrolling = false;
-          this.clickable = true;
-          return;
-        }
-        this.onclick(event);
-      }.bind(this));
-
-      element.addEventListener('touchstart', function() {
-        this.clickable = !this.scrolling;
-      }.bind(this));
-
-      if (dom.supportsTouch()) {
-        element.classList.add('unscrollable');
-      }
-    },
-    setList: function(locations) {
-      var element = document.createElement('div');
-      var listItems = [];
-      var needsCurrentLocation = false;
-
-      locations.forEach(function(location) {
-        var key = location.key;
-        if (key === Location.KEY_CURRENT_LOCATION) {
-          needsCurrentLocation = true;
-          return;
-        }
-        var name = location.name;
-        listItems.push([key, name]);
-      });
-
-      listItems.sort(function(a, b) {
-        return (a[1] < b[1]) ? -1 : 1;
-      });
-
-      if (needsCurrentLocation) {
-        listItems.unshift([Location.KEY_CURRENT_LOCATION, 'Current Location']);
-      }
-
-      listItems.forEach(function(listitem) {
-        var item = document.createElement('div');
-        var key = listitem[0];
-        item.setAttribute('data-key', key);
-        item.classList.add('list-item');
-        var textLength = listitem[1].length;
-        if (textLength >= 20) {
-          item.style.fontSize = '11px';
-        } else if (textLength >= 17) {
-          item.style.fontSize = '14px';
-        }
-        item.innerHTML = listitem[1];
-        element.appendChild(item);
-        this.items[key] = item;
-      }.bind(this));
-
-      this.element.replaceChild(element, this.element.firstElementChild);
-
-      if (dom.supportsTouch()) {
-        if (this.scroll) {
-          this.scroll.destroy();
-          this.scroll = null;
-        }
-
-        this.scroll = new IScroll(this.element, {
-          click: true,
-          scrollbars: true,
-          shrinkScrollbars: 'scale',
-          fadeScrollbars: true,
-        });
-
-        this.scroll.on('scrollStart', function() {
-          this.scrolling = true;
-        }.bind(this));
-
-        this.scroll.on('scrollEnd', function() {
-          this.scrolling = false;
-        }.bind(this));
-      }
-    },
-    update: function(selectedLocations) {
-      if (this.currentSelectedItems.length > selectedLocations.length) {
-        this.currentSelectedItems.forEach(function(item) {
-          item.classList.remove('list-selected');
-        });
-      }
-
-      this.currentSelectedItems = selectedLocations.map(function(location) {
-        var item = this.items[location.key];
-        item.classList.add('list-selected');
-        return item;
-      }.bind(this));
-    },
-    onclick: function(event) {
-      var target = event.target;
-      if (!target.classList.contains('list-item')) {
-        return;
-      }
-      var key = target.getAttribute('data-key');
-      this.ontoggle(key);
     },
   };
 
@@ -591,11 +478,11 @@
     },
   };
 
-  var Main = function(el, list, clock) {
+  var Main = function(el, clock) {
     this.el = el;
-    this.menuButton = new Button(this.el.querySelector('.menu-button'), this._toggleList.bind(this));
     this.locations = this._createLocations(Location.PRESET_KEYS);
-    this.list = list;
+    this.menuButton = new Button(this.el.querySelector('.menu-button'), this._toggleList.bind(this));
+    this.list = new List(document.querySelector('.list'), this._toggleLocation.bind(this));
     this.clock = clock;
     this.selectedLocations = [];
     this.isOpen = false;
@@ -734,7 +621,6 @@
   };
 
   Main.prototype._onready = function() {
-    this.list.init(document.querySelector('.list'), this._toggleLocation.bind(this));
     this.clock.init(document.querySelector('.clock'), this._closeList.bind(this));
 
     this._initTimezoneData();
@@ -746,6 +632,6 @@
     this.clock.updatePoint(Date.now());
   };
 
-  var main = new Main(document.querySelector('.main'), list, clock);
+  var main = new Main(document.querySelector('.main'), clock);
   main.init();
 })(this.app || (this.app = {}));
