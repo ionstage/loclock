@@ -12,133 +12,136 @@
   var NS_SVG = 'http://www.w3.org/2000/svg';
   var DEFAULT_LOCATION_KEYS = ['America/New_York', 'Europe/London', 'Asia/Tokyo'];
 
-  var dialSpinner = {
-    init: function(clockElement, props) {
-      this.timeOffset = 0;
-      this.isRightHanded = true;
-      this.clockElement = clockElement;
-      this.centerTimeElement = clockElement.querySelector('.center-time');
-      this.centerResetElement = clockElement.querySelector('.center-reset');
-      this.ontimeoffsetinvert = props.ontimeoffsetinvert;
-      this.ontimeoffsetupdate = props.ontimeoffsetupdate;
-      this.onresetstart = props.onresetstart;
-      this.onresetend = props.onresetend;
-      this.ondragstart = props.ondragstart;
-      this.ondragend = props.ondragend;
-    },
-    toggleTimeOffset: function() {
-      this.timeOffset = (this.timeOffset + (this.timeOffset >= 0 ? -1 : 1) * 1440) % 1440;
-      this.isRightHanded = (this.timeOffset >= 0);
-      this.ontimeoffsetinvert(this.timeOffset);
-    },
-    reset: function() {
-      var offset = this.timeOffset;
-      if (!offset) {
-        return;
-      }
-      var dt = (offset >= 0 ? -1 : 1) * Math.ceil(Math.ceil(Math.abs(offset / 6)) / 10) * 10;
-      var callback = function() {
-        if (dt && Math.abs(this.timeOffset) > Math.abs(dt)) {
-          this.timeOffset += dt;
-          requestAnimationFrame(callback);
-        } else {
-          this.timeOffset = 0;
-          this.onresetend();
-        }
-        this.ontimeoffsetupdate(this.timeOffset);
-      }.bind(this);
-      this.onresetstart();
-      requestAnimationFrame(callback);
-    },
-    dragstart: function(event) {
-      event.preventDefault();
-      this.startClassName = event.target.getAttribute('class') || '';
-      if (this.startClassName.indexOf('center-time') !== -1) {
-        this.isDragCanceled = true;
-        this.centerTimeElement.setAttribute('fill', 'lightgray');
-        return;
-      }
-      if (this.startClassName.indexOf('center-reset') !== -1) {
-        this.isDragCanceled = true;
-        this.centerResetElement.setAttribute('fill', 'lightgray');
-        return;
-      }
-      this.isDragCanceled = false;
-      this.x0 = (event.touches ? event.changedTouches[0].clientX : event.clientX);
-      this.y0 = (event.touches ? event.changedTouches[0].clientY : event.clientY);
-      this.startTimeOffset = this.timeOffset;
-      this.ondragstart();
-    },
-    dragmove: function(dx, dy) {
-      if (this.isDragCanceled) {
-        return;
-      }
+  var DialSpinner = function(clockElement, props) {
+    this.timeOffset = 0;
+    this.isRightHanded = true;
+    this.clockElement = clockElement;
+    this.centerTimeElement = clockElement.querySelector('.center-time');
+    this.centerResetElement = clockElement.querySelector('.center-reset');
+    this.ontimeoffsetinvert = props.ontimeoffsetinvert;
+    this.ontimeoffsetupdate = props.ontimeoffsetupdate;
+    this.onresetstart = props.onresetstart;
+    this.onresetend = props.onresetend;
+    this.ondragstart = props.ondragstart;
+    this.ondragend = props.ondragend;
+  };
 
-      var rect = this.clockElement.getBoundingClientRect();
-      var cx = rect.width / 2;
-      var cy = rect.height / 2;
-      var x1 = this.x0 + dx;
-      var y1 = this.y0 + dy;
-      var a1 = this.x0 - cx;
-      var a2 = this.y0 - cy;
-      var b1 = x1 - cx;
-      var b2 = y1 - cy;
-      var cos = (a1 * b1 + a2 * b2) / (Math.sqrt(a1 * a1 + a2 * a2) * Math.sqrt(b1 * b1 + b2 * b2));
-      var acos = Math.acos(cos) || 0;
-      var offset = acos / Math.PI * 12 * 60;
-      var direction = (a1 * b2 - b1 * a2 >= 0 ? 1 : -1);
-      var timeOffset = this.startTimeOffset + direction * Math.round(offset / 10) * 10;
-      timeOffset = timeOffset % 1440;
+  DialSpinner.prototype.toggleTimeOffset = function() {
+    this.timeOffset = (this.timeOffset + (this.timeOffset >= 0 ? -1 : 1) * 1440) % 1440;
+    this.isRightHanded = (this.timeOffset >= 0);
+    this.ontimeoffsetinvert(this.timeOffset);
+  };
 
-      /* -720 < timeOffset <= 720 */
-      if (timeOffset > 720) {
-        timeOffset -= 1440;
-      } else if (timeOffset <= -720) {
-        timeOffset += 1440;
+  DialSpinner.prototype.reset = function() {
+    var offset = this.timeOffset;
+    if (!offset) {
+      return;
+    }
+    var dt = (offset >= 0 ? -1 : 1) * Math.ceil(Math.ceil(Math.abs(offset / 6)) / 10) * 10;
+    var callback = function() {
+      if (dt && Math.abs(this.timeOffset) > Math.abs(dt)) {
+        this.timeOffset += dt;
+        requestAnimationFrame(callback);
+      } else {
+        this.timeOffset = 0;
+        this.onresetend();
       }
-
-      /* determine rotation direction */
-      if (this.timeOffset <= 0 && this.timeOffset > -360 && timeOffset > 0 && timeOffset < 360) {
-        this.isRightHanded = true;
-      } else if (this.timeOffset >= 0 && this.timeOffset < 360 && timeOffset < 0 && timeOffset > -360) {
-        this.isRightHanded = false;
-      }
-
-      /* -1440 < timeOffset <= 0 or 0 <= timeOffset < 1440 */
-      if (this.isRightHanded && timeOffset < 0) {
-        timeOffset += 1440;
-      } else if (!this.isRightHanded && timeOffset > 0) {
-        timeOffset -= 1440;
-      }
-
-      if (timeOffset === this.timeOffset) {
-        return;
-      }
-
-      this.timeOffset = timeOffset;
       this.ontimeoffsetupdate(this.timeOffset);
-    },
-    dragend: function(event) {
-      var target = event.target;
-      if (dom.supportsTouch()) {
-        var x = (event.touches ? event.changedTouches[0].clientX : event.clientX);
-        var y = (event.touches ? event.changedTouches[0].clientY : event.clientY);
-        target = document.elementFromPoint(x, y);
+    }.bind(this);
+    this.onresetstart();
+    requestAnimationFrame(callback);
+  };
+
+  DialSpinner.prototype.dragstart = function(event) {
+    event.preventDefault();
+    this.startClassName = event.target.getAttribute('class') || '';
+    if (this.startClassName.indexOf('center-time') !== -1) {
+      this.isDragCanceled = true;
+      this.centerTimeElement.setAttribute('fill', 'lightgray');
+      return;
+    }
+    if (this.startClassName.indexOf('center-reset') !== -1) {
+      this.isDragCanceled = true;
+      this.centerResetElement.setAttribute('fill', 'lightgray');
+      return;
+    }
+    this.isDragCanceled = false;
+    this.x0 = (event.touches ? event.changedTouches[0].clientX : event.clientX);
+    this.y0 = (event.touches ? event.changedTouches[0].clientY : event.clientY);
+    this.startTimeOffset = this.timeOffset;
+    this.ondragstart();
+  };
+
+  DialSpinner.prototype.dragmove = function(dx, dy) {
+    if (this.isDragCanceled) {
+      return;
+    }
+
+    var rect = this.clockElement.getBoundingClientRect();
+    var cx = rect.width / 2;
+    var cy = rect.height / 2;
+    var x1 = this.x0 + dx;
+    var y1 = this.y0 + dy;
+    var a1 = this.x0 - cx;
+    var a2 = this.y0 - cy;
+    var b1 = x1 - cx;
+    var b2 = y1 - cy;
+    var cos = (a1 * b1 + a2 * b2) / (Math.sqrt(a1 * a1 + a2 * a2) * Math.sqrt(b1 * b1 + b2 * b2));
+    var acos = Math.acos(cos) || 0;
+    var offset = acos / Math.PI * 12 * 60;
+    var direction = (a1 * b2 - b1 * a2 >= 0 ? 1 : -1);
+    var timeOffset = this.startTimeOffset + direction * Math.round(offset / 10) * 10;
+    timeOffset = timeOffset % 1440;
+
+    /* -720 < timeOffset <= 720 */
+    if (timeOffset > 720) {
+      timeOffset -= 1440;
+    } else if (timeOffset <= -720) {
+      timeOffset += 1440;
+    }
+
+    /* determine rotation direction */
+    if (this.timeOffset <= 0 && this.timeOffset > -360 && timeOffset > 0 && timeOffset < 360) {
+      this.isRightHanded = true;
+    } else if (this.timeOffset >= 0 && this.timeOffset < 360 && timeOffset < 0 && timeOffset > -360) {
+      this.isRightHanded = false;
+    }
+
+    /* -1440 < timeOffset <= 0 or 0 <= timeOffset < 1440 */
+    if (this.isRightHanded && timeOffset < 0) {
+      timeOffset += 1440;
+    } else if (!this.isRightHanded && timeOffset > 0) {
+      timeOffset -= 1440;
+    }
+
+    if (timeOffset === this.timeOffset) {
+      return;
+    }
+
+    this.timeOffset = timeOffset;
+    this.ontimeoffsetupdate(this.timeOffset);
+  };
+
+  DialSpinner.prototype.dragend = function(event) {
+    var target = event.target;
+    if (dom.supportsTouch()) {
+      var x = (event.touches ? event.changedTouches[0].clientX : event.clientX);
+      var y = (event.touches ? event.changedTouches[0].clientY : event.clientY);
+      target = document.elementFromPoint(x, y);
+    }
+    var className = target.getAttribute('class') || '';
+    if (this.startClassName === className) {
+      if (className.indexOf('center-time') !== -1) {
+        this.toggleTimeOffset();
+      } else if (className.indexOf('center-reset') !== -1) {
+        this.reset();
       }
-      var className = target.getAttribute('class') || '';
-      if (this.startClassName === className) {
-        if (className.indexOf('center-time') !== -1) {
-          this.toggleTimeOffset();
-        } else if (className.indexOf('center-reset') !== -1) {
-          this.reset();
-        }
-      }
-      if (this.isDragCanceled) {
-        this.centerTimeElement.setAttribute('fill', 'gray');
-        this.centerResetElement.setAttribute('fill', 'gray');
-      }
-      this.ondragend();
-    },
+    }
+    if (this.isDragCanceled) {
+      this.centerTimeElement.setAttribute('fill', 'gray');
+      this.centerResetElement.setAttribute('fill', 'gray');
+    }
+    this.ondragend();
   };
 
   var clock = {
@@ -152,22 +155,15 @@
       this.x = width / 2;
       this.y = height / 2;
       this.r = Math.min(width, height) / 2 * 0.6;
-      this.draggable = new Draggable({
-        element: element,
-        onstart: dialSpinner.dragstart.bind(dialSpinner),
-        onmove: dialSpinner.dragmove.bind(dialSpinner),
-        onend: dialSpinner.dragend.bind(dialSpinner),
-      });
       this.locations = [];
       this.timeOffset = 0;
       this.isDragging = false;
 
-      this.draggable.enable();
       element.addEventListener((dom.supportsTouch() ? 'touchstart' : 'mousedown'), onpointerdown);
 
       this.updateBoard();
 
-      dialSpinner.init(this.element, {
+      this.dialSpinner = new DialSpinner(this.element, {
         ontimeoffsetinvert: function(timeOffset) {
           this.setTimeoffset(timeOffset);
           this.updateCenter();
@@ -192,6 +188,15 @@
           this.updateCenter();
         }.bind(this),
       });
+
+      this.draggable = new Draggable({
+        element: element,
+        onstart: this.dialSpinner.dragstart.bind(this.dialSpinner),
+        onmove: this.dialSpinner.dragmove.bind(this.dialSpinner),
+        onend: this.dialSpinner.dragend.bind(this.dialSpinner),
+      });
+
+      this.draggable.enable();
     },
     setLocations: function(locations) {
       this.locations = locations;
