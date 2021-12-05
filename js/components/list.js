@@ -4,15 +4,15 @@
   var IScroll = require('iscroll');
   var dom = app.dom || require('./dom.js');
 
-  var List = function(element, ontoggle) {
+  var List = function(el, ontoggle) {
     this.items = {};
     this.currentSelectedItems = [];
-    this.element = element;
+    this.el = el;
     this.scrolling = false;
     this.clickable = true;
     this.ontoggle = ontoggle;
 
-    element.addEventListener('click', function(event) {
+    el.addEventListener('click', function(event) {
       event.preventDefault();
       if (this.scrolling || !this.clickable) {
         this.scrolling = false;
@@ -22,12 +22,12 @@
       this.onclick(event);
     }.bind(this));
 
-    element.addEventListener('touchstart', function() {
+    el.addEventListener('touchstart', function() {
       this.clickable = !this.scrolling;
     }.bind(this));
 
     if (dom.supportsTouch()) {
-      element.classList.add('unscrollable');
+      el.classList.add('unscrollable');
     }
   };
 
@@ -70,7 +70,7 @@
       this.items[key] = item;
     }.bind(this));
 
-    this.element.replaceChild(element, this.element.firstElementChild);
+    this.el.replaceChild(element, this.el.firstElementChild);
 
     if (dom.supportsTouch()) {
       if (this.scroll) {
@@ -78,7 +78,7 @@
         this.scroll = null;
       }
 
-      this.scroll = new IScroll(this.element, {
+      this.scroll = new IScroll(this.el, {
         click: true,
         scrollbars: true,
         shrinkScrollbars: 'scale',

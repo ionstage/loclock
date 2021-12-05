@@ -1,8 +1,8 @@
 (function(app) {
   'use strict';
 
-  var Draggable = function(props) {
-    this.element = props.element;
+  var Draggable = function(el, props) {
+    this.el = el;
     this.onstart = props.onstart;
     this.onmove = props.onmove;
     this.onend = props.onend;
@@ -23,7 +23,7 @@
 
   Draggable.prototype.enable = function() {
     var type = (Draggable.supportsTouch() ? 'touchstart' : 'mousedown');
-    this.element.addEventListener(type, this['on' + type], { passive: false });
+    this.el.addEventListener(type, this['on' + type], { passive: false });
   };
 
   Draggable.prototype.disable = function() {
@@ -31,7 +31,7 @@
     var startType = (supportsTouch ? 'touchstart' : 'mousedown');
     var moveType = (supportsTouch ? 'touchmove' : 'mousemove');
     var endType = (supportsTouch ? 'touchend' : 'mouseup');
-    this.element.removeEventListener(startType, this['on' + startType], { passive: false });
+    this.el.removeEventListener(startType, this['on' + startType], { passive: false });
     document.removeEventListener(moveType, this['on' + moveType]);
     document.removeEventListener(endType, this['on' + endType]);
   };

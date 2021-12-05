@@ -138,13 +138,13 @@
     this.ondragend();
   };
 
-  var Clock = function(element, onpointerdown) {
+  var Clock = function(el, onpointerdown) {
     var width = 720, height = 720;
-    this.element = element;
+    this.el = el;
     this.boardElement = document.createElementNS(NS_SVG, 'g');
     this.pointElement = document.createElementNS(NS_SVG, 'g');
-    this.element.appendChild(this.boardElement);
-    this.element.appendChild(this.pointElement);
+    this.el.appendChild(this.boardElement);
+    this.el.appendChild(this.pointElement);
     this.x = width / 2;
     this.y = height / 2;
     this.r = Math.min(width, height) / 2 * 0.6;
@@ -152,11 +152,11 @@
     this.timeOffset = 0;
     this.isDragging = false;
 
-    element.addEventListener((dom.supportsTouch() ? 'touchstart' : 'mousedown'), onpointerdown);
+    el.addEventListener((dom.supportsTouch() ? 'touchstart' : 'mousedown'), onpointerdown);
 
     this.updateBoard();
 
-    this.dialSpinner = new DialSpinner(this.element, {
+    this.dialSpinner = new DialSpinner(this.el, {
       ontimeoffsetinvert: function(timeOffset) {
         this.setTimeoffset(timeOffset);
         this.updateCenter();
@@ -182,8 +182,7 @@
       }.bind(this),
     });
 
-    this.draggable = new Draggable({
-      element: element,
+    this.draggable = new Draggable(el, {
       onstart: this.dialSpinner.dragstart.bind(this.dialSpinner),
       onmove: this.dialSpinner.dragmove.bind(this.dialSpinner),
       onend: this.dialSpinner.dragend.bind(this.dialSpinner),
@@ -202,7 +201,7 @@
 
   Clock.prototype.updateBoard = function() {
     var newBoard = this.createBoard(this.x, this.y, this.r);
-    this.element.replaceChild(newBoard, this.boardElement);
+    this.el.replaceChild(newBoard, this.boardElement);
     this.adjustBoard(newBoard);
     this.boardElement = newBoard;
     this.centerTimeElement = this.boardElement.querySelector('.center-time');
@@ -210,7 +209,7 @@
 
   Clock.prototype.updatePoint = function(now) {
     var newPoint = this.createPoint(this.x, this.y, this.r, this.locations, now, this.timeOffset);
-    this.element.replaceChild(newPoint, this.pointElement);
+    this.el.replaceChild(newPoint, this.pointElement);
     this.adjustPointText(newPoint, this.x, this.y, this.r, window.innerWidth, window.innerHeight);
     this.pointElement = newPoint;
   };
@@ -221,11 +220,11 @@
     var m = ('00' + Math.abs(timeOffset % 60)).slice(-2);
     var text = (timeOffset >= 0 ? '+' : '-') + h + ':' + m;
     this.centerTimeElement.textContent = text;
-    this.element.setAttribute('class', (timeOffset || this.isDragging ? 'clock spin' : 'clock'));
+    this.el.setAttribute('class', (timeOffset || this.isDragging ? 'clock spin' : 'clock'));
   };
 
   Clock.prototype.globalBBox = function(bb) {
-    var stageElement = this.element;
+    var stageElement = this.el;
     var lpt = stageElement.createSVGPoint();
     lpt.x = bb.x;
     lpt.y = bb.y;
