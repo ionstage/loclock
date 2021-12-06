@@ -22,10 +22,13 @@
   };
 
   Main.prototype.init = function() {
-    document.addEventListener('DOMContentLoaded', this._onready.bind(this));
     window.addEventListener('resize', helper.debounce(this._onresize.bind(this), 100));
     this._disableTouchScrolling();
     this.menuButton.init();
+
+    this._initTimezoneData();
+    this._initClockTimer();
+    this._initLocations();
   };
 
   Main.prototype._createLocations = function(keys) {
@@ -151,12 +154,6 @@
     this.list.update(this.selectedLocations);
     this.clock.setLocations(this.selectedLocations);
     this.clock.updatePoint(Date.now());
-  };
-
-  Main.prototype._onready = function() {
-    this._initTimezoneData();
-    this._initClockTimer();
-    this._initLocations();
   };
 
   Main.prototype._onresize = function() {
