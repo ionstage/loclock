@@ -116,7 +116,6 @@
   Main.prototype._initTimezoneData = function() {
     this._updateTimezoneOffset(Date.now());
     this.list.setList(this.locations);
-    this.list.update(this.selectedLocations);
   };
 
   Main.prototype._initClockTimer = function() {
