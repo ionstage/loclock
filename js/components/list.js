@@ -48,7 +48,7 @@
       } else if (textLength >= 17) {
         item.style.fontSize = '14px';
       }
-      item.innerHTML = location.name;
+      item.textContent = location.name;
       element.appendChild(item);
       this.items[key] = item;
     }.bind(this));
