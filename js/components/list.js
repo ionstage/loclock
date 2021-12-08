@@ -3,6 +3,7 @@
 
   var IScroll = require('iscroll');
   var dom = app.dom || require('./dom.js');
+  var Location = app.Location || require('../models/location.js');
 
   var List = function(el, ontoggle) {
     this.items = {};
