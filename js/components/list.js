@@ -34,39 +34,21 @@
 
   List.prototype.setList = function(locations) {
     var element = document.createElement('div');
-    var listItems = [];
-    var needsCurrentLocation = false;
 
-    locations.forEach(function(location) {
-      var key = location.key;
-      if (key === Location.KEY_CURRENT_LOCATION) {
-        needsCurrentLocation = true;
-        return;
-      }
-      var name = location.name;
-      listItems.push([key, name]);
-    });
-
-    listItems.sort(function(a, b) {
-      return (a[1] < b[1]) ? -1 : 1;
-    });
-
-    if (needsCurrentLocation) {
-      listItems.unshift([Location.KEY_CURRENT_LOCATION, 'Current Location']);
-    }
-
-    listItems.forEach(function(listitem) {
+    locations.slice().sort(function(a, b) {
+      return (a.name < b.name || a.key === Location.KEY_CURRENT_LOCATION ? -1 : 1);
+    }).forEach(function(location) {
       var item = document.createElement('div');
-      var key = listitem[0];
+      var key = location.key;
       item.setAttribute('data-key', key);
       item.classList.add('list-item');
-      var textLength = listitem[1].length;
+      var textLength = location.name.length;
       if (textLength >= 20) {
         item.style.fontSize = '11px';
       } else if (textLength >= 17) {
         item.style.fontSize = '14px';
       }
-      item.innerHTML = listitem[1];
+      item.innerHTML = location.name;
       element.appendChild(item);
       this.items[key] = item;
     }.bind(this));
