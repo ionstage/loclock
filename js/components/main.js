@@ -52,9 +52,6 @@
   };
 
   Main.prototype._setSelectedKeys = function(keys) {
-    keys = keys.filter(function(key) {
-      return Location.isValidKey(key);
-    });
     location.replace('#' + this._encodeLocationKeys(keys));
     this._selectTimezone(keys);
   };
@@ -101,6 +98,9 @@
   };
 
   Main.prototype._toggleLocation = function(key) {
+    if (!Location.isValidKey(key)) {
+      return;
+    }
     var keys = this._getSelectedKeys();
     var index = keys.indexOf(key);
 
@@ -132,7 +132,10 @@
   Main.prototype._initLocations = function() {
     var fragment = location.hash.substring(1);
     var keys = (fragment ? this._decodeLocationKeys(fragment) : DEFAULT_LOCATION_KEYS);
-    this._setSelectedKeys(keys);
+    var validKeys = keys.filter(function(key) {
+      return Location.isValidKey(key);
+    });
+    this._setSelectedKeys(validKeys);
   };
 
   Main.prototype._updateTimezoneList = function() {
