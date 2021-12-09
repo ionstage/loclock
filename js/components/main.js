@@ -16,9 +16,9 @@
     this.locations = this._createLocations(Location.PRESET_KEYS);
     this.menuButton = new Button(this.el.querySelector('.menu-button'), this._toggleList.bind(this));
     this.list = new List(document.querySelector('.list'), this._toggleLocation.bind(this));
-    this.clock = new Clock(document.querySelector('.clock'), this._closeList.bind(this));
+    this.clock = new Clock(document.querySelector('.clock'), this._hideList.bind(this));
     this.selectedLocations = [];
-    this.isOpen = false;
+    this.isListVisible = false;
   };
 
   Main.prototype.init = function() {
@@ -63,29 +63,26 @@
   };
 
   Main.prototype._toggleList = function() {
-    if (this.isOpen) {
-      this._closeList();
+    this.isListVisible = !this.isListVisible;
+    this._updateListVisibility();
+  };
+
+  Main.prototype._hideList = function() {
+    if (!this.isListVisible) {
+      return;
+    }
+    this.isListVisible = false;
+    this._updateListVisibility();
+  };
+
+  Main.prototype._updateListVisibility = function() {
+    if (this.isListVisible) {
+      this.el.classList.add('list-visible');
+      this.clock.draggable.disable();
     } else {
-      this._openList();
+      this.el.classList.remove('list-visible');
+      this.clock.draggable.enable();
     }
-  };
-
-  Main.prototype._openList = function() {
-    if (this.isOpen) {
-      return;
-    }
-    this.el.classList.add('open');
-    this.clock.draggable.disable();
-    this.isOpen = true;
-  };
-
-  Main.prototype._closeList = function() {
-    if (!this.isOpen) {
-      return;
-    }
-    this.el.classList.remove('open');
-    this.clock.draggable.enable();
-    this.isOpen = false;
   };
 
   Main.prototype._disableTouchScrolling = function() {

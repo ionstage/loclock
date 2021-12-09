@@ -16,7 +16,7 @@ body {
   width: 100%;
 }
 
-.main.open {
+.main.list-visible {
   -ms-transform: translateX(168px);
   transform: translateX(168px);
 }
@@ -63,7 +63,7 @@ body {
   z-index: 1;
 }
 
-.menu-button:active g, .open .menu-button g {
+.menu-button:active g, .list-visible .menu-button g {
   stroke: lightgray;
 }
 
