@@ -51,12 +51,15 @@
     });
   };
 
-  Main.prototype._setSelectedKeys = function(keys) {
+  Main.prototype._setSelectedLocationKeys = function(keys) {
     location.replace('#' + this._encodeLocationKeys(keys));
-    this._selectTimezone(keys);
+    this.selectedLocations = this._findLocations(keys);
+    this.list.update(this.selectedLocations);
+    this.clock.setLocations(this.selectedLocations);
+    this.clock.updatePoint(Date.now());
   };
 
-  Main.prototype._getSelectedKeys = function() {
+  Main.prototype._getSelectedLocationKeys = function() {
     return this.selectedLocations.map(function(location) {
       return location.key;
     });
@@ -98,7 +101,7 @@
     if (!Location.isValidKey(key)) {
       return;
     }
-    var keys = this._getSelectedKeys();
+    var keys = this._getSelectedLocationKeys();
     var index = keys.indexOf(key);
 
     if (index !== -1) {
@@ -107,7 +110,7 @@
       keys.push(key);
     }
 
-    this._setSelectedKeys(keys);
+    this._setSelectedLocationKeys(keys);
   };
 
   Main.prototype._initTimezoneData = function() {
@@ -132,12 +135,12 @@
     var validKeys = keys.filter(function(key) {
       return Location.isValidKey(key);
     });
-    this._setSelectedKeys(validKeys);
+    this._setSelectedLocationKeys(validKeys);
   };
 
   Main.prototype._updateTimezoneList = function() {
     this._initTimezoneData();
-    this._setSelectedKeys(this._getSelectedKeys());
+    this._setSelectedLocationKeys(this._getSelectedLocationKeys());
   };
 
   Main.prototype._encodeLocationKeys = function(keys) {
@@ -146,13 +149,6 @@
 
   Main.prototype._decodeLocationKeys = function(s) {
     return Base64.decode(s).split(',');
-  };
-
-  Main.prototype._selectTimezone = function(keys) {
-    this.selectedLocations = this._findLocations(keys);
-    this.list.update(this.selectedLocations);
-    this.clock.setLocations(this.selectedLocations);
-    this.clock.updatePoint(Date.now());
   };
 
   Main.prototype._onresize = function() {
