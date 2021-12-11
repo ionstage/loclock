@@ -138,11 +138,6 @@
     this._setSelectedLocationKeys(validKeys);
   };
 
-  Main.prototype._updateTimezoneList = function() {
-    this._initTimezoneData();
-    this._setSelectedLocationKeys(this._getSelectedLocationKeys());
-  };
-
   Main.prototype._encodeLocationKeys = function(keys) {
     return Base64.encodeURI(keys.join(','))
   };
