@@ -14,7 +14,7 @@
   var Main = function(el) {
     this.el = el;
     this.locations = this._createLocations(Location.PRESET_KEYS);
-    this.menuButton = new Button(this.el.querySelector('.menu-button'), this._toggleList.bind(this));
+    this.menuButton = new Button(this.el.querySelector('.menu-button'));
     this.list = new List(document.querySelector('.list'), this._toggleLocation.bind(this));
     this.clock = new Clock(document.querySelector('.clock'), this._hideList.bind(this));
     this.selectedLocations = [];
@@ -25,6 +25,7 @@
     window.addEventListener('resize', helper.debounce(this._onresize.bind(this), 100));
     this._disableTouchScrolling();
     this.menuButton.init();
+    this.menuButton.on('click', this._toggleList.bind(this));
 
     this._initTimezoneData();
     this._initClockTimer();
