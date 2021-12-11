@@ -44,6 +44,10 @@
     return null;
   };
 
+  Collection.prototype.includes = function(item) {
+    return (this._items.indexOf(item) !== -1);
+  };
+
   Collection.prototype.on = function() {
     return Events.prototype.on.apply(this._events, arguments);
   };
