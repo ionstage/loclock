@@ -524,13 +524,13 @@
     this.timezoneOffset = NaN;
   };
 
-  Location.prototype.updateTimezoneOffset = function(now) {
-    this.currentTimezoneOffset = new Date(now).getTimezoneOffset();
-    this.timezoneOffset = this._createTimezoneOffset(now);
+  Location.prototype.updateTimezoneOffset = function(time) {
+    this.currentTimezoneOffset = new Date(time).getTimezoneOffset();
+    this.timezoneOffset = this._createTimezoneOffset(time);
   };
 
-  Location.prototype.getLocalTime = function(now) {
-    return now + this.timezoneOffset * 1000 + this.currentTimezoneOffset * 60 * 1000;
+  Location.prototype.getLocalTime = function(time) {
+    return time + this.timezoneOffset * 1000 + this.currentTimezoneOffset * 60 * 1000;
   };
 
   Location.prototype._createName = function(key) {
@@ -540,11 +540,11 @@
     return key.substring(key.lastIndexOf('/') + 1).replace(/_/g, ' ');
   };
 
-  Location.prototype._createTimezoneOffset = function(now) {
+  Location.prototype._createTimezoneOffset = function(time) {
     if (this.key === Location.KEY_CURRENT_LOCATION) {
       return this.currentTimezoneOffset * (-60);
     }
-    return moment.tz.zone(Location._keyToTzname(this.key)).utcOffset(now) * (-60);
+    return moment.tz.zone(Location._keyToTzname(this.key)).utcOffset(time) * (-60);
   };
 
   Location.isValidKey = function(key) {
