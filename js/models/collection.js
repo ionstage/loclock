@@ -4,56 +4,56 @@
   var Events = app.Events || require('./events.js');
 
   var Collection = function() {
-    this.items = [];
-    this.events = new Events();
+    this._items = [];
+    this._events = new Events();
   };
 
   Collection.prototype.add = function(item) {
-    this.items.push(item);
-    this.events.emit('add', item);
+    this._items.push(item);
+    this._events.emit('add', item);
   };
 
   Collection.prototype.remove = function(item) {
-    var index = this.items.lastIndexOf(item);
+    var index = this._items.lastIndexOf(item);
     if (index === -1) {
       return;
     }
-    this.items.splice(index, 1);
-    this.events.emit('remove', item);
+    this._items.splice(index, 1);
+    this._events.emit('remove', item);
   };
 
   Collection.prototype.reset = function(items) {
-    this.items = items || [];
-    this.events.emit('reset', this.items);
+    this._items = items || [];
+    this._events.emit('reset', this._items);
   };
 
   Collection.prototype.forEach = function() {
-    return Array.prototype.forEach.apply(this.items, arguments);
+    return Array.prototype.forEach.apply(this._items, arguments);
   };
 
   Collection.prototype.map = function() {
-    return Array.prototype.map.apply(this.items, arguments);
+    return Array.prototype.map.apply(this._items, arguments);
   };
 
   Collection.prototype.find = function(callback) {
-    for (var i = 0, len = this.items.length; i < len; i++) {
-      if (callback(this.items[i], i, this.items)) {
-        return this.items[i];
+    for (var i = 0, len = this._items.length; i < len; i++) {
+      if (callback(this._items[i], i, this._items)) {
+        return this._items[i];
       }
     }
     return null;
   };
 
   Collection.prototype.on = function() {
-    return Events.prototype.on.apply(this.events, arguments);
+    return Events.prototype.on.apply(this._events, arguments);
   };
 
   Collection.prototype.off = function() {
-    return Events.prototype.off.apply(this.events, arguments);
+    return Events.prototype.off.apply(this._events, arguments);
   };
 
   Collection.prototype.removeAllListeners = function() {
-    return Events.prototype.removeAllListeners.apply(this.events, arguments);
+    return Events.prototype.removeAllListeners.apply(this._events, arguments);
   };
 
   if (typeof module !== 'undefined' && module.exports) {
