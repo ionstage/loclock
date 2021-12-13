@@ -25,6 +25,9 @@
     window.addEventListener('resize', helper.debounce(this._onresize.bind(this), 100));
     this._disableTouchScrolling();
     this.menuButton.init();
+    this.list.init();
+    this.clock.init();
+
     this.menuButton.on('click', this._toggleList.bind(this));
 
     this._initTimezoneData();

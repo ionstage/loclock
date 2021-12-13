@@ -12,8 +12,10 @@
     this.scrolling = false;
     this.clickable = true;
     this.ontoggle = ontoggle;
+  };
 
-    el.addEventListener('click', function(event) {
+  List.prototype.init = function() {
+    this.el.addEventListener('click', function(event) {
       event.preventDefault();
       if (this.scrolling || !this.clickable) {
         this.scrolling = false;
@@ -23,12 +25,12 @@
       this.onclick(event);
     }.bind(this));
 
-    el.addEventListener('touchstart', function() {
+    this.el.addEventListener('touchstart', function() {
       this.clickable = !this.scrolling;
     }.bind(this));
 
     if (dom.supportsTouch()) {
-      el.classList.add('unscrollable');
+      this.el.classList.add('unscrollable');
     }
   };
 
