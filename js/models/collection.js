@@ -3,8 +3,8 @@
 
   var Events = app.Events || require('./events.js');
 
-  var Collection = function() {
-    this._items = [];
+  var Collection = function(items) {
+    this._items = items || [];
     this._events = new Events();
   };
 
