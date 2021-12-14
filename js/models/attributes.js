@@ -3,6 +3,11 @@
 
   var Events = app.Events || require('./events.js');
 
+  var isPlainObject = function(obj) {
+    return (typeof obj === 'object' && obj !== null &&
+            Object.prototype.toString.call(obj) === '[object Object]');
+  };
+
   var Attributes = function(attrs) {
     this._attrs = attrs || {};
     this._events = new Events();
@@ -14,7 +19,7 @@
 
   Attributes.prototype.set = function(name, value) {
     var changes = null;
-    if (Attributes.isPlainObject(name)) {
+    if (isPlainObject(name)) {
       var obj = name;
       for (var key in obj) {
         if (this._set(key, obj[key])) {
@@ -60,11 +65,6 @@
     }
     this._attrs[name] = value;
     return true;
-  };
-
-  Attributes.isPlainObject = function(obj) {
-    return (typeof obj === 'object' && obj !== null &&
-            Object.prototype.toString.call(obj) === '[object Object]');
   };
 
   if (typeof module !== 'undefined' && module.exports) {
