@@ -4,6 +4,7 @@
   var Base64 = require('js-base64').Base64;
   var helper = app.helper || require('./helper.js');
   var dom = app.dom || require('./dom.js');
+  var Attributes = app.Attributes || require('../models/attributes.js');
   var Button = app.Button || require('./button.js');
   var Clock = app.Clock || require('./clock.js');
   var List = app.List || require('./list.js');
@@ -15,10 +16,10 @@
     this.el = el;
     this.locations = this._createLocations(Location.PRESET_KEYS);
     this.selectedLocations = [];
-    this.isListVisible = false;
     this.menuButton = new Button(this.el.querySelector('.menu-button'));
     this.list = new List(document.querySelector('.list'), this._toggleLocation.bind(this));
     this.clock = new Clock(document.querySelector('.clock'), this._hideList.bind(this));
+    this._attrs = new Attributes({ listVisible: false });
   };
 
   Main.prototype.init = function() {
@@ -28,6 +29,7 @@
     this.list.init();
     this.clock.init();
 
+    this._attrs.on('change:listVisible', this._updateListVisibility.bind(this));
     this.menuButton.on('click', this._toggleList.bind(this));
 
     this._initTimezoneData();
@@ -70,20 +72,15 @@
   };
 
   Main.prototype._toggleList = function() {
-    this.isListVisible = !this.isListVisible;
-    this._updateListVisibility();
+    this._attrs.set('listVisible', !this._attrs.get('listVisible'));
   };
 
   Main.prototype._hideList = function() {
-    if (!this.isListVisible) {
-      return;
-    }
-    this.isListVisible = false;
-    this._updateListVisibility();
+    this._attrs.set('listVisible', false);
   };
 
-  Main.prototype._updateListVisibility = function() {
-    if (this.isListVisible) {
+  Main.prototype._updateListVisibility = function(visible) {
+    if (visible) {
       this.el.classList.add('list-visible');
       this.clock.draggable.disable();
     } else {
