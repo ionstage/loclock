@@ -48,6 +48,10 @@
     return (this._items.indexOf(item) !== -1);
   };
 
+  Collection.prototype.size = function() {
+    return this._items.length;
+  };
+
   Collection.prototype.on = function() {
     return Events.prototype.on.apply(this._events, arguments);
   };
