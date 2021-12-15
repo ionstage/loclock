@@ -9,28 +9,19 @@
     this.items = {};
     this.currentSelectedItems = [];
     this.el = el;
-    this.scrolling = false;
-    this.clickable = true;
+    this.scroll = null;
     this.ontoggle = ontoggle;
   };
 
   List.prototype.init = function() {
-    this.el.addEventListener('click', function(event) {
+    this.el.addEventListener(dom.supportsTouch() ? 'tap' : 'click', function(event) {
       event.preventDefault();
-      if (this.scrolling || !this.clickable) {
-        this.scrolling = false;
-        this.clickable = true;
-        return;
-      }
       this.onclick(event);
     }.bind(this));
 
-    this.el.addEventListener('touchstart', function() {
-      this.clickable = !this.scrolling;
-    }.bind(this));
-
     if (dom.supportsTouch()) {
-      this.el.classList.add('unscrollable');
+      this._disableNativeScroll();
+      this._disableDoubleTapZoom();
     }
   };
 
@@ -60,23 +51,14 @@
     if (dom.supportsTouch()) {
       if (this.scroll) {
         this.scroll.destroy();
-        this.scroll = null;
       }
 
       this.scroll = new IScroll(this.el, {
-        click: true,
+        tap: true,
         scrollbars: true,
         shrinkScrollbars: 'scale',
         fadeScrollbars: true,
       });
-
-      this.scroll.on('scrollStart', function() {
-        this.scrolling = true;
-      }.bind(this));
-
-      this.scroll.on('scrollEnd', function() {
-        this.scrolling = false;
-      }.bind(this));
     }
   };
 
@@ -101,6 +83,16 @@
     }
     var key = target.getAttribute('data-key');
     this.ontoggle(key);
+  };
+
+  List.prototype._disableNativeScroll = function() {
+    this.el.style.overflowY = 'hidden';
+  };
+
+  List.prototype._disableDoubleTapZoom = function() {
+    this.el.addEventListener('touchstart', function(event) {
+      event.preventDefault();
+    });
   };
 
   if (typeof module !== 'undefined' && module.exports) {

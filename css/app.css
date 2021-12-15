@@ -37,11 +37,6 @@ body {
   width: 168px;
 }
 
-.list.unscrollable {
-  overflow-y: hidden;
-  touch-action: none;
-}
-
 .list > * {
   overflow-x: hidden;
 }
