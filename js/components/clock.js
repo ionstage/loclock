@@ -139,10 +139,11 @@
   };
 
   var Clock = function(el, onpointerdown) {
-    var width = 720, height = 720;
     this.el = el;
     this.boardElement = document.createElementNS(NS_SVG, 'g');
     this.pointElement = document.createElementNS(NS_SVG, 'g');
+    var width = this.el.viewBox.baseVal.width;
+    var height = this.el.viewBox.baseVal.height;
     this.x = width / 2;
     this.y = height / 2;
     this.r = Math.min(width, height) / 2 * 0.6;
