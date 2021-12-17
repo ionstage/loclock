@@ -6,12 +6,12 @@
   var Location = app.Location || require('../models/location.js');
 
   var List = function(el, ontoggle, props) {
-    this.items = {};
     this.el = el;
     this.scroll = null;
     this.ontoggle = ontoggle;
     this._locations = props.locations;
     this._selectedLocations = props.selectedLocations;
+    this._itemElements = {};
   };
 
   List.prototype.init = function() {
@@ -25,27 +25,18 @@
   };
 
   List.prototype._resetLocations = function(locations) {
-    var element = document.createElement('div');
+    var container = document.createElement('div');
 
-    locations.slice().sort(function(a, b) {
+    this._itemElements = locations.slice().sort(function(a, b) {
       return (a.name < b.name || a.key === Location.KEY_CURRENT_LOCATION ? -1 : 1);
-    }).forEach(function(location) {
-      var item = document.createElement('div');
-      var key = location.key;
-      item.setAttribute('data-key', key);
-      item.classList.add('list-item');
-      var textLength = location.name.length;
-      if (textLength >= 20) {
-        item.style.fontSize = '11px';
-      } else if (textLength >= 17) {
-        item.style.fontSize = '14px';
-      }
-      item.textContent = location.name;
-      element.appendChild(item);
-      this.items[key] = item;
-    }.bind(this));
+    }).reduce(function(ret, location) {
+      var el = this._createItemElement(location);
+      container.appendChild(el);
+      ret[location.key] = el;
+      return ret;
+    }.bind(this), {});
 
-    this.el.replaceChild(element, this.el.firstElementChild);
+    this.el.replaceChild(container, this.el.firstElementChild);
 
     if (dom.supportsTouch()) {
       if (this.scroll) {
@@ -63,13 +54,27 @@
 
   List.prototype._resetSelectedLocations = function(selectedLocations) {
     this._locations.forEach(function(location) {
-      var item = this.items[location.key];
+      var el = this._itemElements[location.key];
       if (selectedLocations.indexOf(location) !== -1) {
-        item.classList.add('list-selected');
+        el.classList.add('list-selected');
       } else {
-        item.classList.remove('list-selected');
+        el.classList.remove('list-selected');
       }
     }.bind(this));
+  };
+
+  List.prototype._createItemElement = function(location) {
+    var el = document.createElement('div');
+    el.classList.add('list-item');
+    el.setAttribute('data-key', location.key);
+    var textLength = location.name.length;
+    if (textLength >= 20) {
+      el.style.fontSize = '11px';
+    } else if (textLength >= 17) {
+      el.style.fontSize = '14px';
+    }
+    el.textContent = location.name;
+    return el;
   };
 
   List.prototype._onclick = function(event) {
