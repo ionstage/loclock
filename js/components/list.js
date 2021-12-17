@@ -15,13 +15,8 @@
   };
 
   List.prototype.init = function() {
-    this.el.addEventListener(dom.supportsTouch() ? 'tap' : 'click', function(event) {
-      event.preventDefault();
-      this.onclick(event);
-    }.bind(this));
-
+    this.el.addEventListener(dom.supportsTouch() ? 'tap' : 'click', this._onclick.bind(this));
     this._location.on('reset', this._resetLocations.bind(this));
-
     if (dom.supportsTouch()) {
       this._disableNativeScroll();
       this._disableDoubleTapZoom();
@@ -79,7 +74,8 @@
     }.bind(this));
   };
 
-  List.prototype.onclick = function(event) {
+  List.prototype._onclick = function(event) {
+    event.preventDefault();
     var target = event.target;
     if (!target.classList.contains('list-item')) {
       return;
