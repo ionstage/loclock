@@ -5,10 +5,9 @@
   var dom = app.dom || require('./dom.js');
   var Location = app.Location || require('../models/location.js');
 
-  var List = function(el, ontoggle, props) {
+  var List = function(el, props) {
     this.el = el;
     this.scroll = null;
-    this.ontoggle = ontoggle;
     this._locations = props.locations;
     this._selectedLocations = props.selectedLocations;
     this._itemElements = {};
@@ -18,6 +17,8 @@
     this.el.addEventListener(dom.supportsTouch() ? 'tap' : 'click', this._onclick.bind(this));
     this._locations.on('reset', this._resetLocations.bind(this));
     this._selectedLocations.on('reset', this._resetSelectedLocations.bind(this));
+    this._selectedLocations.on('add', this._addSelectedLocation.bind(this));
+    this._selectedLocations.on('remove', this._removeSelectedLocation.bind(this));
     if (dom.supportsTouch()) {
       this._disableNativeScroll();
       this._disableDoubleTapZoom();
@@ -63,6 +64,20 @@
     }.bind(this));
   };
 
+  List.prototype._addSelectedLocation = function(location) {
+    var el = this._itemElements[location.key];
+    if (el) {
+      el.classList.add('list-selected');
+    }
+  };
+
+  List.prototype._removeSelectedLocation = function(location) {
+    var el = this._itemElements[location.key];
+    if (el) {
+      el.classList.remove('list-selected');
+    }
+  };
+
   List.prototype._createItemElement = function(location) {
     var el = document.createElement('div');
     el.classList.add('list-item');
@@ -84,7 +99,21 @@
       return;
     }
     var key = target.getAttribute('data-key');
-    this.ontoggle(key);
+    if (!Location.isValidKey(key)) {
+      return;
+    }
+    var location = this._locations.find(function(location) {
+      return (location.key === key);
+    });
+    if (!location) {
+      return;
+    }
+    // toggle selection of location
+    if (this._selectedLocations.includes(location)) {
+      this._selectedLocations.remove(location);
+    } else {
+      this._selectedLocations.add(location);
+    }
   };
 
   List.prototype._disableNativeScroll = function() {

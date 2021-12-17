@@ -198,6 +198,12 @@
     this.locations.on('reset', function() {
       this.updatePoint(Date.now());
     }.bind(this));
+    this.locations.on('add', function() {
+      this.updatePoint(Date.now());
+    }.bind(this));
+    this.locations.on('remove', function() {
+      this.updatePoint(Date.now());
+    }.bind(this));
   };
 
   Clock.prototype.setTimeoffset = function(offset) {
