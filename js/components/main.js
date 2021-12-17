@@ -33,6 +33,7 @@
     this.list.init();
     this.clock.init();
 
+    this._selectedLocations.on('reset', this._saveSelectedLocationKeys.bind(this));
     this._attrs.on('change:listVisible', this._updateListVisibility.bind(this));
     this.menuButton.on('click', this._toggleList.bind(this));
 
@@ -63,7 +64,6 @@
   };
 
   Main.prototype._setSelectedLocationKeys = function(keys) {
-    location.replace('#' + this._encodeLocationKeys(keys));
     this._selectedLocations.reset(this._findLocations(keys));
   };
 
@@ -138,6 +138,11 @@
       return Location.isValidKey(key);
     });
     this._setSelectedLocationKeys(validKeys);
+  };
+
+  Main.prototype._saveSelectedLocationKeys = function() {
+    var keys = this._getSelectedLocationKeys();
+    location.replace('#' + this._encodeLocationKeys(keys));
   };
 
   Main.prototype._encodeLocationKeys = function(keys) {
