@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var Events = app.Events || require('../models/events.js');
+  var Events = app.Events || require('../base/events.js');
 
   var Button = function(el) {
     this.el = el;
