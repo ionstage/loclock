@@ -18,7 +18,10 @@
     this._locations = new Collection();
     this._selectedLocations = new Collection();
     this.menuButton = new Button(this.el.querySelector('.menu-button'));
-    this.list = new List(document.querySelector('.list'), this._toggleLocation.bind(this), { locations: this._locations });
+    this.list = new List(document.querySelector('.list'), this._toggleLocation.bind(this), {
+      locations: this._locations,
+      selectedLocations: this._selectedLocations,
+    });
     this.clock = new Clock(document.querySelector('.clock'), this._hideList.bind(this), { locations: this._selectedLocations });
     this._attrs = new Attributes({ listVisible: false });
   };
@@ -62,8 +65,6 @@
   Main.prototype._setSelectedLocationKeys = function(keys) {
     location.replace('#' + this._encodeLocationKeys(keys));
     this._selectedLocations.reset(this._findLocations(keys));
-    this.list.update(this._selectedLocations);
-    this.clock.updatePoint(Date.now());
   };
 
   Main.prototype._getSelectedLocationKeys = function() {

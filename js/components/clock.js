@@ -195,6 +195,9 @@
     });
 
     this.draggable.enable();
+    this.locations.on('reset', function() {
+      this.updatePoint(Date.now());
+    }.bind(this));
   };
 
   Clock.prototype.setTimeoffset = function(offset) {

@@ -12,11 +12,13 @@
     this.scroll = null;
     this.ontoggle = ontoggle;
     this._locations = props.locations;
+    this._selectedLocations = props.selectedLocations;
   };
 
   List.prototype.init = function() {
     this.el.addEventListener(dom.supportsTouch() ? 'tap' : 'click', this._onclick.bind(this));
     this._locations.on('reset', this._resetLocations.bind(this));
+    this._selectedLocations.on('reset', this._resetSelectedLocations.bind(this));
     if (dom.supportsTouch()) {
       this._disableNativeScroll();
       this._disableDoubleTapZoom();
@@ -60,8 +62,8 @@
     }
   };
 
-  List.prototype.update = function(selectedLocations) {
-    if (this.currentSelectedItems.length > selectedLocations.size()) {
+  List.prototype._resetSelectedLocations = function(selectedLocations) {
+    if (this.currentSelectedItems.length > selectedLocations.length) {
       this.currentSelectedItems.forEach(function(item) {
         item.classList.remove('list-selected');
       });
