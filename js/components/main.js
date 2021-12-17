@@ -6,6 +6,7 @@
   var dom = app.dom || require('./dom.js');
   var Attributes = app.Attributes || require('../models/attributes.js');
   var Button = app.Button || require('./button.js');
+  var Collection = app.Collection || require('../models/collection.js');
   var Clock = app.Clock || require('./clock.js');
   var List = app.List || require('./list.js');
   var Location = app.Location || require('../models/location.js');
@@ -14,7 +15,7 @@
 
   var Main = function(el) {
     this.el = el;
-    this.locations = this._createLocations(Location.PRESET_KEYS);
+    this._locations = new Collection(this._createLocations(Location.PRESET_KEYS));
     this.selectedLocations = [];
     this.menuButton = new Button(this.el.querySelector('.menu-button'));
     this.list = new List(document.querySelector('.list'), this._toggleLocation.bind(this));
@@ -45,14 +46,14 @@
 
   Main.prototype._findLocations = function(keys) {
     return keys.map(function(key) {
-      return helper.find(this.locations, function(location) {
+      return this._locations.find(function(location) {
         return (location.key === key);
       });
     }.bind(this));
   };
 
   Main.prototype._updateTimezoneOffset = function(now) {
-    this.locations.forEach(function(location) {
+    this._locations.forEach(function(location) {
       location.updateTimezoneOffset(now);
     });
   };
@@ -116,7 +117,7 @@
 
   Main.prototype._initTimezoneData = function() {
     this._updateTimezoneOffset(Date.now());
-    this.list.setList(this.locations);
+    this.list.setList(this._locations);
   };
 
   Main.prototype._initClockTimer = function() {
