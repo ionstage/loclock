@@ -7,7 +7,6 @@
 
   var List = function(el, ontoggle, props) {
     this.items = {};
-    this.currentSelectedItems = [];
     this.el = el;
     this.scroll = null;
     this.ontoggle = ontoggle;
@@ -63,16 +62,13 @@
   };
 
   List.prototype._resetSelectedLocations = function(selectedLocations) {
-    if (this.currentSelectedItems.length > selectedLocations.length) {
-      this.currentSelectedItems.forEach(function(item) {
-        item.classList.remove('list-selected');
-      });
-    }
-
-    this.currentSelectedItems = selectedLocations.map(function(location) {
+    this._locations.forEach(function(location) {
       var item = this.items[location.key];
-      item.classList.add('list-selected');
-      return item;
+      if (selectedLocations.indexOf(location) !== -1) {
+        item.classList.add('list-selected');
+      } else {
+        item.classList.remove('list-selected');
+      }
     }.bind(this));
   };
 
