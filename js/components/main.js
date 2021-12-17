@@ -18,7 +18,7 @@
     this._locations = new Collection();
     this._selectedLocations = new Collection();
     this.menuButton = new Button(this.el.querySelector('.menu-button'));
-    this.list = new List(document.querySelector('.list'), this._toggleLocation.bind(this), { location: this._locations });
+    this.list = new List(document.querySelector('.list'), this._toggleLocation.bind(this), { locations: this._locations });
     this.clock = new Clock(document.querySelector('.clock'), this._hideList.bind(this), { locations: this._selectedLocations });
     this._attrs = new Attributes({ listVisible: false });
   };

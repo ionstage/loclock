@@ -11,12 +11,12 @@
     this.el = el;
     this.scroll = null;
     this.ontoggle = ontoggle;
-    this._location = props.location;
+    this._locations = props.locations;
   };
 
   List.prototype.init = function() {
     this.el.addEventListener(dom.supportsTouch() ? 'tap' : 'click', this._onclick.bind(this));
-    this._location.on('reset', this._resetLocations.bind(this));
+    this._locations.on('reset', this._resetLocations.bind(this));
     if (dom.supportsTouch()) {
       this._disableNativeScroll();
       this._disableDoubleTapZoom();
