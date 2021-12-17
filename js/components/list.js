@@ -5,12 +5,13 @@
   var dom = app.dom || require('./dom.js');
   var Location = app.Location || require('../models/location.js');
 
-  var List = function(el, ontoggle) {
+  var List = function(el, ontoggle, props) {
     this.items = {};
     this.currentSelectedItems = [];
     this.el = el;
     this.scroll = null;
     this.ontoggle = ontoggle;
+    this._location = props.location;
   };
 
   List.prototype.init = function() {
@@ -19,13 +20,15 @@
       this.onclick(event);
     }.bind(this));
 
+    this._location.on('reset', this._resetLocations.bind(this));
+
     if (dom.supportsTouch()) {
       this._disableNativeScroll();
       this._disableDoubleTapZoom();
     }
   };
 
-  List.prototype.setList = function(locations) {
+  List.prototype._resetLocations = function(locations) {
     var element = document.createElement('div');
 
     locations.slice().sort(function(a, b) {

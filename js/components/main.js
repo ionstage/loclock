@@ -15,10 +15,10 @@
 
   var Main = function(el) {
     this.el = el;
-    this._locations = new Collection(this._createLocations(Location.PRESET_KEYS));
+    this._locations = new Collection();
     this.selectedLocations = [];
     this.menuButton = new Button(this.el.querySelector('.menu-button'));
-    this.list = new List(document.querySelector('.list'), this._toggleLocation.bind(this));
+    this.list = new List(document.querySelector('.list'), this._toggleLocation.bind(this), { location: this._locations });
     this.clock = new Clock(document.querySelector('.clock'), this._hideList.bind(this));
     this._attrs = new Attributes({ listVisible: false });
   };
@@ -33,6 +33,7 @@
     this._attrs.on('change:listVisible', this._updateListVisibility.bind(this));
     this.menuButton.on('click', this._toggleList.bind(this));
 
+    this._locations.reset(this._createLocations(Location.PRESET_KEYS));
     this._initTimezoneData();
     this._initClockTimer();
     this._initLocations();
@@ -117,7 +118,6 @@
 
   Main.prototype._initTimezoneData = function() {
     this._updateTimezoneOffset(Date.now());
-    this.list.setList(this._locations);
   };
 
   Main.prototype._initClockTimer = function() {
