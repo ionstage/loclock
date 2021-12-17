@@ -16,10 +16,10 @@
   var Main = function(el) {
     this.el = el;
     this._locations = new Collection();
-    this.selectedLocations = [];
+    this._selectedLocations = new Collection();
     this.menuButton = new Button(this.el.querySelector('.menu-button'));
     this.list = new List(document.querySelector('.list'), this._toggleLocation.bind(this), { location: this._locations });
-    this.clock = new Clock(document.querySelector('.clock'), this._hideList.bind(this));
+    this.clock = new Clock(document.querySelector('.clock'), this._hideList.bind(this), { locations: this._selectedLocations });
     this._attrs = new Attributes({ listVisible: false });
   };
 
@@ -61,14 +61,13 @@
 
   Main.prototype._setSelectedLocationKeys = function(keys) {
     location.replace('#' + this._encodeLocationKeys(keys));
-    this.selectedLocations = this._findLocations(keys);
-    this.list.update(this.selectedLocations);
-    this.clock.setLocations(this.selectedLocations);
+    this._selectedLocations.reset(this._findLocations(keys));
+    this.list.update(this._selectedLocations);
     this.clock.updatePoint(Date.now());
   };
 
   Main.prototype._getSelectedLocationKeys = function() {
-    return this.selectedLocations.map(function(location) {
+    return this._selectedLocations.map(function(location) {
       return location.key;
     });
   };

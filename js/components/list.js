@@ -61,7 +61,7 @@
   };
 
   List.prototype.update = function(selectedLocations) {
-    if (this.currentSelectedItems.length > selectedLocations.length) {
+    if (this.currentSelectedItems.length > selectedLocations.size()) {
       this.currentSelectedItems.forEach(function(item) {
         item.classList.remove('list-selected');
       });

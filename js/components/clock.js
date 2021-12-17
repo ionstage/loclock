@@ -138,7 +138,7 @@
     this.ondragend();
   };
 
-  var Clock = function(el, onpointerdown) {
+  var Clock = function(el, onpointerdown, props) {
     this.el = el;
     this.boardElement = document.createElementNS(NS_SVG, 'g');
     this.pointElement = document.createElementNS(NS_SVG, 'g');
@@ -147,7 +147,7 @@
     this.x = width / 2;
     this.y = height / 2;
     this.r = Math.min(width, height) / 2 * 0.6;
-    this.locations = [];
+    this.locations = props.locations;
     this.timeOffset = 0;
     this.isDragging = false;
     this.onpointerdown = onpointerdown;
@@ -195,10 +195,6 @@
     });
 
     this.draggable.enable();
-  };
-
-  Clock.prototype.setLocations = function(locations) {
-    this.locations = locations;
   };
 
   Clock.prototype.setTimeoffset = function(offset) {
