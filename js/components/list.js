@@ -32,6 +32,7 @@
       return (a.name < b.name || a.key === Location.KEY_CURRENT_LOCATION ? -1 : 1);
     }).reduce(function(ret, location) {
       var el = this._createItemElement(location);
+      dom.toggleClass(el, 'list-selected', this._selectedLocations.includes(location));
       container.appendChild(el);
       ret[location.key] = el;
       return ret;
