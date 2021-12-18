@@ -50,11 +50,7 @@
   List.prototype._resetSelectedLocations = function(selectedLocations) {
     this._locations.forEach(function(location) {
       var el = this._itemElements[location.key];
-      if (selectedLocations.indexOf(location) !== -1) {
-        el.classList.add('list-selected');
-      } else {
-        el.classList.remove('list-selected');
-      }
+      dom.toggleClass(el, 'list-selected', selectedLocations.indexOf(location) !== -1);
     }.bind(this));
   };
 

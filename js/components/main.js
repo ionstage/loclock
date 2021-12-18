@@ -80,11 +80,10 @@
   };
 
   Main.prototype._updateListVisibility = function(visible) {
+    dom.toggleClass(this.el, 'list-visible', visible);
     if (visible) {
-      this.el.classList.add('list-visible');
       this.clock.draggable.disable();
     } else {
-      this.el.classList.remove('list-visible');
       this.clock.draggable.enable();
     }
   };
