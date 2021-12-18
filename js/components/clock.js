@@ -232,6 +232,10 @@
     }
   };
 
+  Clock.prototype.resetSize = function() {
+    this.updatePoint(Date.now());
+  };
+
   Clock.prototype.updateBoard = function() {
     var newBoard = this.createBoard(this.x, this.y, this.r);
     this.el.replaceChild(newBoard, this.boardElement);

@@ -105,7 +105,7 @@
   };
 
   Main.prototype._onresize = function() {
-    this.clock.updatePoint(Date.now());
+    this.clock.resetSize();
   };
 
   if (typeof module !== 'undefined' && module.exports) {
