@@ -3,15 +3,6 @@
 
   var helper = {};
 
-  helper.find = function(array, callback) {
-    for (var i = 0, len = array.length; i < len; i++) {
-      if (callback(array[i], i, array)) {
-        return array[i];
-      }
-    }
-    return null;
-  };
-
   helper.debounce = function(func, delay) {
     var t = 0;
     var ctx = null;
