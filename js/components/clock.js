@@ -210,6 +210,14 @@
     this.locations.on('remove', function() {
       this.updatePoint(Date.now());
     }.bind(this));
+
+    setInterval(function() {
+      var now = Date.now();
+      this.locations.forEach(function(location) {
+        location.updateTimezoneOffset(now);
+      });
+      this.updatePoint(now);
+    }.bind(this), 30000);
   };
 
   Clock.prototype.setTimeoffset = function(offset) {

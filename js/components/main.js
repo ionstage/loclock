@@ -40,19 +40,12 @@
     this.menuButton.on('click', this._toggleList.bind(this));
 
     this._locations.reset(this._createLocations(Location.PRESET_KEYS));
-    this._initClockTimer();
     this._selectedLocations.reset(this._loadSelectedLocations());
   };
 
   Main.prototype._createLocations = function(keys) {
     return keys.map(function(key) {
       return new Location(key);
-    });
-  };
-
-  Main.prototype._updateTimezoneOffset = function(now) {
-    this._selectedLocations.forEach(function(location) {
-      location.updateTimezoneOffset(now);
     });
   };
 
@@ -78,17 +71,6 @@
     window.addEventListener('touchmove', function(event) {
       event.preventDefault();
     }, { passive: false });
-  };
-
-  Main.prototype._initClockTimer = function() {
-    return setInterval(function() {
-      var now = Date.now();
-      var minutes = new Date().getMinutes();
-      if (minutes === 0 || minutes === 15 || minutes === 30 || minutes === 45) {
-        this._updateTimezoneOffset(now);
-      }
-      this.clock.updatePoint(now);
-    }.bind(this), 30000);
   };
 
   Main.prototype._loadSelectedLocations = function() {
