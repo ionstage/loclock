@@ -3,7 +3,6 @@
 
   var IScroll = require('iscroll');
   var dom = app.dom || require('./dom.js');
-  var Location = app.Location || require('../models/location.js');
 
   var List = function(el, props) {
     this.el = el;
@@ -28,9 +27,7 @@
   List.prototype._resetLocations = function(locations) {
     var container = document.createElement('div');
 
-    this._itemElements = locations.slice().sort(function(a, b) {
-      return (a.name < b.name || a.key === Location.KEY_CURRENT_LOCATION ? -1 : 1);
-    }).reduce(function(ret, location) {
+    this._itemElements = locations.reduce(function(ret, location) {
       var el = this._createItemElement(location);
       dom.toggleClass(el, 'list-selected', this._selectedLocations.includes(location));
       container.appendChild(el);

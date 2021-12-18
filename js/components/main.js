@@ -46,6 +46,8 @@
   Main.prototype._createLocations = function(keys) {
     return keys.map(function(key) {
       return new Location(key);
+    }).sort(function(a, b) {
+      return (a.name < b.name || a.key === Location.KEY_CURRENT_LOCATION ? -1 : 1);
     });
   };
 
