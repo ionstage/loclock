@@ -7,10 +7,10 @@
 
   var List = function(el, props) {
     this.el = el;
-    this.scroll = null;
     this._locations = props.locations;
     this._selectedLocations = props.selectedLocations;
     this._itemElements = {};
+    this._iScroll = null;
   };
 
   List.prototype.init = function() {
@@ -40,16 +40,10 @@
     this.el.replaceChild(container, this.el.firstElementChild);
 
     if (dom.supportsTouch()) {
-      if (this.scroll) {
-        this.scroll.destroy();
+      if (this._iScroll) {
+        this._iScroll.destroy();
       }
-
-      this.scroll = new IScroll(this.el, {
-        tap: true,
-        scrollbars: true,
-        shrinkScrollbars: 'scale',
-        fadeScrollbars: true,
-      });
+      this._iScroll = this._createIScroll();
     }
   };
 
@@ -90,6 +84,15 @@
     }
     el.textContent = location.name;
     return el;
+  };
+
+  List.prototype._createIScroll = function() {
+    return new IScroll(this.el, {
+      tap: true,
+      scrollbars: true,
+      shrinkScrollbars: 'scale',
+      fadeScrollbars: true,
+    });
   };
 
   List.prototype._onclick = function(event) {
