@@ -210,6 +210,14 @@
     this.timeOffset = offset;
   };
 
+  Clock.prototype.setDragEnabled = function(dragEnabled) {
+    if (dragEnabled) {
+      this.draggable.enable();
+    } else {
+      this.draggable.disable();
+    }
+  };
+
   Clock.prototype.updateBoard = function() {
     var newBoard = this.createBoard(this.x, this.y, this.r);
     this.el.replaceChild(newBoard, this.boardElement);

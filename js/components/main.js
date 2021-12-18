@@ -58,20 +58,18 @@
   };
 
   Main.prototype._toggleList = function() {
-    this._attrs.set('listVisible', !this._attrs.get('listVisible'));
+    var visible = !this._attrs.get('listVisible');
+    this._attrs.set('listVisible', visible);
+    this.clock.setDragEnabled(!visible);
   };
 
   Main.prototype._hideList = function() {
     this._attrs.set('listVisible', false);
+    this.clock.setDragEnabled(true);
   };
 
   Main.prototype._updateListVisibility = function(visible) {
     dom.toggleClass(this.el, 'list-visible', visible);
-    if (visible) {
-      this.clock.draggable.disable();
-    } else {
-      this.clock.draggable.enable();
-    }
   };
 
   Main.prototype._disableTouchScrolling = function() {
