@@ -40,7 +40,6 @@
     this.menuButton.on('click', this._toggleList.bind(this));
 
     this._locations.reset(this._createLocations(Location.PRESET_KEYS));
-    this._initTimezoneData();
     this._initClockTimer();
     this._selectedLocations.reset(this._loadSelectedLocations());
   };
@@ -52,7 +51,7 @@
   };
 
   Main.prototype._updateTimezoneOffset = function(now) {
-    this._locations.forEach(function(location) {
+    this._selectedLocations.forEach(function(location) {
       location.updateTimezoneOffset(now);
     });
   };
@@ -79,10 +78,6 @@
     window.addEventListener('touchmove', function(event) {
       event.preventDefault();
     }, { passive: false });
-  };
-
-  Main.prototype._initTimezoneData = function() {
-    this._updateTimezoneOffset(Date.now());
   };
 
   Main.prototype._initClockTimer = function() {

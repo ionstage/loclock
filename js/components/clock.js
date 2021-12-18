@@ -195,11 +195,17 @@
     });
 
     this.draggable.enable();
-    this.locations.on('reset', function() {
-      this.updatePoint(Date.now());
+    this.locations.on('reset', function(locations) {
+      var now = Date.now();
+      locations.forEach(function(location) {
+        location.updateTimezoneOffset(now);
+      });
+      this.updatePoint(now);
     }.bind(this));
-    this.locations.on('add', function() {
-      this.updatePoint(Date.now());
+    this.locations.on('add', function(location) {
+      var now = Date.now();
+      location.updateTimezoneOffset(now);
+      this.updatePoint(now);
     }.bind(this));
     this.locations.on('remove', function() {
       this.updatePoint(Date.now());
