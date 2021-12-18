@@ -99,9 +99,6 @@
       return;
     }
     var key = target.getAttribute('data-key');
-    if (!Location.isValidKey(key)) {
-      return;
-    }
     var location = this._locations.find(function(location) {
       return (location.key === key);
     });
