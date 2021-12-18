@@ -42,21 +42,13 @@
     this._locations.reset(this._createLocations(Location.PRESET_KEYS));
     this._initTimezoneData();
     this._initClockTimer();
-    this._initLocations();
+    this._selectedLocations.reset(this._loadSelectedLocations());
   };
 
   Main.prototype._createLocations = function(keys) {
     return keys.map(function(key) {
       return new Location(key);
     });
-  };
-
-  Main.prototype._findLocations = function(keys) {
-    return keys.map(function(key) {
-      return this._locations.find(function(location) {
-        return (location.key === key);
-      });
-    }.bind(this));
   };
 
   Main.prototype._updateTimezoneOffset = function(now) {
@@ -112,13 +104,20 @@
     }.bind(this), 30000);
   };
 
-  Main.prototype._initLocations = function() {
+  Main.prototype._loadSelectedLocations = function() {
     var fragment = location.hash.substring(1);
     var keys = (fragment ? this._decodeLocationKeys(fragment) : DEFAULT_LOCATION_KEYS);
-    var validKeys = keys.filter(function(key) {
+    return keys.filter(function(key) {
       return Location.isValidKey(key);
-    });
-    this._selectedLocations.reset(this._findLocations(validKeys));
+    }).reduce(function(ret, key) {
+      var location = this._locations.find(function(location) {
+        return (location.key === key);
+      });
+      if (location) {
+        ret.push(location);
+      }
+      return ret;
+    }.bind(this), []);
   };
 
   Main.prototype._saveSelectedLocationKeys = function() {
