@@ -17,27 +17,27 @@
     this.el = el;
     this._locations = new Collection();
     this._selectedLocations = new Collection();
-    this.menuButton = new Button(this.el.querySelector('.menu-button'));
-    this.list = new List(document.querySelector('.list'), {
+    this._menuButton = new Button(this.el.querySelector('.menu-button'));
+    this._list = new List(this.el.querySelector('.list'), {
       locations: this._locations,
       selectedLocations: this._selectedLocations,
     });
-    this.clock = new Clock(document.querySelector('.clock'), this._hideList.bind(this), { locations: this._selectedLocations });
+    this._clock = new Clock(this.el.querySelector('.clock'), this._hideList.bind(this), { locations: this._selectedLocations });
     this._attrs = new Attributes({ listVisible: false });
   };
 
   Main.prototype.init = function() {
     window.addEventListener('resize', helper.debounce(this._onresize.bind(this), 100));
     this._disableTouchScrolling();
-    this.menuButton.init();
-    this.list.init();
-    this.clock.init();
+    this._menuButton.init();
+    this._list.init();
+    this._clock.init();
 
     this._selectedLocations.on('reset', this._saveSelectedLocations.bind(this));
     this._selectedLocations.on('add', this._saveSelectedLocations.bind(this));
     this._selectedLocations.on('remove', this._saveSelectedLocations.bind(this));
     this._attrs.on('change:listVisible', this._updateListVisibility.bind(this));
-    this.menuButton.on('click', this._toggleList.bind(this));
+    this._menuButton.on('click', this._toggleList.bind(this));
 
     this._locations.reset(this._createLocations(Location.PRESET_KEYS));
     this._selectedLocations.reset(this._loadSelectedLocations());
@@ -52,12 +52,12 @@
   Main.prototype._toggleList = function() {
     var visible = !this._attrs.get('listVisible');
     this._attrs.set('listVisible', visible);
-    this.clock.setDragEnabled(!visible);
+    this._clock.setDragEnabled(!visible);
   };
 
   Main.prototype._hideList = function() {
     this._attrs.set('listVisible', false);
-    this.clock.setDragEnabled(true);
+    this._clock.setDragEnabled(true);
   };
 
   Main.prototype._updateListVisibility = function(visible) {
@@ -105,7 +105,7 @@
   };
 
   Main.prototype._onresize = function() {
-    this.clock.resetSize();
+    this._clock.resetSize();
   };
 
   if (typeof module !== 'undefined' && module.exports) {
