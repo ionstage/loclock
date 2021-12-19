@@ -232,7 +232,7 @@
     }
   };
 
-  Clock.prototype.resetSize = function() {
+  Clock.prototype.resize = function() {
     this.updatePoint(Date.now());
   };
 

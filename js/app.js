@@ -1,8 +1,10 @@
 (function(app) {
   'use strict';
 
-  var Main = app.Main || require('./components/main.js');
+  var Root = app.Root || require('./components/root.js');
 
-  app.main = new Main(document.querySelector('.main'));
-  app.main.init();
+  var root = new Root();
+  root.init();
+
+  app.root = root;
 })(this.app || (this.app = {}));
