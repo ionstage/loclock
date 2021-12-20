@@ -22,13 +22,12 @@
     }
   };
 
-  Events.prototype.emit = function() {
-    var args = Array.prototype.slice.call(arguments);
-    var eventName = args.shift();
+  Events.prototype.emit = function(eventName) {
     var listeners = this._events[eventName];
     if (!listeners) {
       return;
     }
+    var args = Array.prototype.slice.call(arguments, 1);
     for (var i = 0, len = listeners.length; i < len; i++) {
       listeners[i].apply(null, args);
     }
