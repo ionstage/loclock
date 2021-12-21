@@ -11,7 +11,7 @@
     this.el = el;
     this._menuButton = new Button(this.el.querySelector('.menu-button'));
     this._list = new List(this.el.querySelector('.list'), props);
-    this._clock = new Clock(this.el.querySelector('.clock'), this._hideList.bind(this), { locations: props.selectedLocations });
+    this._clock = new Clock(this.el.querySelector('.clock'), { locations: props.selectedLocations });
     this._attrs = new Attributes({ listVisible: false });
   };
 
@@ -22,6 +22,7 @@
 
     this._attrs.on('change:listVisible', this._updateListVisibility.bind(this));
     this._menuButton.on('click', this._toggleList.bind(this));
+    this._clock.on('pointerdown', this._hideList.bind(this));
   };
 
   Main.prototype.resize = function() {

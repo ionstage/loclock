@@ -3,6 +3,7 @@
 
   var dom = app.dom || require('./dom.js');
   var Draggable = app.Draggable || require('./draggable.js');
+  var Events = app.Events || require('../base/events.js');
 
   var NS_SVG = 'http://www.w3.org/2000/svg';
 
@@ -138,7 +139,7 @@
     this.ondragend();
   };
 
-  var Clock = function(el, onpointerdown, props) {
+  var Clock = function(el, props) {
     this.el = el;
     this.boardElement = document.createElementNS(NS_SVG, 'g');
     this.pointElement = document.createElementNS(NS_SVG, 'g');
@@ -150,15 +151,15 @@
     this.locations = props.locations;
     this.timeOffset = 0;
     this.isDragging = false;
-    this.onpointerdown = onpointerdown;
     this.draggable = null;
     this.dialSpinner = null;
+    this._events = new Events();
   };
 
   Clock.prototype.init = function() {
     this.el.appendChild(this.boardElement);
     this.el.appendChild(this.pointElement);
-    this.el.addEventListener((dom.supportsTouch() ? 'touchstart' : 'mousedown'), this.onpointerdown);
+    this.el.addEventListener((dom.supportsTouch() ? 'touchstart' : 'mousedown'), this._events.emit.bind(this._events, 'pointerdown'));
 
     this.updateBoard();
 
@@ -234,6 +235,10 @@
 
   Clock.prototype.resize = function() {
     this.updatePoint(Date.now());
+  };
+
+  Clock.prototype.on = function() {
+    return Events.prototype.on.apply(this._events, arguments);
   };
 
   Clock.prototype.updateBoard = function() {
