@@ -551,6 +551,19 @@
     return (key === Location.KEY_CURRENT_LOCATION) || (moment.tz.zone(Location._keyToTzname(key)) !== null);
   };
 
+  Location.get = (function() {
+    var cache = {};
+    return function(key) {
+      if (!Location.isValidKey(key)) {
+        return null;
+      }
+      if (!cache[key]) {
+        cache[key] = new Location(key);
+      }
+      return cache[key];
+    };
+  })();
+
   Location._keyToTzname = function(key) {
     return key.split('#/')[0];
   };
