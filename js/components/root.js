@@ -44,8 +44,9 @@
   Root.prototype._loadSelectedLocations = function() {
     var fragment = location.hash.substring(1);
     var keys = (fragment ? this._decodeLocationKeys(fragment) : DEFAULT_LOCATION_KEYS);
-    return keys.filter(function(key) {
-      return Location.isValidKey(key);
+    return keys.filter(function(key, index, keys) {
+      var isUnique = (keys.indexOf(key) === index);
+      return isUnique && Location.isValidKey(key);
     }).reduce(function(ret, key) {
       var location = this._locations.find(function(location) {
         return (location.key === key);
