@@ -141,13 +141,13 @@
 
   var Clock = function(el, props) {
     this.el = el;
-    this.boardElement = document.createElementNS(NS_SVG, 'g');
-    this.pointElement = document.createElementNS(NS_SVG, 'g');
     var width = this.el.viewBox.baseVal.width;
     var height = this.el.viewBox.baseVal.height;
     this.x = width / 2;
     this.y = height / 2;
     this.r = Math.min(width, height) / 2 * 0.6;
+    this.boardElement = this.createBoard(this.x, this.y, this.r);
+    this.pointElement = document.createElementNS(NS_SVG, 'g');
     this.locations = props.locations;
     this.timeOffset = 0;
     this.isDragging = false;
@@ -161,7 +161,8 @@
     this.el.appendChild(this.pointElement);
     this.el.addEventListener((dom.supportsTouch() ? 'touchstart' : 'mousedown'), this._events.emit.bind(this._events, 'pointerdown'));
 
-    this.updateBoard();
+    this.adjustBoard(this.boardElement);
+    this.centerTimeElement = this.boardElement.querySelector('.center-time');
 
     this.dialSpinner = new DialSpinner(this.el, {
       ontimeoffsetinvert: function(timeOffset) {
@@ -239,14 +240,6 @@
 
   Clock.prototype.on = function() {
     return Events.prototype.on.apply(this._events, arguments);
-  };
-
-  Clock.prototype.updateBoard = function() {
-    var newBoard = this.createBoard(this.x, this.y, this.r);
-    this.el.replaceChild(newBoard, this.boardElement);
-    this.adjustBoard(newBoard);
-    this.boardElement = newBoard;
-    this.centerTimeElement = this.boardElement.querySelector('.center-time');
   };
 
   Clock.prototype.updatePoint = function(now) {
