@@ -2,6 +2,7 @@
   'use strict';
 
   var dom = app.dom || require('./dom.js');
+  var Attributes = app.Attributes || require('../base/attributes.js');
   var Draggable = app.Draggable || require('./draggable.js');
   var Events = app.Events || require('../base/events.js');
 
@@ -153,6 +154,7 @@
     this.isDragging = false;
     this.draggable = null;
     this.dialSpinner = null;
+    this._attrs = new Attributes({ dragEnabled: false });
     this._events = new Events();
   };
 
@@ -160,6 +162,8 @@
     this.el.appendChild(this.boardElement);
     this.el.appendChild(this.pointElement);
     this.el.addEventListener((dom.supportsTouch() ? 'touchstart' : 'mousedown'), this._events.emit.bind(this._events, 'pointerdown'));
+
+    this._attrs.on('change:dragEnabled', this._updateDragEnabled.bind(this));
 
     this.adjustBoard(this.boardElement);
     this.centerTimeElement = this.boardElement.querySelector('.center-time');
@@ -196,7 +200,7 @@
       onend: this.dialSpinner.dragend.bind(this.dialSpinner),
     });
 
-    this.draggable.enable();
+    this._attrs.set('dragEnabled', true);
     this.locations.on('reset', function(locations) {
       var now = Date.now();
       locations.forEach(function(location) {
@@ -227,6 +231,10 @@
   };
 
   Clock.prototype.setDragEnabled = function(dragEnabled) {
+    this._attrs.set('dragEnabled', dragEnabled);
+  };
+
+  Clock.prototype._updateDragEnabled = function(dragEnabled) {
     if (dragEnabled) {
       this.draggable.enable();
     } else {
