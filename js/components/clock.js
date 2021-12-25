@@ -17,6 +17,8 @@
     this.r = Math.min(width, height) / 2 * 0.6;
     this.boardElement = this.createBoard(this.x, this.y, this.r);
     this.pointElement = document.createElementNS(NS_SVG, 'g');
+    this.centerTimeElement = this.boardElement.querySelector('.center-time');
+    this.centerResetElement = this.boardElement.querySelector('.center-reset');
     this.locations = props.locations;
     this.timeOffset = 0;
     this.isRightHanded = true;
@@ -34,33 +36,6 @@
     this._attrs.on('change:dragEnabled', this._updateDragEnabled.bind(this));
 
     this.adjustBoard(this.boardElement);
-
-    this.centerTimeElement = this.el.querySelector('.center-time');
-    this.centerResetElement = this.el.querySelector('.center-reset');
-
-    this.ontimeoffsetinvert = function(timeOffset) {
-      this.setTimeoffset(timeOffset);
-      this.updateCenter();
-    }.bind(this);
-    this.ontimeoffsetupdate = function(timeOffset) {
-      this.setTimeoffset(timeOffset);
-      this.updatePoint(Date.now());
-      this.updateCenter();
-    }.bind(this);
-    this.onresetstart = function() {
-      this.draggable.disable();
-    }.bind(this);
-    this.onresetend = function() {
-      this.draggable.enable();
-    }.bind(this);
-    this.ondragstart = function() {
-      this.isDragging = true;
-      this.updateCenter();
-    }.bind(this);
-    this.ondragend = function() {
-      this.isDragging = false;
-      this.updateCenter();
-    }.bind(this);
 
     this.draggable = new Draggable(this.el, {
       onstart: this.dragstart.bind(this),
@@ -92,10 +67,6 @@
       });
       this.updatePoint(now);
     }.bind(this), 30000);
-  };
-
-  Clock.prototype.setTimeoffset = function(offset) {
-    this.timeOffset = offset;
   };
 
   Clock.prototype.setDragEnabled = function(dragEnabled) {
@@ -403,7 +374,7 @@
   Clock.prototype.toggleTimeOffset = function() {
     this.timeOffset = (this.timeOffset + (this.timeOffset >= 0 ? -1 : 1) * 1440) % 1440;
     this.isRightHanded = (this.timeOffset >= 0);
-    this.ontimeoffsetinvert(this.timeOffset);
+    this.updateCenter();
   };
 
   Clock.prototype.reset = function() {
@@ -418,11 +389,12 @@
         requestAnimationFrame(callback);
       } else {
         this.timeOffset = 0;
-        this.onresetend();
+        this.draggable.enable();
       }
-      this.ontimeoffsetupdate(this.timeOffset);
+      this.updatePoint(Date.now());
+      this.updateCenter();
     }.bind(this);
-    this.onresetstart();
+    this.draggable.disable();
     requestAnimationFrame(callback);
   };
 
@@ -443,7 +415,8 @@
     this.x0 = (event.touches ? event.changedTouches[0].clientX : event.clientX);
     this.y0 = (event.touches ? event.changedTouches[0].clientY : event.clientY);
     this.startTimeOffset = this.timeOffset;
-    this.ondragstart();
+    this.isDragging = true;
+    this.updateCenter();
   };
 
   Clock.prototype.dragmove = function(dx, dy) {
@@ -493,7 +466,8 @@
     }
 
     this.timeOffset = timeOffset;
-    this.ontimeoffsetupdate(this.timeOffset);
+    this.updatePoint(Date.now());
+    this.updateCenter();
   };
 
   Clock.prototype.dragend = function(event) {
@@ -515,7 +489,8 @@
       this.centerTimeElement.setAttribute('fill', 'gray');
       this.centerResetElement.setAttribute('fill', 'gray');
     }
-    this.ondragend();
+    this.isDragging = false;
+    this.updateCenter();
   };
 
   if (typeof module !== 'undefined' && module.exports) {
