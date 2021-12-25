@@ -93,7 +93,7 @@ body {
 .clock .center-spin {
   fill: gray;
   font-family: 'Courier New';
-  visibility: hidden;
+  display: none;
 }
 
 .clock .center-reset {
@@ -109,5 +109,5 @@ body {
 }
 
 .clock.spin .center-spin {
-  visibility: visible;
+  display: inline;
 }
