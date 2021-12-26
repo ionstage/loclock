@@ -23,7 +23,11 @@
     this.timeOffset = 0;
     this.isRightHanded = true;
     this.isDragging = false;
-    this.draggable = null;
+    this.draggable = new Draggable(this.el, {
+      onstart: this.dragstart.bind(this),
+      onmove: this.dragmove.bind(this),
+      onend: this.dragend.bind(this),
+    });
     this._attrs = new Attributes({ dragEnabled: false });
     this._events = new Events();
   };
@@ -36,12 +40,6 @@
     this._attrs.on('change:dragEnabled', this._updateDragEnabled.bind(this));
 
     this.adjustBoard(this.boardElement);
-
-    this.draggable = new Draggable(this.el, {
-      onstart: this.dragstart.bind(this),
-      onmove: this.dragmove.bind(this),
-      onend: this.dragend.bind(this),
-    });
 
     this._attrs.set('dragEnabled', true);
     this.locations.on('reset', function(locations) {
