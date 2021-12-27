@@ -471,8 +471,8 @@
   Clock.prototype.dragend = function(event) {
     var target = event.target;
     if (dom.supportsTouch()) {
-      var x = (event.touches ? event.changedTouches[0].clientX : event.clientX);
-      var y = (event.touches ? event.changedTouches[0].clientY : event.clientY);
+      var x = event.changedTouches[0].clientX;
+      var y = event.changedTouches[0].clientY;
       target = document.elementFromPoint(x, y);
     }
     var className = target.getAttribute('class') || '';
