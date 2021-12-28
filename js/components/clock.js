@@ -2,8 +2,8 @@
   'use strict';
 
   var dom = app.dom || require('./dom.js');
-  var Attributes = app.Attributes || require('../base/attributes.js');
   var Draggable = app.Draggable || require('./draggable.js');
+  var Attributes = app.Attributes || require('../base/attributes.js');
   var Events = app.Events || require('../base/events.js');
 
   var NS_SVG = 'http://www.w3.org/2000/svg';
