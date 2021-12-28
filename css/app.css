@@ -62,6 +62,10 @@ body {
   stroke: lightgray;
 }
 
+.menu-button > * {
+  pointer-events: none;
+}
+
 .clock {
   cursor: default;
   font-family: Helvetica;
