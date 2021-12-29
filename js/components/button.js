@@ -26,6 +26,7 @@
   Button.prototype._onstart = function(event) {
     event.preventDefault();
     this._dragTarget = event.target;
+    this._events.emit('pointerdown');
   };
 
   Button.prototype._onend = function(event) {
@@ -33,6 +34,7 @@
       this._events.emit('click');
     }
     this._dragTarget = null;
+    this._events.emit('pointerup');
   };
 
   if (typeof module !== 'undefined' && module.exports) {
