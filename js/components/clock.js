@@ -13,21 +13,23 @@
     this.el = el;
     var width = this.el.viewBox.baseVal.width;
     var height = this.el.viewBox.baseVal.height;
-    this.x = width / 2;
-    this.y = height / 2;
-    this.r = Math.min(width, height) / 2 * 0.6;
-    this.boardElement = this.createBoard(this.x, this.y, this.r);
-    this.pointElement = document.createElementNS(NS_SVG, 'g');
-    this._timeOffsetButton = new Button(this.boardElement.querySelector('.center-time'));
-    this._resetButton = new Button(this.boardElement.querySelector('.center-reset'));
-    this.locations = props.locations;
-    this.timeOffset = 0;
-    this.isRightHanded = true;
-    this.isDragging = false;
-    this.draggable = new Draggable(this.el, {
-      onstart: this.dragstart.bind(this),
-      onmove: this.dragmove.bind(this),
-      onend: this.dragend.bind(this),
+    this._x = width / 2;
+    this._y = height / 2;
+    this._r = Math.min(width, height) / 2 * 0.6;
+    this._x0 = 0;
+    this._y0 = 0;
+    this._boardElement = this._createBoard(this._x, this._y, this._r);
+    this._pointElement = document.createElementNS(NS_SVG, 'g');
+    this._timeOffsetButton = new Button(this._boardElement.querySelector('.center-time'));
+    this._resetButton = new Button(this._boardElement.querySelector('.center-reset'));
+    this._locations = props.locations;
+    this._timeOffset = 0;
+    this._isRightHanded = true;
+    this._isDragging = false;
+    this._draggable = new Draggable(this.el, {
+      onstart: this._dragstart.bind(this),
+      onmove: this._dragmove.bind(this),
+      onend: this._dragend.bind(this),
     });
     this._attrs = new Attributes({ dragEnabled: false });
     this._events = new Events();
@@ -37,29 +39,29 @@
     this._timeOffsetButton.init();
     this._resetButton.init();
 
-    this.el.appendChild(this.boardElement);
-    this.el.appendChild(this.pointElement);
+    this.el.appendChild(this._boardElement);
+    this.el.appendChild(this._pointElement);
     this.el.addEventListener((dom.supportsTouch() ? 'touchstart' : 'mousedown'), this._events.emit.bind(this._events, 'pointerdown'));
 
     this._attrs.on('change:dragEnabled', this._updateDragEnabled.bind(this));
 
-    this.adjustBoard(this.boardElement);
+    this._adjustBoard(this._boardElement);
 
     this._attrs.set('dragEnabled', true);
-    this.locations.on('reset', function(locations) {
+    this._locations.on('reset', function(locations) {
       var now = Date.now();
       locations.forEach(function(location) {
         location.updateTimezoneOffset(now);
       });
-      this.updatePoint(now);
+      this._updatePoint(now);
     }.bind(this));
-    this.locations.on('add', function(location) {
+    this._locations.on('add', function(location) {
       var now = Date.now();
       location.updateTimezoneOffset(now);
-      this.updatePoint(now);
+      this._updatePoint(now);
     }.bind(this));
-    this.locations.on('remove', function() {
-      this.updatePoint(Date.now());
+    this._locations.on('remove', function() {
+      this._updatePoint(Date.now());
     }.bind(this));
 
     this._timeOffsetButton.on('pointerdown', function(event) {
@@ -70,7 +72,7 @@
       this._timeOffsetButton.el.setAttribute('fill', 'gray');
     }.bind(this));
     this._timeOffsetButton.on('click', function() {
-      this.toggleTimeOffset();
+      this._toggleTimeOffset();
     }.bind(this));
 
     this._resetButton.on('pointerdown', function(event) {
@@ -81,15 +83,15 @@
       this._resetButton.el.setAttribute('fill', 'gray');
     }.bind(this));
     this._resetButton.on('click', function() {
-      this.reset();
+      this._reset();
     }.bind(this));
 
     setInterval(function() {
       var now = Date.now();
-      this.locations.forEach(function(location) {
+      this._locations.forEach(function(location) {
         location.updateTimezoneOffset(now);
       });
-      this.updatePoint(now);
+      this._updatePoint(now);
     }.bind(this), 30000);
   };
 
@@ -98,7 +100,7 @@
   };
 
   Clock.prototype.resize = function() {
-    this.updatePoint(Date.now());
+    this._updatePoint(Date.now());
   };
 
   Clock.prototype.setDragEnabled = function(dragEnabled) {
@@ -107,29 +109,29 @@
 
   Clock.prototype._updateDragEnabled = function(dragEnabled) {
     if (dragEnabled) {
-      this.draggable.enable();
+      this._draggable.enable();
     } else {
-      this.draggable.disable();
+      this._draggable.disable();
     }
   };
 
-  Clock.prototype.updatePoint = function(now) {
-    var newPoint = this.createPoint(this.x, this.y, this.r, this.locations, now, this.timeOffset);
-    this.el.replaceChild(newPoint, this.pointElement);
-    this.adjustPointText(newPoint, this.x, this.y, this.r, window.innerWidth, window.innerHeight);
-    this.pointElement = newPoint;
+  Clock.prototype._updatePoint = function(now) {
+    var newPoint = this._createPoint(this._x, this._y, this._r, this._locations, now, this._timeOffset);
+    this.el.replaceChild(newPoint, this._pointElement);
+    this._adjustPointText(newPoint, this._x, this._y, this._r, window.innerWidth, window.innerHeight);
+    this._pointElement = newPoint;
   };
 
-  Clock.prototype.updateCenter = function() {
-    var timeOffset = this.timeOffset;
+  Clock.prototype._updateCenter = function() {
+    var timeOffset = this._timeOffset;
     var h = ('00' + Math.abs((timeOffset - timeOffset % 60) / 60)).slice(-2);
     var m = ('00' + Math.abs(timeOffset % 60)).slice(-2);
     var text = (timeOffset >= 0 ? '+' : '-') + h + ':' + m;
     this._timeOffsetButton.el.textContent = text;
-    this.el.setAttribute('class', (timeOffset || this.isDragging ? 'clock spin' : 'clock'));
+    this.el.setAttribute('class', (timeOffset || this._isDragging ? 'clock spin' : 'clock'));
   };
 
-  Clock.prototype.globalBBox = function(bb) {
+  Clock.prototype._globalBBox = function(bb) {
     var stageElement = this.el;
     var lpt = stageElement.createSVGPoint();
     lpt.x = bb.x;
@@ -146,7 +148,7 @@
     };
   };
 
-  Clock.prototype.createCircle = function(o) {
+  Clock.prototype._createCircle = function(o) {
     var element = document.createElementNS(NS_SVG, 'circle');
     for (var key in o) {
       element.setAttribute(key, o[key]);
@@ -154,7 +156,7 @@
     return element;
   };
 
-  Clock.prototype.createText = function(text, o) {
+  Clock.prototype._createText = function(text, o) {
     var element = document.createElementNS(NS_SVG, 'text');
     element.appendChild(document.createTextNode(text));
     for (var key in o) {
@@ -163,10 +165,10 @@
     return element;
   };
 
-  Clock.prototype.createBoard = function(x, y, r) {
+  Clock.prototype._createBoard = function(x, y, r) {
     var board = document.createElementNS(NS_SVG, 'g');
 
-    board.appendChild(this.createCircle({
+    board.appendChild(this._createCircle({
       cx: x,
       cy: y,
       r: r,
@@ -174,7 +176,7 @@
       'class': 'circle',
     }));
 
-    board.appendChild(this.createCircle({
+    board.appendChild(this._createCircle({
       cx: x,
       cy: y,
       r: (r / 45).toFixed(1),
@@ -185,14 +187,14 @@
     var centerSpin = document.createElementNS(NS_SVG, 'g');
     centerSpin.setAttribute('class', 'center-spin');
 
-    centerSpin.appendChild(this.createText('+00:00', {
+    centerSpin.appendChild(this._createText('+00:00', {
       x: x - 11,
       y: y - 16,
       'font-size': r / 6,
       'class': 'text center-time',
     }));
 
-    centerSpin.appendChild(this.createText('RESET', {
+    centerSpin.appendChild(this._createText('RESET', {
       x: x,
       y: y + 32,
       'font-size': r / 10,
@@ -211,7 +213,7 @@
       var difX = r * (0.8 - Math.abs(rate * Math.cos(deg))) * Math.cos(deg);
       var difY = r * (0.8 - Math.abs(rate * Math.sin(deg))) * Math.sin(deg);
 
-      board.appendChild(this.createText(text, {
+      board.appendChild(this._createText(text, {
         x: (x + difX).toFixed(1),
         y: (y + difY).toFixed(1),
         'font-size': fontSize.toFixed(),
@@ -224,15 +226,15 @@
     return board;
   };
 
-  Clock.prototype.adjustBoard = function(board) {
-    this.forEachTextElement(board, function(element) {
+  Clock.prototype._adjustBoard = function(board) {
+    this._forEachTextElement(board, function(element) {
       var textBBox = element.getBBox();
       var dy = +element.getAttribute('y') - (textBBox.y + textBBox.height / 2);
       element.setAttribute('dy', dy);
     });
   };
 
-  Clock.prototype.createPoint = function(x, y, r, locations, now, timeOffset) {
+  Clock.prototype._createPoint = function(x, y, r, locations, now, timeOffset) {
     var containerElement = document.createElementNS(NS_SVG, 'g');
     var pointItemMap = {};
 
@@ -258,7 +260,7 @@
       var text = pointItem.text;
       var deg = pointItem.deg;
 
-      containerElement.appendChild(this.createCircle({
+      containerElement.appendChild(this._createCircle({
         cx: (x + r * Math.cos(deg)).toFixed(1),
         cy: (y + r * Math.sin(deg)).toFixed(1),
         r: (r / 20).toFixed(1),
@@ -266,7 +268,7 @@
         'class': 'circle',
       }));
 
-      containerElement.appendChild(this.createText(text, {
+      containerElement.appendChild(this._createText(text, {
         x: x + r * Math.cos(deg),
         y: y + r * Math.sin(deg),
         'font-size': (r / 8).toFixed(),
@@ -278,7 +280,7 @@
     return containerElement;
   };
 
-  Clock.prototype.forEachTextElement = function(parent, method) {
+  Clock.prototype._forEachTextElement = function(parent, method) {
     var children = Array.prototype.slice.call(parent.childNodes);
     children.forEach(function(element) {
       if (element.nodeName === 'text') {
@@ -287,16 +289,16 @@
     });
   };
 
-  Clock.prototype.isBBoxOverlaid = function(bb0, bb1) {
+  Clock.prototype._isBBoxOverlaid = function(bb0, bb1) {
     return ((bb0.x <= bb1.x && bb0.x + bb0.width >= bb1.x) ||
               (bb0.x >= bb1.x && bb1.x + bb1.width >= bb0.x)) &&
             ((bb0.y <= bb1.y && bb0.y + bb0.height >= bb1.y) ||
               (bb0.y >= bb1.y && bb1.y + bb1.height >= bb0.y));
   };
 
-  Clock.prototype.shrinkElement = function(element, width, height) {
+  Clock.prototype._shrinkElement = function(element, width, height) {
     var bb = element.getBBox();
-    var gbb = this.globalBBox(bb);
+    var gbb = this._globalBBox(bb);
     var pattern = 0;
 
     if ((gbb.x < 0 && (pattern = 1)) ||
@@ -331,12 +333,12 @@
     }
   };
 
-  Clock.prototype.adjustPointText = function(point, x, y, r, width, height) {
+  Clock.prototype._adjustPointText = function(point, x, y, r, width, height) {
     var upperElements = [];
     var downElements = [];
     var elements = [];
 
-    this.forEachTextElement(point, function(element) {
+    this._forEachTextElement(point, function(element) {
       var textBBox = element.getBBox();
       var deg = +element.getAttribute('data-deg');
       var dy = +element.getAttribute('y') - (textBBox.y + textBBox.height / 2);
@@ -365,7 +367,7 @@
       for (var j = i + 1; j < ulen; j++) {
         var bb0 = item[1];
         var bb1 = upperElements[j][1];
-        if (!this.isBBoxOverlaid(bb0, bb1)) {
+        if (!this._isBBoxOverlaid(bb0, bb1)) {
           continue;
         }
         var dy = +el.getAttribute('dy') - ((bb0.y + bb0.height) - bb1.y);
@@ -381,7 +383,7 @@
       for (var j = i + 1; j < dlen; j++) {
         var bb0 = item[1];
         var bb1 = downElements[j][1];
-        if (!this.isBBoxOverlaid(bb0, bb1)) {
+        if (!this._isBBoxOverlaid(bb0, bb1)) {
           continue;
         }
         var dy = +el.getAttribute('dy') + ((bb1.y + bb1.height) - bb0.y);
@@ -391,54 +393,54 @@
     }.bind(this));
 
     elements.forEach(function(element) {
-      this.shrinkElement(element, width, height);
+      this._shrinkElement(element, width, height);
     }.bind(this));
   };
 
-  Clock.prototype.toggleTimeOffset = function() {
-    this.timeOffset = (this.timeOffset + (this.timeOffset >= 0 ? -1 : 1) * 1440) % 1440;
-    this.isRightHanded = (this.timeOffset >= 0);
-    this.updateCenter();
+  Clock.prototype._toggleTimeOffset = function() {
+    this._timeOffset = (this._timeOffset + (this._timeOffset >= 0 ? -1 : 1) * 1440) % 1440;
+    this._isRightHanded = (this._timeOffset >= 0);
+    this._updateCenter();
   };
 
-  Clock.prototype.reset = function() {
-    var offset = this.timeOffset;
+  Clock.prototype._reset = function() {
+    var offset = this._timeOffset;
     if (!offset) {
       return;
     }
     var dt = (offset >= 0 ? -1 : 1) * Math.ceil(Math.ceil(Math.abs(offset / 6)) / 10) * 10;
     var callback = function() {
-      if (dt && Math.abs(this.timeOffset) > Math.abs(dt)) {
-        this.timeOffset += dt;
+      if (dt && Math.abs(this._timeOffset) > Math.abs(dt)) {
+        this._timeOffset += dt;
         requestAnimationFrame(callback);
       } else {
-        this.timeOffset = 0;
-        this.draggable.enable();
+        this._timeOffset = 0;
+        this._draggable.enable();
       }
-      this.updatePoint(Date.now());
-      this.updateCenter();
+      this._updatePoint(Date.now());
+      this._updateCenter();
     }.bind(this);
-    this.draggable.disable();
+    this._draggable.disable();
     requestAnimationFrame(callback);
   };
 
-  Clock.prototype.dragstart = function(event) {
+  Clock.prototype._dragstart = function(event) {
     event.preventDefault();
-    this.x0 = (event.touches ? event.changedTouches[0].clientX : event.clientX);
-    this.y0 = (event.touches ? event.changedTouches[0].clientY : event.clientY);
-    this.startTimeOffset = this.timeOffset;
-    this.isDragging = true;
-    this.updateCenter();
+    this._x0 = (event.touches ? event.changedTouches[0].clientX : event.clientX);
+    this._y0 = (event.touches ? event.changedTouches[0].clientY : event.clientY);
+    this.startTimeOffset = this._timeOffset;
+    this._isDragging = true;
+    this._updateCenter();
   };
 
-  Clock.prototype.dragmove = function(dx, dy) {
+  Clock.prototype._dragmove = function(dx, dy) {
     var rect = this.el.getBoundingClientRect();
     var cx = rect.width / 2;
     var cy = rect.height / 2;
-    var x1 = this.x0 + dx;
-    var y1 = this.y0 + dy;
-    var a1 = this.x0 - cx;
-    var a2 = this.y0 - cy;
+    var x1 = this._x0 + dx;
+    var y1 = this._y0 + dy;
+    var a1 = this._x0 - cx;
+    var a2 = this._y0 - cy;
     var b1 = x1 - cx;
     var b2 = y1 - cy;
     var cos = (a1 * b1 + a2 * b2) / (Math.sqrt(a1 * a1 + a2 * a2) * Math.sqrt(b1 * b1 + b2 * b2));
@@ -456,31 +458,31 @@
     }
 
     /* determine rotation direction */
-    if (this.timeOffset <= 0 && this.timeOffset > -360 && timeOffset > 0 && timeOffset < 360) {
-      this.isRightHanded = true;
-    } else if (this.timeOffset >= 0 && this.timeOffset < 360 && timeOffset < 0 && timeOffset > -360) {
-      this.isRightHanded = false;
+    if (this._timeOffset <= 0 && this._timeOffset > -360 && timeOffset > 0 && timeOffset < 360) {
+      this._isRightHanded = true;
+    } else if (this._timeOffset >= 0 && this._timeOffset < 360 && timeOffset < 0 && timeOffset > -360) {
+      this._isRightHanded = false;
     }
 
     /* -1440 < timeOffset <= 0 or 0 <= timeOffset < 1440 */
-    if (this.isRightHanded && timeOffset < 0) {
+    if (this._isRightHanded && timeOffset < 0) {
       timeOffset += 1440;
-    } else if (!this.isRightHanded && timeOffset > 0) {
+    } else if (!this._isRightHanded && timeOffset > 0) {
       timeOffset -= 1440;
     }
 
-    if (timeOffset === this.timeOffset) {
+    if (timeOffset === this._timeOffset) {
       return;
     }
 
-    this.timeOffset = timeOffset;
-    this.updatePoint(Date.now());
-    this.updateCenter();
+    this._timeOffset = timeOffset;
+    this._updatePoint(Date.now());
+    this._updateCenter();
   };
 
-  Clock.prototype.dragend = function() {
-    this.isDragging = false;
-    this.updateCenter();
+  Clock.prototype._dragend = function() {
+    this._isDragging = false;
+    this._updateCenter();
   };
 
   if (typeof module !== 'undefined' && module.exports) {
