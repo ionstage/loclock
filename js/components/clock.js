@@ -4,6 +4,7 @@
   var dom = app.dom || require('./dom.js');
   var Draggable = app.Draggable || require('./draggable.js');
   var Attributes = app.Attributes || require('../base/attributes.js');
+  var Button = app.Button || require('./button.js');
   var Events = app.Events || require('../base/events.js');
 
   var NS_SVG = 'http://www.w3.org/2000/svg';
@@ -17,8 +18,8 @@
     this.r = Math.min(width, height) / 2 * 0.6;
     this.boardElement = this.createBoard(this.x, this.y, this.r);
     this.pointElement = document.createElementNS(NS_SVG, 'g');
-    this.centerTimeElement = this.boardElement.querySelector('.center-time');
-    this.centerResetElement = this.boardElement.querySelector('.center-reset');
+    this._timeOffsetButton = new Button(this.boardElement.querySelector('.center-time'));
+    this._resetButton = new Button(this.boardElement.querySelector('.center-reset'));
     this.locations = props.locations;
     this.timeOffset = 0;
     this.isRightHanded = true;
@@ -33,6 +34,9 @@
   };
 
   Clock.prototype.init = function() {
+    this._timeOffsetButton.init();
+    this._resetButton.init();
+
     this.el.appendChild(this.boardElement);
     this.el.appendChild(this.pointElement);
     this.el.addEventListener((dom.supportsTouch() ? 'touchstart' : 'mousedown'), this._events.emit.bind(this._events, 'pointerdown'));
@@ -56,6 +60,28 @@
     }.bind(this));
     this.locations.on('remove', function() {
       this.updatePoint(Date.now());
+    }.bind(this));
+
+    this._timeOffsetButton.on('pointerdown', function(event) {
+      event.stopPropagation();
+      this._timeOffsetButton.el.setAttribute('fill', 'lightgray');
+    }.bind(this));
+    this._timeOffsetButton.on('pointerup', function() {
+      this._timeOffsetButton.el.setAttribute('fill', 'gray');
+    }.bind(this));
+    this._timeOffsetButton.on('click', function() {
+      this.toggleTimeOffset();
+    }.bind(this));
+
+    this._resetButton.on('pointerdown', function(event) {
+      event.stopPropagation();
+      this._resetButton.el.setAttribute('fill', 'lightgray');
+    }.bind(this));
+    this._resetButton.on('pointerup', function() {
+      this._resetButton.el.setAttribute('fill', 'gray');
+    }.bind(this));
+    this._resetButton.on('click', function() {
+      this.reset();
     }.bind(this));
 
     setInterval(function() {
@@ -99,7 +125,7 @@
     var h = ('00' + Math.abs((timeOffset - timeOffset % 60) / 60)).slice(-2);
     var m = ('00' + Math.abs(timeOffset % 60)).slice(-2);
     var text = (timeOffset >= 0 ? '+' : '-') + h + ':' + m;
-    this.centerTimeElement.textContent = text;
+    this._timeOffsetButton.el.textContent = text;
     this.el.setAttribute('class', (timeOffset || this.isDragging ? 'clock spin' : 'clock'));
   };
 
@@ -398,18 +424,6 @@
 
   Clock.prototype.dragstart = function(event) {
     event.preventDefault();
-    this.startClassName = event.target.getAttribute('class') || '';
-    if (this.startClassName.indexOf('center-time') !== -1) {
-      this.isDragCanceled = true;
-      this.centerTimeElement.setAttribute('fill', 'lightgray');
-      return;
-    }
-    if (this.startClassName.indexOf('center-reset') !== -1) {
-      this.isDragCanceled = true;
-      this.centerResetElement.setAttribute('fill', 'lightgray');
-      return;
-    }
-    this.isDragCanceled = false;
     this.x0 = (event.touches ? event.changedTouches[0].clientX : event.clientX);
     this.y0 = (event.touches ? event.changedTouches[0].clientY : event.clientY);
     this.startTimeOffset = this.timeOffset;
@@ -418,10 +432,6 @@
   };
 
   Clock.prototype.dragmove = function(dx, dy) {
-    if (this.isDragCanceled) {
-      return;
-    }
-
     var rect = this.el.getBoundingClientRect();
     var cx = rect.width / 2;
     var cy = rect.height / 2;
@@ -468,25 +478,7 @@
     this.updateCenter();
   };
 
-  Clock.prototype.dragend = function(event) {
-    var target = event.target;
-    if (dom.supportsTouch()) {
-      var x = event.changedTouches[0].clientX;
-      var y = event.changedTouches[0].clientY;
-      target = document.elementFromPoint(x, y);
-    }
-    var className = target.getAttribute('class') || '';
-    if (this.startClassName === className) {
-      if (className.indexOf('center-time') !== -1) {
-        this.toggleTimeOffset();
-      } else if (className.indexOf('center-reset') !== -1) {
-        this.reset();
-      }
-    }
-    if (this.isDragCanceled) {
-      this.centerTimeElement.setAttribute('fill', 'gray');
-      this.centerResetElement.setAttribute('fill', 'gray');
-    }
+  Clock.prototype.dragend = function() {
     this.isDragging = false;
     this.updateCenter();
   };
