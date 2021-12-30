@@ -93,6 +93,14 @@
     }.bind(this), 30000);
   };
 
+  Clock.prototype.on = function() {
+    return Events.prototype.on.apply(this._events, arguments);
+  };
+
+  Clock.prototype.resize = function() {
+    this.updatePoint(Date.now());
+  };
+
   Clock.prototype.setDragEnabled = function(dragEnabled) {
     this._attrs.set('dragEnabled', dragEnabled);
   };
@@ -103,14 +111,6 @@
     } else {
       this.draggable.disable();
     }
-  };
-
-  Clock.prototype.resize = function() {
-    this.updatePoint(Date.now());
-  };
-
-  Clock.prototype.on = function() {
-    return Events.prototype.on.apply(this._events, arguments);
   };
 
   Clock.prototype.updatePoint = function(now) {
