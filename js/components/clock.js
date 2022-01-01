@@ -166,64 +166,32 @@
   };
 
   Clock.prototype._createBoard = function(x, y, r) {
-    var board = document.createElementNS(NS_SVG, 'g');
-
-    board.appendChild(this._createCircle({
-      cx: x,
-      cy: y,
-      r: r,
-      'stroke-width': (r / 30).toFixed(1),
-      'class': 'circle',
-    }));
-
-    board.appendChild(this._createCircle({
-      cx: x,
-      cy: y,
-      r: (r / 45).toFixed(1),
-      fill: 'black',
-      'class': 'center-point',
-    }));
-
-    var centerSpin = document.createElementNS(NS_SVG, 'g');
-    centerSpin.setAttribute('class', 'center-spin');
-
-    centerSpin.appendChild(this._createText('+00:00', {
-      x: x - 11,
-      y: y - 16,
-      'font-size': r / 6,
-      'class': 'text center-time',
-    }));
-
-    centerSpin.appendChild(this._createText('RESET', {
-      x: x,
-      y: y + 32,
-      'font-size': r / 10,
-      'class': 'text center-reset',
-    }));
-
-    board.appendChild(centerSpin);
+    var texts = [
+      '<svg><g>',
+        '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" stroke-width="' + (r / 30).toFixed(1) + '" class="circle"></circle>',
+        '<circle cx="' + x + '" cy="' + y + '" r="' + (r / 45).toFixed(1) + '" fill="black" class="center-point"></circle>',
+        '<g class="center-spin">',
+          '<text x="' + (x - 11) + '" y="' + (y - 16) + '" font-size="' + (r / 6) + '" class="text center-time">+00:00</text>',
+          '<text x="' + x + '" y="' + (y + 32) + '" font-size="' + (r / 10) + '" class="text center-reset">RESET</text>',
+        '</g>',
+    ];
 
     var dif = Math.PI / 12;
     var deg = 0;
-
     for (var i = 0; i < 24; i++) {
       var text = (i % 3 === 0) ? String((i - 6 >= 0) ? i - 6 : i + 18) : '・';
       var fontSize = (text === '・') ? r / 12 : r / 4.5;
       var rate = (text === '18' || text === '15' || text === '21') ? 0.04 : 0;
       var difX = r * (0.8 - Math.abs(rate * Math.cos(deg))) * Math.cos(deg);
       var difY = r * (0.8 - Math.abs(rate * Math.sin(deg))) * Math.sin(deg);
-
-      board.appendChild(this._createText(text, {
-        x: (x + difX).toFixed(1),
-        y: (y + difY).toFixed(1),
-        'font-size': fontSize.toFixed(),
-        'class': 'text',
-      }));
-
+      texts.push('<text x="' + (x + difX).toFixed(1) + '" y="' + (y + difY).toFixed(1) + '" font-size="' + fontSize.toFixed() + '" class="text">' + text + '</text>');
       deg += dif;
     }
 
-    return board;
+    texts.push('</g></svg>');
+
+    var el = dom.render(texts.join(''));
+    return el.childNodes[0];
   };
 
   Clock.prototype._adjustBoard = function(board) {

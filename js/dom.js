@@ -3,6 +3,12 @@
 
   var dom = {};
 
+  dom.render = function(s) {
+    var el = document.createRange().createContextualFragment(s).firstChild;
+    el.parentNode.removeChild(el);
+    return el;
+  };
+
   dom.toggleClass = function(el, className, force) {
     if (force) {
       el.classList.add(className);
