@@ -148,23 +148,6 @@
     };
   };
 
-  Clock.prototype._createCircle = function(o) {
-    var element = document.createElementNS(NS_SVG, 'circle');
-    for (var key in o) {
-      element.setAttribute(key, o[key]);
-    }
-    return element;
-  };
-
-  Clock.prototype._createText = function(text, o) {
-    var element = document.createElementNS(NS_SVG, 'text');
-    element.appendChild(document.createTextNode(text));
-    for (var key in o) {
-      element.setAttribute(key, o[key]);
-    }
-    return element;
-  };
-
   Clock.prototype._createBoard = function(x, y, r) {
     var texts = [
       '<svg><g>',
@@ -203,7 +186,6 @@
   };
 
   Clock.prototype._createPoint = function(x, y, r, locations, now, timeOffset) {
-    var containerElement = document.createElementNS(NS_SVG, 'g');
     var pointItemMap = {};
 
     locations.forEach(function(location) {
@@ -223,29 +205,20 @@
       };
     });
 
+    var texts = ['<svg><g>'];
+
     for (var key in pointItemMap) {
       var pointItem = pointItemMap[key];
       var text = pointItem.text;
       var deg = pointItem.deg;
-
-      containerElement.appendChild(this._createCircle({
-        cx: (x + r * Math.cos(deg)).toFixed(1),
-        cy: (y + r * Math.sin(deg)).toFixed(1),
-        r: (r / 20).toFixed(1),
-        'stroke-width': (r / 90).toFixed(1),
-        'class': 'circle',
-      }));
-
-      containerElement.appendChild(this._createText(text, {
-        x: x + r * Math.cos(deg),
-        y: y + r * Math.sin(deg),
-        'font-size': (r / 8).toFixed(),
-        'class': 'text',
-        'data-deg': deg,
-      }));
+      texts.push('<circle cx="' + (x + r * Math.cos(deg)).toFixed(1) + '" cy="' + (y + r * Math.sin(deg)).toFixed(1) + '" r="' + (r / 20).toFixed(1) + '" stroke-width="' + (r / 90).toFixed(1) + '" class="circle"></circle>');
+      texts.push('<text x="' + (x + r * Math.cos(deg)) + '" y="' + (y + r * Math.sin(deg)) + '" font-size="' + (r / 8).toFixed() + '" class="text" data-deg="' + deg + '">' + text + '</text>');
     }
 
-    return containerElement;
+    texts.push('</g></svg>');
+
+    var el = dom.render(texts.join(''));
+    return el.childNodes[0];
   };
 
   Clock.prototype._forEachTextElement = function(parent, method) {
