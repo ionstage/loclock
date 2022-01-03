@@ -116,7 +116,7 @@
   };
 
   Clock.prototype._updatePoint = function(now) {
-    var newPoint = this._createPoint(this._x, this._y, this._r, this._locations, now, this._timeOffset);
+    var newPoint = this._createPoints(this._x, this._y, this._r, this._locations, now, this._timeOffset);
     this.el.replaceChild(newPoint, this._pointElement);
     this._adjustPointText(newPoint, this._x, this._y, this._r, window.innerWidth, window.innerHeight);
     this._pointElement = newPoint;
@@ -181,27 +181,27 @@
     });
   };
 
-  Clock.prototype._createPoint = function(x, y, r, locations, now, timeOffset) {
-    var pointItemMap = {};
+  Clock.prototype._createPoints = function(x, y, r, locations, now, timeOffset) {
+    var points = {};
     locations.forEach(function(location) {
-      var locationName = location.name;
+      var text = location.name;
       var date = new Date(location.getLocalTime(now));
       var key = date.getTime() % (24 * 60 * 60 * 1000);
-      var pointItem = pointItemMap[key];
-      if (pointItem) {
-        pointItem.text +=  ', ' + locationName;
+      var point = points[key];
+      if (point) {
+        point.text +=  ', ' + text;
         return;
       }
-      pointItemMap[key] = {
-        text: locationName,
+      points[key] = {
+        text: text,
         deg: (date.getHours() + (date.getMinutes() + timeOffset) / 60) / 24 * (Math.PI * 2) + Math.PI / 2,
       };
     });
     var texts = ['<svg><g>'];
-    for (var key in pointItemMap) {
-      var pointItem = pointItemMap[key];
-      var text = pointItem.text;
-      var deg = pointItem.deg;
+    for (var key in points) {
+      var point = points[key];
+      var text = point.text;
+      var deg = point.deg;
       texts.push('<circle cx="' + (x + r * Math.cos(deg)).toFixed(1) + '" cy="' + (y + r * Math.sin(deg)).toFixed(1) + '" r="' + (r / 20).toFixed(1) + '" stroke-width="' + (r / 90).toFixed(1) + '" class="circle"></circle>');
       texts.push('<text x="' + (x + r * Math.cos(deg)) + '" y="' + (y + r * Math.sin(deg)) + '" font-size="' + (r / 8).toFixed() + '" class="text" data-deg="' + deg + '">' + text + '</text>');
     }
