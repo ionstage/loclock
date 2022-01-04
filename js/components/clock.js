@@ -182,21 +182,21 @@
   };
 
   Clock.prototype._createPoints = function(x, y, r, locations, now, timeOffset) {
-    var points = {};
-    locations.forEach(function(location) {
+    var points = locations.reduce(function(ret, location) {
       var text = location.name;
       var date = new Date(location.getLocalTime(now));
       var key = date.getTime() % (24 * 60 * 60 * 1000);
-      var point = points[key];
+      var point = ret[key];
       if (point) {
         point.text +=  ', ' + text;
-        return;
+        return ret;
       }
-      points[key] = {
+      ret[key] = {
         text: text,
         deg: (date.getHours() + (date.getMinutes() + timeOffset) / 60) / 24 * (Math.PI * 2) + Math.PI / 2,
       };
-    });
+      return ret;
+    }, {});
     var texts = ['<svg><g>'];
     for (var key in points) {
       var point = points[key];

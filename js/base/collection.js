@@ -35,6 +35,10 @@
     return Array.prototype.map.apply(this._items, arguments);
   };
 
+  Collection.prototype.reduce = function() {
+    return Array.prototype.reduce.apply(this._items, arguments);
+  };
+
   Collection.prototype.find = function(callback) {
     for (var i = 0, len = this._items.length; i < len; i++) {
       if (callback(this._items[i], i, this._items)) {
