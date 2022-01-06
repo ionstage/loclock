@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var dom = app.dom || require('./dom.js');
+  var dom = app.dom || require('../dom.js');
   var Attributes = app.Attributes || require('../base/attributes.js');
   var Button = app.Button || require('./button.js');
   var Clock = app.Clock || require('./clock.js');

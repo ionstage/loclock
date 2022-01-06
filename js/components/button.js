@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var Draggable = app.Draggable || require('./draggable.js');
+  var Draggable = app.Draggable || require('../draggable.js');
   var Events = app.Events || require('../base/events.js');
 
   var Button = function(el) {

@@ -1,8 +1,8 @@
 (function(app) {
   'use strict';
 
-  var dom = app.dom || require('./dom.js');
-  var Draggable = app.Draggable || require('./draggable.js');
+  var dom = app.dom || require('../dom.js');
+  var Draggable = app.Draggable || require('../draggable.js');
   var Attributes = app.Attributes || require('../base/attributes.js');
   var Button = app.Button || require('./button.js');
   var Events = app.Events || require('../base/events.js');

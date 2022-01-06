@@ -2,7 +2,7 @@
   'use strict';
 
   var IScroll = require('iscroll');
-  var dom = app.dom || require('./dom.js');
+  var dom = app.dom || require('../dom.js');
 
   var List = function(el, props) {
     this.el = el;
