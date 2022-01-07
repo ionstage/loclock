@@ -16,8 +16,6 @@
     this._x = width / 2;
     this._y = height / 2;
     this._r = Math.min(width, height) / 2 * 0.6;
-    this._x0 = 0;
-    this._y0 = 0;
     this._boardElement = this._createBoard(this._x, this._y, this._r);
     this._pointElement = document.createElementNS(NS_SVG, 'g');
     this._timeOffsetButton = new Button(this._boardElement.querySelector('.center-time'));
@@ -25,12 +23,15 @@
     this._locations = props.locations;
     this._timeOffset = 0;
     this._isRightHanded = true;
-    this._isDragging = false;
     this._draggable = new Draggable(this.el, {
       onstart: this._dragstart.bind(this),
       onmove: this._dragmove.bind(this),
       onend: this._dragend.bind(this),
     });
+    this._dragStartX = 0;
+    this._dragStartY = 0;
+    this._dragStartTimeOffset = 0;
+    this._isDragging = false;
     this._attrs = new Attributes({ dragEnabled: false });
     this._events = new Events();
   };
@@ -351,9 +352,10 @@
 
   Clock.prototype._dragstart = function(event) {
     event.preventDefault();
-    this._x0 = (event.touches ? event.changedTouches[0].clientX : event.clientX);
-    this._y0 = (event.touches ? event.changedTouches[0].clientY : event.clientY);
-    this.startTimeOffset = this._timeOffset;
+    var supportsTouch = dom.supportsTouch();
+    this._dragStartX = (supportsTouch ? event.changedTouches[0].clientX : event.clientX);
+    this._dragStartY = (supportsTouch ? event.changedTouches[0].clientY : event.clientY);
+    this._dragStartTimeOffset = this._timeOffset;
     this._isDragging = true;
     this._updateCenter();
   };
@@ -362,17 +364,17 @@
     var rect = this.el.getBoundingClientRect();
     var cx = rect.width / 2;
     var cy = rect.height / 2;
-    var x1 = this._x0 + dx;
-    var y1 = this._y0 + dy;
-    var a1 = this._x0 - cx;
-    var a2 = this._y0 - cy;
+    var x1 = this._dragStartX + dx;
+    var y1 = this._dragStartY + dy;
+    var a1 = this._dragStartX - cx;
+    var a2 = this._dragStartY - cy;
     var b1 = x1 - cx;
     var b2 = y1 - cy;
     var cos = (a1 * b1 + a2 * b2) / (Math.sqrt(a1 * a1 + a2 * a2) * Math.sqrt(b1 * b1 + b2 * b2));
     var acos = Math.acos(cos) || 0;
     var offset = acos / Math.PI * 12 * 60;
     var direction = (a1 * b2 - b1 * a2 >= 0 ? 1 : -1);
-    var timeOffset = this.startTimeOffset + direction * Math.round(offset / 10) * 10;
+    var timeOffset = this._dragStartTimeOffset + direction * Math.round(offset / 10) * 10;
     timeOffset = timeOffset % 1440;
 
     /* -720 < timeOffset <= 720 */
