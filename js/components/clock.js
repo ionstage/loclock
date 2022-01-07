@@ -11,11 +11,9 @@
 
   var Clock = function(el, props) {
     this.el = el;
-    var width = this.el.viewBox.baseVal.width;
-    var height = this.el.viewBox.baseVal.height;
-    this._x = width / 2;
-    this._y = height / 2;
-    this._r = Math.min(width, height) / 2 * 0.6;
+    this._x = this.el.viewBox.baseVal.width / 2;
+    this._y = this.el.viewBox.baseVal.height / 2;
+    this._r = Math.min(this._x, this._y) * 0.6;
     this._boardElement = this._createBoard(this._x, this._y, this._r);
     this._pointElement = document.createElementNS(NS_SVG, 'g');
     this._timeOffsetButton = new Button(this._boardElement.querySelector('.center-time'));
