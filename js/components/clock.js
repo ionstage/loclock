@@ -7,21 +7,19 @@
   var Button = app.Button || require('./button.js');
   var Events = app.Events || require('../base/events.js');
 
-  var NS_SVG = 'http://www.w3.org/2000/svg';
-
   var Clock = function(el, props) {
     this.el = el;
     this._x = this.el.viewBox.baseVal.width / 2;
     this._y = this.el.viewBox.baseVal.height / 2;
     this._r = Math.min(this._x, this._y) * 0.6;
-    this._boardElement = this._createBoard(this._x, this._y, this._r);
-    this._pointsElement = document.createElementNS(NS_SVG, 'g');
-    this._timeOffsetButton = new Button(this._boardElement.querySelector('.center-time'));
-    this._resetButton = new Button(this._boardElement.querySelector('.center-reset'));
     this._locations = props.locations;
     this._time = Date.now();
     this._timeOffset = 0;
     this._isRightHanded = true;
+    this._boardElement = this._createBoard(this._x, this._y, this._r);
+    this._pointsElement = this._createPoints(this._x, this._y, this._r, this._locations, this._time, this._timeOffset);
+    this._timeOffsetButton = new Button(this._boardElement.querySelector('.center-time'));
+    this._resetButton = new Button(this._boardElement.querySelector('.center-reset'));
     this._draggable = new Draggable(this.el, {
       onstart: this._dragstart.bind(this),
       onmove: this._dragmove.bind(this),
