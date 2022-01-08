@@ -15,7 +15,7 @@
     this._y = this.el.viewBox.baseVal.height / 2;
     this._r = Math.min(this._x, this._y) * 0.6;
     this._boardElement = this._createBoard(this._x, this._y, this._r);
-    this._pointElement = document.createElementNS(NS_SVG, 'g');
+    this._pointsElement = document.createElementNS(NS_SVG, 'g');
     this._timeOffsetButton = new Button(this._boardElement.querySelector('.center-time'));
     this._resetButton = new Button(this._boardElement.querySelector('.center-reset'));
     this._locations = props.locations;
@@ -39,7 +39,7 @@
     this._resetButton.init();
 
     this.el.appendChild(this._boardElement);
-    this.el.appendChild(this._pointElement);
+    this.el.appendChild(this._pointsElement);
     this.el.addEventListener((dom.supportsTouch() ? 'touchstart' : 'mousedown'), this._events.emit.bind(this._events, 'pointerdown'));
 
     this._attrs.on('change:dragEnabled', this._updateDragEnabled.bind(this));
@@ -52,15 +52,15 @@
       locations.forEach(function(location) {
         location.updateTimezoneOffset(now);
       });
-      this._updatePoint(now);
+      this._updatePoints(now);
     }.bind(this));
     this._locations.on('add', function(location) {
       var now = Date.now();
       location.updateTimezoneOffset(now);
-      this._updatePoint(now);
+      this._updatePoints(now);
     }.bind(this));
     this._locations.on('remove', function() {
-      this._updatePoint(Date.now());
+      this._updatePoints(Date.now());
     }.bind(this));
 
     this._timeOffsetButton.on('pointerdown', function(event) {
@@ -86,7 +86,7 @@
       this._locations.forEach(function(location) {
         location.updateTimezoneOffset(now);
       });
-      this._updatePoint(now);
+      this._updatePoints(now);
     }.bind(this), 30000);
   };
 
@@ -95,7 +95,7 @@
   };
 
   Clock.prototype.resize = function() {
-    this._updatePoint(Date.now());
+    this._updatePoints(Date.now());
   };
 
   Clock.prototype.setDragEnabled = function(dragEnabled) {
@@ -110,11 +110,11 @@
     }
   };
 
-  Clock.prototype._updatePoint = function(now) {
-    var newPoint = this._createPoints(this._x, this._y, this._r, this._locations, now, this._timeOffset);
-    this.el.replaceChild(newPoint, this._pointElement);
-    this._adjustPointText(newPoint, this._x, this._y, this._r, window.innerWidth, window.innerHeight);
-    this._pointElement = newPoint;
+  Clock.prototype._updatePoints = function(now) {
+    var points = this._createPoints(this._x, this._y, this._r, this._locations, now, this._timeOffset);
+    this.el.replaceChild(points, this._pointsElement);
+    this._adjustPointTexts(points, this._x, this._y, this._r, window.innerWidth, window.innerHeight);
+    this._pointsElement = points;
   };
 
   Clock.prototype._updateCenter = function() {
@@ -257,12 +257,12 @@
     }
   };
 
-  Clock.prototype._adjustPointText = function(point, x, y, r, width, height) {
+  Clock.prototype._adjustPointTexts = function(points, x, y, r, width, height) {
     var upperElements = [];
     var downElements = [];
     var elements = [];
 
-    this._forEachTextElement(point, function(element) {
+    this._forEachTextElement(points, function(element) {
       var textBBox = element.getBBox();
       var deg = +element.getAttribute('data-deg');
       var dy = +element.getAttribute('y') - (textBBox.y + textBBox.height / 2);
@@ -341,7 +341,7 @@
         this._timeOffset = 0;
         this._draggable.enable();
       }
-      this._updatePoint(Date.now());
+      this._updatePoints(Date.now());
       this._updateCenter();
     }.bind(this);
     this._draggable.disable();
@@ -401,7 +401,7 @@
     }
 
     this._timeOffset = timeOffset;
-    this._updatePoint(Date.now());
+    this._updatePoints(Date.now());
     this._updateCenter();
   };
 
