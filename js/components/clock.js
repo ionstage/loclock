@@ -19,6 +19,7 @@
     this._timeOffsetButton = new Button(this._boardElement.querySelector('.center-time'));
     this._resetButton = new Button(this._boardElement.querySelector('.center-reset'));
     this._locations = props.locations;
+    this._time = Date.now();
     this._timeOffset = 0;
     this._isRightHanded = true;
     this._draggable = new Draggable(this.el, {
@@ -48,19 +49,19 @@
 
     this._attrs.set('dragEnabled', true);
     this._locations.on('reset', function(locations) {
-      var now = Date.now();
+      this._time = Date.now();
       locations.forEach(function(location) {
-        location.updateTimezoneOffset(now);
-      });
-      this._updatePoints(now);
+        location.updateTimezoneOffset(this._time);
+      }.bind(this));
+      this._updatePoints();
     }.bind(this));
     this._locations.on('add', function(location) {
-      var now = Date.now();
-      location.updateTimezoneOffset(now);
-      this._updatePoints(now);
+      this._time = Date.now();
+      location.updateTimezoneOffset(this._time);
+      this._updatePoints();
     }.bind(this));
     this._locations.on('remove', function() {
-      this._updatePoints(Date.now());
+      this._updatePoints();
     }.bind(this));
 
     this._timeOffsetButton.on('pointerdown', function(event) {
@@ -82,11 +83,11 @@
     this._resetButton.on('click', this._reset.bind(this));
 
     setInterval(function() {
-      var now = Date.now();
+      this._time = Date.now();
       this._locations.forEach(function(location) {
-        location.updateTimezoneOffset(now);
-      });
-      this._updatePoints(now);
+        location.updateTimezoneOffset(this._time);
+      }.bind(this));
+      this._updatePoints();
     }.bind(this), 30000);
   };
 
@@ -95,7 +96,7 @@
   };
 
   Clock.prototype.resize = function() {
-    this._updatePoints(Date.now());
+    this._updatePoints();
   };
 
   Clock.prototype.setDragEnabled = function(dragEnabled) {
@@ -110,8 +111,8 @@
     }
   };
 
-  Clock.prototype._updatePoints = function(now) {
-    var points = this._createPoints(this._x, this._y, this._r, this._locations, now, this._timeOffset);
+  Clock.prototype._updatePoints = function() {
+    var points = this._createPoints(this._x, this._y, this._r, this._locations, this._time, this._timeOffset);
     this.el.replaceChild(points, this._pointsElement);
     this._adjustPointTexts(points, this._x, this._y, this._r, window.innerWidth, window.innerHeight);
     this._pointsElement = points;
@@ -176,10 +177,10 @@
     });
   };
 
-  Clock.prototype._createPoints = function(x, y, r, locations, now, timeOffset) {
+  Clock.prototype._createPoints = function(x, y, r, locations, time, timeOffset) {
     var points = locations.reduce(function(ret, location) {
       var text = location.name;
-      var date = new Date(location.getLocalTime(now));
+      var date = new Date(location.getLocalTime(time));
       var key = date.getTime() % (24 * 60 * 60 * 1000);
       var point = ret[key];
       if (point) {
@@ -341,7 +342,7 @@
         this._timeOffset = 0;
         this._draggable.enable();
       }
-      this._updatePoints(Date.now());
+      this._updatePoints();
       this._updateCenter();
     }.bind(this);
     this._draggable.disable();
@@ -401,7 +402,7 @@
     }
 
     this._timeOffset = timeOffset;
-    this._updatePoints(Date.now());
+    this._updatePoints();
     this._updateCenter();
   };
 
