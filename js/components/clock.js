@@ -12,14 +12,14 @@
     this._locations = props.locations;
     this._attrs = new Attributes({ dragEnabled: false });
     this._events = new Events();
-    this._x = this.el.viewBox.baseVal.width / 2;
-    this._y = this.el.viewBox.baseVal.height / 2;
-    this._r = Math.min(this._x, this._y) * 0.6;
+    this._cx = this.el.viewBox.baseVal.width / 2;
+    this._cy = this.el.viewBox.baseVal.height / 2;
+    this._r = Math.min(this._cx, this._cy) * 0.6;
     this._time = Date.now();
     this._timeOffset = 0;
     this._isRightHanded = true;
-    this._boardElement = this._createBoard(this._x, this._y, this._r);
-    this._pointsElement = this._createPoints(this._x, this._y, this._r, this._locations, this._time, this._timeOffset);
+    this._boardElement = this._createBoard(this._cx, this._cy, this._r);
+    this._pointsElement = this._createPoints(this._cx, this._cy, this._r, this._locations, this._time, this._timeOffset);
     this._timeOffsetButton = new Button(this._boardElement.querySelector('.center-time'));
     this._resetButton = new Button(this._boardElement.querySelector('.center-reset'));
     this._draggable = new Draggable(this.el, {
@@ -110,9 +110,9 @@
   };
 
   Clock.prototype._updatePoints = function() {
-    var points = this._createPoints(this._x, this._y, this._r, this._locations, this._time, this._timeOffset);
+    var points = this._createPoints(this._cx, this._cy, this._r, this._locations, this._time, this._timeOffset);
     this.el.replaceChild(points, this._pointsElement);
-    this._adjustPointTexts(points, this._x, this._y, this._r, window.innerWidth, window.innerHeight);
+    this._adjustPointTexts(points, this._cx, this._cy, this._r, window.innerWidth, window.innerHeight);
     this._pointsElement = points;
   };
 
@@ -142,14 +142,14 @@
     };
   };
 
-  Clock.prototype._createBoard = function(x, y, r) {
+  Clock.prototype._createBoard = function(cx, cy, r) {
     var texts = [
       '<svg><g>',
-        '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" stroke-width="' + (r / 30).toFixed(1) + '" class="circle"></circle>',
-        '<circle cx="' + x + '" cy="' + y + '" r="' + (r / 45).toFixed(1) + '" fill="black" class="center-point"></circle>',
+        '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" stroke-width="' + (r / 30).toFixed(1) + '" class="circle"></circle>',
+        '<circle cx="' + cx + '" cy="' + cy + '" r="' + (r / 45).toFixed(1) + '" fill="black" class="center-point"></circle>',
         '<g class="center-spin">',
-          '<text x="' + (x - 11) + '" y="' + (y - 16) + '" font-size="' + (r / 6) + '" class="text center-time">+00:00</text>',
-          '<text x="' + x + '" y="' + (y + 32) + '" font-size="' + (r / 10) + '" class="text center-reset">RESET</text>',
+          '<text x="' + (cx - 11) + '" y="' + (cy - 16) + '" font-size="' + (r / 6) + '" class="text center-time">+00:00</text>',
+          '<text x="' + cx + '" y="' + (cy + 32) + '" font-size="' + (r / 10) + '" class="text center-reset">RESET</text>',
         '</g>',
     ];
     var dif = Math.PI / 12;
@@ -160,7 +160,7 @@
       var rate = (text === '18' || text === '15' || text === '21') ? 0.04 : 0;
       var difX = r * (0.8 - Math.abs(rate * Math.cos(deg))) * Math.cos(deg);
       var difY = r * (0.8 - Math.abs(rate * Math.sin(deg))) * Math.sin(deg);
-      texts.push('<text x="' + (x + difX).toFixed(1) + '" y="' + (y + difY).toFixed(1) + '" font-size="' + fontSize.toFixed() + '" class="text">' + text + '</text>');
+      texts.push('<text x="' + (cx + difX).toFixed(1) + '" y="' + (cy + difY).toFixed(1) + '" font-size="' + fontSize.toFixed() + '" class="text">' + text + '</text>');
       deg += dif;
     }
     texts.push('</g></svg>');
@@ -175,7 +175,7 @@
     });
   };
 
-  Clock.prototype._createPoints = function(x, y, r, locations, time, timeOffset) {
+  Clock.prototype._createPoints = function(cx, cy, r, locations, time, timeOffset) {
     var points = locations.reduce(function(ret, location) {
       var text = location.name;
       var date = new Date(location.getLocalTime(time));
@@ -196,8 +196,8 @@
       var point = points[key];
       var text = point.text;
       var deg = point.deg;
-      texts.push('<circle cx="' + (x + r * Math.cos(deg)).toFixed(1) + '" cy="' + (y + r * Math.sin(deg)).toFixed(1) + '" r="' + (r / 20).toFixed(1) + '" stroke-width="' + (r / 90).toFixed(1) + '" class="circle"></circle>');
-      texts.push('<text x="' + (x + r * Math.cos(deg)) + '" y="' + (y + r * Math.sin(deg)) + '" font-size="' + (r / 8).toFixed() + '" class="text" data-deg="' + deg + '">' + text + '</text>');
+      texts.push('<circle cx="' + (cx + r * Math.cos(deg)).toFixed(1) + '" cy="' + (cy + r * Math.sin(deg)).toFixed(1) + '" r="' + (r / 20).toFixed(1) + '" stroke-width="' + (r / 90).toFixed(1) + '" class="circle"></circle>');
+      texts.push('<text x="' + (cx + r * Math.cos(deg)) + '" y="' + (cy + r * Math.sin(deg)) + '" font-size="' + (r / 8).toFixed() + '" class="text" data-deg="' + deg + '">' + text + '</text>');
     }
     texts.push('</g></svg>');
     return dom.render(texts.join('')).childNodes[0];
@@ -256,7 +256,7 @@
     }
   };
 
-  Clock.prototype._adjustPointTexts = function(points, x, y, r, width, height) {
+  Clock.prototype._adjustPointTexts = function(points, cx, cy, r, width, height) {
     var upperElements = [];
     var downElements = [];
     var elements = [];
@@ -268,12 +268,12 @@
       var sin = Math.sin(deg);
       var cos = Math.cos(deg);
 
-      element.setAttribute('x', x + (r * 1.125 + textBBox.width / 2 + (textBBox.height / 2) * sin * sin) * cos);
-      element.setAttribute('y', y + (r * 1.125 + textBBox.height / 2 + (textBBox.width / 8) * cos * cos) * sin);
+      element.setAttribute('x', cx + (r * 1.125 + textBBox.width / 2 + (textBBox.height / 2) * sin * sin) * cos);
+      element.setAttribute('y', cy + (r * 1.125 + textBBox.height / 2 + (textBBox.width / 8) * cos * cos) * sin);
       element.setAttribute('dy', dy);
       textBBox = element.getBBox();
 
-      if (textBBox.y + textBBox.height / 2 < y) {
+      if (textBBox.y + textBBox.height / 2 < cy) {
         upperElements.push([element, textBBox]);
       } else {
         downElements.push([element, textBBox]);
