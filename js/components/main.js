@@ -9,10 +9,10 @@
 
   var Main = function(el, props) {
     this.el = el;
+    this._attrs = new Attributes({ listVisible: false });
     this._menuButton = new Button(this.el.querySelector('.menu-button'));
     this._list = new List(this.el.querySelector('.list'), props);
     this._clock = new Clock(this.el.querySelector('.clock'), { locations: props.selectedLocations });
-    this._attrs = new Attributes({ listVisible: false });
   };
 
   Main.prototype.init = function() {

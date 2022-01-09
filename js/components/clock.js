@@ -9,10 +9,12 @@
 
   var Clock = function(el, props) {
     this.el = el;
+    this._locations = props.locations;
+    this._attrs = new Attributes({ dragEnabled: false });
+    this._events = new Events();
     this._x = this.el.viewBox.baseVal.width / 2;
     this._y = this.el.viewBox.baseVal.height / 2;
     this._r = Math.min(this._x, this._y) * 0.6;
-    this._locations = props.locations;
     this._time = Date.now();
     this._timeOffset = 0;
     this._isRightHanded = true;
@@ -29,8 +31,6 @@
     this._dragStartY = 0;
     this._dragStartTimeOffset = 0;
     this._isDragging = false;
-    this._attrs = new Attributes({ dragEnabled: false });
-    this._events = new Events();
   };
 
   Clock.prototype.init = function() {
