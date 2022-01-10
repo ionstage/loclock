@@ -168,7 +168,10 @@
   };
 
   Clock.prototype._adjustBoard = function(board) {
-    this._forEachTextElement(board, function(element) {
+    Array.prototype.slice.call(board.childNodes).forEach(function(element) {
+      if (element.nodeName !== 'text') {
+        return
+      }
       var textBBox = element.getBBox();
       var dy = +element.getAttribute('y') - (textBBox.y + textBBox.height / 2);
       element.setAttribute('dy', dy);
@@ -201,15 +204,6 @@
     }
     texts.push('</g></svg>');
     return dom.render(texts.join('')).childNodes[0];
-  };
-
-  Clock.prototype._forEachTextElement = function(parent, method) {
-    var children = Array.prototype.slice.call(parent.childNodes);
-    children.forEach(function(element) {
-      if (element.nodeName === 'text') {
-        method(element);
-      }
-    });
   };
 
   Clock.prototype._isBBoxOverlaid = function(bb0, bb1) {
@@ -261,7 +255,10 @@
     var downElements = [];
     var elements = [];
 
-    this._forEachTextElement(points, function(element) {
+    Array.prototype.slice.call(points.childNodes).forEach(function(element) {
+      if (element.nodeName !== 'text') {
+        return
+      }
       var textBBox = element.getBBox();
       var deg = +element.getAttribute('data-deg');
       var dy = +element.getAttribute('y') - (textBBox.y + textBBox.height / 2);
