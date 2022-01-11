@@ -236,69 +236,57 @@
   };
 
   Clock.prototype._adjustPointTexts = function(points, cx, cy, r, width, height) {
-    var upperElements = [];
-    var downElements = [];
-    var elements = [];
-
-    Array.prototype.slice.call(points.childNodes).forEach(function(element) {
+    var items = Array.prototype.slice.call(points.childNodes).reduce(function(ret, element) {
       if (element.nodeName !== 'text') {
-        return
+        return ret;
       }
-      var textBBox = element.getBBox();
+      var bb = element.getBBox();
       var deg = +element.getAttribute('data-deg');
-      var dy = +element.getAttribute('y') - (textBBox.y + textBBox.height / 2);
+      var dy = +element.getAttribute('y') - (bb.y + bb.height / 2);
       var sin = Math.sin(deg);
       var cos = Math.cos(deg);
-
-      element.setAttribute('x', cx + (r * 1.125 + textBBox.width / 2 + (textBBox.height / 2) * sin * sin) * cos);
-      element.setAttribute('y', cy + (r * 1.125 + textBBox.height / 2 + (textBBox.width / 8) * cos * cos) * sin);
+      element.setAttribute('x', cx + (r * 1.125 + bb.width / 2 + (bb.height / 2) * sin * sin) * cos);
+      element.setAttribute('y', cy + (r * 1.125 + bb.height / 2 + (bb.width / 8) * cos * cos) * sin);
       element.setAttribute('dy', dy);
-      textBBox = element.getBBox();
-
-      if (textBBox.y + textBBox.height / 2 < cy) {
-        upperElements.push([element, textBBox]);
+      bb = element.getBBox();
+      if (bb.y + bb.height / 2 < cy) {
+        ret.upper.push([element, bb]);
       } else {
-        downElements.push([element, textBBox]);
+        ret.down.push([element, bb]);
       }
-    });
+      return ret;
+    }, { upper: [], down: [] });
 
-    var ulen = upperElements.length;
-    var dlen = downElements.length;
-
-    upperElements.sort(function(a, b) {
+    items.upper.sort(function(a, b) {
       return (a[1].y < b[1].y) ? -1 : 1;
-    }).forEach(function(item, i) {
+    }).forEach(function(item, i, array) {
       var el = item[0];
-      for (var j = i + 1; j < ulen; j++) {
-        var bb0 = item[1];
-        var bb1 = upperElements[j][1];
+      var bb0 = item[1];
+      for (var j = i + 1, len = array.length; j < len; j++) {
+        var bb1 = array[j][1];
         if (!this._isBBoxOverlaid(bb0, bb1)) {
           continue;
         }
         var dy = +el.getAttribute('dy') - ((bb0.y + bb0.height) - bb1.y);
         el.setAttribute('dy', dy);
       }
-      elements.push(el);
+      this._shrinkElement(el, width, height);
     }.bind(this));
 
-    downElements.sort(function(a, b) {
+    items.down.sort(function(a, b) {
       return (a[1].y > b[1].y) ? -1 : 1;
-    }).forEach(function(item, i) {
+    }).forEach(function(item, i, array) {
       var el = item[0];
-      for (var j = i + 1; j < dlen; j++) {
-        var bb0 = item[1];
-        var bb1 = downElements[j][1];
+      var bb0 = item[1];
+      for (var j = i + 1, len = array.length; j < len; j++) {
+        var bb1 = array[j][1];
         if (!this._isBBoxOverlaid(bb0, bb1)) {
           continue;
         }
         var dy = +el.getAttribute('dy') + ((bb1.y + bb1.height) - bb0.y);
         el.setAttribute('dy', dy);
       }
-      elements.push(el);
-    }.bind(this));
-
-    elements.forEach(function(element) {
-      this._shrinkElement(element, width, height);
+      this._shrinkElement(el, width, height);
     }.bind(this));
   };
 
