@@ -95,13 +95,25 @@ body {
 }
 
 .clock .center-spin {
-  fill: gray;
   font-family: 'Courier New';
   display: none;
 }
 
+.clock .center-time {
+  fill: gray;
+}
+
+.clock .center-time.active {
+  fill: lightgray;
+}
+
 .clock .center-reset {
   cursor: pointer;
+  fill: gray;
+}
+
+.clock .center-reset.active {
+  fill: lightgray;
 }
 
 .clock.spin .circle {

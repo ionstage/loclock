@@ -62,22 +62,7 @@
       this._updatePoints();
     }.bind(this));
 
-    this._timeOffsetButton.on('pointerdown', function(event) {
-      event.stopPropagation();
-      this._timeOffsetButton.el.setAttribute('fill', 'lightgray');
-    }.bind(this));
-    this._timeOffsetButton.on('pointerup', function() {
-      this._timeOffsetButton.el.setAttribute('fill', 'gray');
-    }.bind(this));
     this._timeOffsetButton.on('click', this._toggleTimeOffset.bind(this));
-
-    this._resetButton.on('pointerdown', function(event) {
-      event.stopPropagation();
-      this._resetButton.el.setAttribute('fill', 'lightgray');
-    }.bind(this));
-    this._resetButton.on('pointerup', function() {
-      this._resetButton.el.setAttribute('fill', 'gray');
-    }.bind(this));
     this._resetButton.on('click', this._reset.bind(this));
 
     setInterval(function() {
