@@ -111,19 +111,18 @@
   };
 
   Clock.prototype._globalBBox = function(bb) {
-    var stageElement = this.el;
-    var lpt = stageElement.createSVGPoint();
-    lpt.x = bb.x;
-    lpt.y = bb.y;
-    var pt0 = lpt.matrixTransform(stageElement.getCTM() || stageElement.getScreenCTM());
-    lpt.x = bb.x + bb.width;
-    lpt.y = bb.y + bb.height;
-    var pt1 = lpt.matrixTransform(stageElement.getCTM() || stageElement.getScreenCTM());
+    var p = this.el.createSVGPoint();
+    p.x = bb.x;
+    p.y = bb.y;
+    var p0 = p.matrixTransform(this.el.getCTM() || this.el.getScreenCTM());
+    p.x = bb.x + bb.width;
+    p.y = bb.y + bb.height;
+    var p1 = p.matrixTransform(this.el.getCTM() || this.el.getScreenCTM());
     return {
-      x: pt0.x,
-      y: pt0.y,
-      width: pt1.x - pt0.x,
-      height: pt1.y - pt0.y,
+      x: p0.x,
+      y: p0.y,
+      width: p1.x - p0.x,
+      height: p1.y - p0.y,
     };
   };
 
@@ -143,9 +142,9 @@
       var text = (i % 3 === 0) ? String((i - 6 >= 0) ? i - 6 : i + 18) : '・';
       var fontSize = (text === '・') ? r / 12 : r / 4.5;
       var rate = (text === '18' || text === '15' || text === '21') ? 0.04 : 0;
-      var difX = r * (0.8 - Math.abs(rate * Math.cos(deg))) * Math.cos(deg);
-      var difY = r * (0.8 - Math.abs(rate * Math.sin(deg))) * Math.sin(deg);
-      texts.push('<text x="' + (cx + difX).toFixed(1) + '" y="' + (cy + difY).toFixed(1) + '" font-size="' + fontSize.toFixed() + '" class="text">' + text + '</text>');
+      var dx = r * (0.8 - Math.abs(rate * Math.cos(deg))) * Math.cos(deg);
+      var dy = r * (0.8 - Math.abs(rate * Math.sin(deg))) * Math.sin(deg);
+      texts.push('<text x="' + (cx + dx).toFixed(1) + '" y="' + (cy + dy).toFixed(1) + '" font-size="' + fontSize.toFixed() + '" class="text">' + text + '</text>');
       deg += dif;
     }
     texts.push('</g></svg>');
@@ -153,13 +152,13 @@
   };
 
   Clock.prototype._adjustBoard = function(board) {
-    Array.prototype.slice.call(board.childNodes).forEach(function(element) {
-      if (element.nodeName !== 'text') {
+    Array.prototype.slice.call(board.childNodes).forEach(function(el) {
+      if (el.nodeName !== 'text') {
         return
       }
-      var textBBox = element.getBBox();
-      var dy = +element.getAttribute('y') - (textBBox.y + textBBox.height / 2);
-      element.setAttribute('dy', dy);
+      var bb = el.getBBox();
+      var dy = +el.getAttribute('y') - (bb.y + bb.height / 2);
+      el.setAttribute('dy', dy);
     });
   };
 
@@ -198,36 +197,33 @@
               (bb0.y >= bb1.y && bb1.y + bb1.height >= bb0.y));
   };
 
-  Clock.prototype._shrinkElement = function(element, width, height) {
-    var bb = element.getBBox();
+  Clock.prototype._shrinkElement = function(el, width, height) {
+    var bb = el.getBBox();
     var gbb = this._globalBBox(bb);
-    var pattern = 0;
-
-    if ((gbb.x < 0 && (pattern = 1)) ||
-        (gbb.x + gbb.width > width && (pattern = 2)) ||
-        (gbb.y < 0 && (pattern = 3)) ||
-        (gbb.y + gbb.height > height && (pattern = 4))) {
-      element.setAttribute('font-size', +element.getAttribute('font-size') / 1.5);
-
-      var newbb = element.getBBox();
+    var c = 0;
+    if ((gbb.x < 0 && (c = 1)) ||
+        (gbb.x + gbb.width > width && (c = 2)) ||
+        (gbb.y < 0 && (c = 3)) ||
+        (gbb.y + gbb.height > height && (c = 4))) {
+      el.setAttribute('font-size', +el.getAttribute('font-size') / 1.5);
+      var newbb = el.getBBox();
       var value;
-
-      switch (pattern) {
+      switch (c) {
         case 1:
           value = bb.x + bb.width - (newbb.x + newbb.width);
-          element.setAttribute('x', +element.getAttribute('x') + value);
+          el.setAttribute('x', +el.getAttribute('x') + value);
           break;
         case 2:
           value = newbb.x - bb.x;
-          element.setAttribute('x', +element.getAttribute('x') - value);
+          el.setAttribute('x', +el.getAttribute('x') - value);
           break;
         case 3:
           value = bb.y + bb.height - (newbb.y + newbb.height);
-          element.setAttribute('y', +element.getAttribute('y') + value);
+          el.setAttribute('y', +el.getAttribute('y') + value);
           break;
         case 4:
           value = newbb.y - bb.y;
-          element.setAttribute('y', +element.getAttribute('y') - value);
+          el.setAttribute('y', +el.getAttribute('y') - value);
           break;
         default:
           break;
@@ -236,23 +232,23 @@
   };
 
   Clock.prototype._adjustPointTexts = function(points, cx, cy, r, width, height) {
-    var items = Array.prototype.slice.call(points.childNodes).reduce(function(ret, element) {
-      if (element.nodeName !== 'text') {
+    var items = Array.prototype.slice.call(points.childNodes).reduce(function(ret, el) {
+      if (el.nodeName !== 'text') {
         return ret;
       }
-      var bb = element.getBBox();
-      var deg = +element.getAttribute('data-deg');
-      var dy = +element.getAttribute('y') - (bb.y + bb.height / 2);
+      var bb = el.getBBox();
+      var deg = +el.getAttribute('data-deg');
+      var dy = +el.getAttribute('y') - (bb.y + bb.height / 2);
       var sin = Math.sin(deg);
       var cos = Math.cos(deg);
-      element.setAttribute('x', cx + (r * 1.125 + bb.width / 2 + (bb.height / 2) * sin * sin) * cos);
-      element.setAttribute('y', cy + (r * 1.125 + bb.height / 2 + (bb.width / 8) * cos * cos) * sin);
-      element.setAttribute('dy', dy);
-      bb = element.getBBox();
+      el.setAttribute('x', cx + (r * 1.125 + bb.width / 2 + (bb.height / 2) * sin * sin) * cos);
+      el.setAttribute('y', cy + (r * 1.125 + bb.height / 2 + (bb.width / 8) * cos * cos) * sin);
+      el.setAttribute('dy', dy);
+      bb = el.getBBox();
       if (bb.y + bb.height / 2 < cy) {
-        ret.upper.push([element, bb]);
+        ret.upper.push([el, bb]);
       } else {
-        ret.down.push([element, bb]);
+        ret.down.push([el, bb]);
       }
       return ret;
     }, { upper: [], down: [] });
