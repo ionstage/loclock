@@ -190,11 +190,8 @@
     return dom.render(texts.join('')).childNodes[0];
   };
 
-  Clock.prototype._isBBoxOverlaid = function(bb0, bb1) {
-    return ((bb0.x <= bb1.x && bb0.x + bb0.width >= bb1.x) ||
-              (bb0.x >= bb1.x && bb1.x + bb1.width >= bb0.x)) &&
-            ((bb0.y <= bb1.y && bb0.y + bb0.height >= bb1.y) ||
-              (bb0.y >= bb1.y && bb1.y + bb1.height >= bb0.y));
+  Clock.prototype._hasIntersect = function(a, b) {
+    return (a.x + a.width >= b.x) && (b.x + b.width >= a.x) && (a.y + a.height >= b.y) && (b.y + b.height >= a.y);
   };
 
   Clock.prototype._shrinkElement = function(el, width, height) {
@@ -260,7 +257,7 @@
       var bb0 = item[1];
       for (var j = i + 1, len = array.length; j < len; j++) {
         var bb1 = array[j][1];
-        if (!this._isBBoxOverlaid(bb0, bb1)) {
+        if (!this._hasIntersect(bb0, bb1)) {
           continue;
         }
         var dy = +el.getAttribute('dy') - ((bb0.y + bb0.height) - bb1.y);
@@ -276,7 +273,7 @@
       var bb0 = item[1];
       for (var j = i + 1, len = array.length; j < len; j++) {
         var bb1 = array[j][1];
-        if (!this._isBBoxOverlaid(bb0, bb1)) {
+        if (!this._hasIntersect(bb0, bb1)) {
           continue;
         }
         var dy = +el.getAttribute('dy') + ((bb1.y + bb1.height) - bb0.y);
