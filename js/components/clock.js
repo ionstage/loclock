@@ -228,6 +228,7 @@
       el.setAttribute('x', cx + (r * 1.125 + bb.width / 2 + (bb.height / 2) * sin * sin) * cos);
       el.setAttribute('y', cy + (r * 1.125 + bb.height / 2 + (bb.width / 8) * cos * cos) * sin);
       el.setAttribute('dy', dy);
+      this._shrinkElement(el, width, height);
       bb = el.getBBox();
       if (bb.y + bb.height / 2 < cy) {
         ret.upper.push([el, bb]);
@@ -235,7 +236,7 @@
         ret.down.push([el, bb]);
       }
       return ret;
-    }, { upper: [], down: [] });
+    }.bind(this), { upper: [], down: [] });
 
     items.upper.sort(function(a, b) {
       return a[1].y - b[1].y;
@@ -250,7 +251,6 @@
         var dy = +el.getAttribute('dy') - ((bb0.y + bb0.height) - bb1.y);
         el.setAttribute('dy', dy);
       }
-      this._shrinkElement(el, width, height);
     }.bind(this));
 
     items.down.sort(function(a, b) {
@@ -266,7 +266,6 @@
         var dy = +el.getAttribute('dy') + ((bb1.y + bb1.height) - bb0.y);
         el.setAttribute('dy', dy);
       }
-      this._shrinkElement(el, width, height);
     }.bind(this));
   };
 
