@@ -238,7 +238,7 @@
     }, { upper: [], down: [] });
 
     items.upper.sort(function(a, b) {
-      return (a[1].y < b[1].y) ? -1 : 1;
+      return a[1].y - b[1].y;
     }).forEach(function(item, i, array) {
       var el = item[0];
       var bb0 = item[1];
@@ -254,7 +254,7 @@
     }.bind(this));
 
     items.down.sort(function(a, b) {
-      return (a[1].y > b[1].y) ? -1 : 1;
+      return b[1].y - a[1].y;
     }).forEach(function(item, i, array) {
       var el = item[0];
       var bb0 = item[1];
