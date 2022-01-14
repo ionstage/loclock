@@ -46,22 +46,9 @@
     this._adjustBoard(this._boardElement);
 
     this._attrs.set('dragEnabled', true);
-    this._locations.on('reset', function(locations) {
-      this._time = Date.now();
-      locations.forEach(function(location) {
-        location.updateTimezoneOffset(this._time);
-      }.bind(this));
-      this._updatePoints();
-    }.bind(this));
-    this._locations.on('add', function(location) {
-      this._time = Date.now();
-      location.updateTimezoneOffset(this._time);
-      this._updatePoints();
-    }.bind(this));
-    this._locations.on('remove', function() {
-      this._updatePoints();
-    }.bind(this));
-
+    this._locations.on('reset', this._resetLocations.bind(this));
+    this._locations.on('add', this._addLocation.bind(this));
+    this._locations.on('remove', this._removeLocation.bind(this));
     this._timeOffsetButton.on('click', this._toggleTimeOffset.bind(this));
     this._resetButton.on('click', this._reset.bind(this));
 
@@ -281,6 +268,24 @@
       }
       this._shrinkElement(el, width, height);
     }.bind(this));
+  };
+
+  Clock.prototype._resetLocations = function(locations) {
+    this._time = Date.now();
+    locations.forEach(function(location) {
+      location.updateTimezoneOffset(this._time);
+    }.bind(this));
+    this._updatePoints();
+  };
+
+  Clock.prototype._addLocation = function(location) {
+    this._time = Date.now();
+    location.updateTimezoneOffset(this._time);
+    this._updatePoints();
+  };
+
+  Clock.prototype._removeLocation = function() {
+    this._updatePoints();
   };
 
   Clock.prototype._toggleTimeOffset = function() {
