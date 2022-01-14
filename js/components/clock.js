@@ -271,7 +271,6 @@
   };
 
   Clock.prototype._resetLocations = function(locations) {
-    this._time = Date.now();
     locations.forEach(function(location) {
       location.updateTimezoneOffset(this._time);
     }.bind(this));
@@ -279,7 +278,6 @@
   };
 
   Clock.prototype._addLocation = function(location) {
-    this._time = Date.now();
     location.updateTimezoneOffset(this._time);
     this._updatePoints();
   };
