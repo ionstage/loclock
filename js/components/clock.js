@@ -51,14 +51,7 @@
     this._locations.on('remove', this._removeLocation.bind(this));
     this._timeOffsetButton.on('click', this._toggleTimeOffset.bind(this));
     this._resetButton.on('click', this._reset.bind(this));
-
-    setInterval(function() {
-      this._time = Date.now();
-      this._locations.forEach(function(location) {
-        location.updateTimezoneOffset(this._time);
-      }.bind(this));
-      this._updatePoints();
-    }.bind(this), 30000);
+    setInterval(this._updateTime.bind(this), 30000);
   };
 
   Clock.prototype.on = function() {
@@ -310,6 +303,14 @@
     }.bind(this);
     this._draggable.disable();
     requestAnimationFrame(callback);
+  };
+
+  Clock.prototype._updateTime = function() {
+    this._time = Date.now();
+    this._locations.forEach(function(location) {
+      location.updateTimezoneOffset(this._time);
+    }.bind(this));
+    this._updatePoints();
   };
 
   Clock.prototype._dragstart = function(event) {
