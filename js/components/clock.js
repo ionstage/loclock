@@ -220,41 +220,38 @@
       el.setAttribute('dy', dy);
       this._shrinkElement(el, width, height);
       bb = el.getBBox();
-      if (bb.y + bb.height / 2 < cy) {
-        ret.upper.push([el, bb]);
-      } else {
-        ret.down.push([el, bb]);
-      }
+      var array = (bb.y + bb.height / 2 < cy ? ret.upper : ret.down);
+      array.push({ el: el, bb: bb });
       return ret;
     }.bind(this), { upper: [], down: [] });
 
     items.upper.sort(function(a, b) {
-      return a[1].y - b[1].y;
+      return b.bb.y - a.bb.y;
     }).forEach(function(item, i, array) {
-      var el = item[0];
-      var bb0 = item[1];
+      var bb0 = item.bb;
       for (var j = i + 1, len = array.length; j < len; j++) {
-        var bb1 = array[j][1];
-        if (!this._hasIntersect(bb0, bb1)) {
-          continue;
+        var bb1 = array[j].bb;
+        if (this._hasIntersect(bb0, bb1)) {
+          var el = array[j].el;
+          var dy = +el.getAttribute('dy') - ((bb1.y + bb1.height) - bb0.y);
+          el.setAttribute('dy', dy);
+          array[j].bb = el.getBBox();
         }
-        var dy = +el.getAttribute('dy') - ((bb0.y + bb0.height) - bb1.y);
-        el.setAttribute('dy', dy);
       }
     }.bind(this));
 
     items.down.sort(function(a, b) {
-      return b[1].y - a[1].y;
+      return a.bb.y - b.bb.y;
     }).forEach(function(item, i, array) {
-      var el = item[0];
-      var bb0 = item[1];
+      var bb0 = item.bb;
       for (var j = i + 1, len = array.length; j < len; j++) {
-        var bb1 = array[j][1];
-        if (!this._hasIntersect(bb0, bb1)) {
-          continue;
+        var bb1 = array[j].bb;
+        if (this._hasIntersect(bb0, bb1)) {
+          var el = array[j].el;
+          var dy = +el.getAttribute('dy') + ((bb0.y + bb0.height) - bb1.y);
+          el.setAttribute('dy', dy);
+          array[j].bb = el.getBBox();
         }
-        var dy = +el.getAttribute('dy') + ((bb1.y + bb1.height) - bb0.y);
-        el.setAttribute('dy', dy);
       }
     }.bind(this));
   };
