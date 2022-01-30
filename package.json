@@ -13,7 +13,7 @@
   "dependencies": {
     "iscroll": "^5.1.3",
     "js-base64": "^2.1.8",
-    "moment-timezone": "^0.5.31"
+    "moment-timezone": "^0.5.34"
   },
   "devDependencies": {
     "browser-sync": "^2.7.1",
