@@ -37,7 +37,19 @@
     return keys.map(function(key) {
       return Location.get(key);
     }).sort(function(a, b) {
-      return (a.name < b.name || a.key === Location.KEY_CURRENT_LOCATION ? -1 : 1);
+      if (a.key === Location.KEY_CURRENT_LOCATION) {
+        return -1;
+      }
+      if (b.key === Location.KEY_CURRENT_LOCATION) {
+        return 1;
+      }
+      if (a.name < b.name) {
+        return -1;
+      }
+      if (a.name > b.name) {
+        return 1;
+      }
+      return 0;
     });
   };
 
