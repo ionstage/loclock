@@ -84,7 +84,7 @@
     var m = ('00' + Math.abs(timeOffset % 60)).slice(-2);
     var text = (timeOffset >= 0 ? '+' : '-') + h + ':' + m;
     this._timeOffsetButton.el.textContent = text;
-    this.el.setAttribute('class', (timeOffset || this._isDragging ? 'clock spin' : 'clock'));
+    dom.toggleClass(this.el, 'spin', timeOffset || this._isDragging);
   };
 
   Clock.prototype._globalBBox = function(bb) {
