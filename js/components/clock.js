@@ -133,7 +133,7 @@
       }
       var bb = el.getBBox();
       var dy = +el.getAttribute('y') - (bb.y + bb.height / 2);
-      el.setAttribute('dy', dy);
+      el.setAttribute('dy', dy.toFixed(1));
     });
   };
 
@@ -158,7 +158,7 @@
       }
       var bb = el.getBBox();
       var dy = +el.getAttribute('y') - (bb.y + bb.height / 2);
-      el.setAttribute('dy', dy);
+      el.setAttribute('dy', dy.toFixed(1));
     });
   };
 
@@ -184,7 +184,7 @@
       var text = point.text;
       var deg = point.deg;
       texts.push('<circle cx="' + (cx + r * Math.cos(deg)).toFixed(1) + '" cy="' + (cy + r * Math.sin(deg)).toFixed(1) + '" r="' + (r / 20).toFixed(1) + '" stroke-width="' + (r / 90).toFixed(1) + '" class="circle"></circle>');
-      texts.push('<text x="' + (cx + r * Math.cos(deg)) + '" y="' + (cy + r * Math.sin(deg)) + '" font-size="' + (r / 8).toFixed() + '" class="text" data-deg="' + deg + '">' + text + '</text>');
+      texts.push('<text x="' + (cx + r * Math.cos(deg)).toFixed(1) + '" y="' + (cy + r * Math.sin(deg)).toFixed(1) + '" font-size="' + (r / 8).toFixed() + '" class="text" data-deg="' + deg + '">' + text + '</text>');
     }
     texts.push('</g></svg>');
     return dom.render(texts.join('')).childNodes[0];
@@ -208,19 +208,19 @@
       switch (c) {
         case 1:
           value = bb.x + bb.width - (newbb.x + newbb.width);
-          el.setAttribute('x', +el.getAttribute('x') + value);
+          el.setAttribute('x', (+el.getAttribute('x') + value).toFixed(1));
           break;
         case 2:
           value = newbb.x - bb.x;
-          el.setAttribute('x', +el.getAttribute('x') - value);
+          el.setAttribute('x', (+el.getAttribute('x') - value).toFixed(1));
           break;
         case 3:
           value = bb.y + bb.height - (newbb.y + newbb.height);
-          el.setAttribute('y', +el.getAttribute('y') + value);
+          el.setAttribute('y', (+el.getAttribute('y') + value).toFixed(1));
           break;
         case 4:
           value = newbb.y - bb.y;
-          el.setAttribute('y', +el.getAttribute('y') - value);
+          el.setAttribute('y', (+el.getAttribute('y') - value).toFixed(1));
           break;
         default:
           break;
@@ -238,9 +238,11 @@
       var dy = +el.getAttribute('y') - (bb.y + bb.height / 2);
       var sin = Math.sin(deg);
       var cos = Math.cos(deg);
-      el.setAttribute('x', cx + (r * 1.125 + bb.width / 2 + (bb.height / 2) * sin * sin) * cos);
-      el.setAttribute('y', cy + (r * 1.125 + bb.height / 2 + (bb.width / 8) * cos * cos) * sin);
-      el.setAttribute('dy', dy);
+      var x = cx + (r * 1.125 + bb.width / 2 + (bb.height / 2) * sin * sin) * cos;
+      var y = cy + (r * 1.125 + bb.height / 2 + (bb.width / 8) * cos * cos) * sin;
+      el.setAttribute('x', x.toFixed(1));
+      el.setAttribute('y', y.toFixed(1));
+      el.setAttribute('dy', dy.toFixed(1));
       this._shrinkElement(el, width, height);
       bb = el.getBBox();
       var array = (bb.y + bb.height / 2 < cy ? ret.upper : ret.down);
@@ -257,7 +259,7 @@
         if (this._hasIntersect(bb0, bb1)) {
           var el = array[j].el;
           var dy = +el.getAttribute('dy') - ((bb1.y + bb1.height) - bb0.y);
-          el.setAttribute('dy', dy);
+          el.setAttribute('dy', dy.toFixed(1));
           array[j].bb = el.getBBox();
         }
       }
@@ -272,7 +274,7 @@
         if (this._hasIntersect(bb0, bb1)) {
           var el = array[j].el;
           var dy = +el.getAttribute('dy') + ((bb0.y + bb0.height) - bb1.y);
-          el.setAttribute('dy', dy);
+          el.setAttribute('dy', dy.toFixed(1));
           array[j].bb = el.getBBox();
         }
       }
