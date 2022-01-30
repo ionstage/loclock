@@ -85,7 +85,6 @@ body {
 }
 
 .clock .text {
-  dominant-baseline: central;
   text-anchor: middle;
 }
 
@@ -96,7 +95,8 @@ body {
 
 .clock .center-spin {
   font-family: 'Courier New';
-  display: none;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 .clock .center-time {
@@ -125,5 +125,6 @@ body {
 }
 
 .clock.spin .center-spin {
-  display: inline;
+  pointer-events: auto;
+  visibility: visible;
 }

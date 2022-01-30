@@ -19,9 +19,10 @@
     this._timeOffset = 0;
     this._isRightHanded = true;
     this._boardElement = this._createBoard(this._cx, this._cy, this._r);
+    this._centerElement = this._createCenter(this._cx, this._cy, this._r);
     this._pointsElement = this._createPoints(this._cx, this._cy, this._r, this._locations, this._time, this._timeOffset);
-    this._timeOffsetButton = new Button(this._boardElement.querySelector('.center-time'));
-    this._resetButton = new Button(this._boardElement.querySelector('.center-reset'));
+    this._timeOffsetButton = new Button(this._centerElement.querySelector('.center-time'));
+    this._resetButton = new Button(this._centerElement.querySelector('.center-reset'));
     this._draggable = new Draggable(this.el, {
       onstart: this._dragstart.bind(this),
       onmove: this._dragmove.bind(this),
@@ -47,6 +48,8 @@
 
     this.el.appendChild(this._boardElement);
     this._adjustBoard(this._boardElement);
+    this.el.appendChild(this._centerElement);
+    this._adjustCenter(this._centerElement);
     this.el.appendChild(this._pointsElement);
     this._attrs.set('dragEnabled', true);
   };
@@ -107,11 +110,6 @@
     var texts = [
       '<svg><g>',
         '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" stroke-width="' + (r / 30).toFixed(1) + '" class="circle"></circle>',
-        '<circle cx="' + cx + '" cy="' + cy + '" r="' + (r / 45).toFixed(1) + '" fill="black" class="center-point"></circle>',
-        '<g class="center-spin">',
-          '<text x="' + (cx - 11) + '" y="' + (cy - 16) + '" font-size="' + (r / 6) + '" class="text center-time">+00:00</text>',
-          '<text x="' + cx + '" y="' + (cy + 32) + '" font-size="' + (r / 10) + '" class="text center-reset">RESET</text>',
-        '</g>',
     ];
     var dif = Math.PI / 12;
     var deg = 0;
@@ -130,6 +128,31 @@
 
   Clock.prototype._adjustBoard = function(board) {
     Array.prototype.slice.call(board.childNodes).forEach(function(el) {
+      if (el.nodeName !== 'text') {
+        return
+      }
+      var bb = el.getBBox();
+      var dy = +el.getAttribute('y') - (bb.y + bb.height / 2);
+      el.setAttribute('dy', dy);
+    });
+  };
+
+  Clock.prototype._createCenter = function(cx, cy, r) {
+    var texts = [
+      '<svg><g>',
+        '<circle cx="' + cx + '" cy="' + cy + '" r="' + (r / 45).toFixed(1) + '" fill="black" class="center-point"></circle>',
+        '<g class="center-spin">',
+          '<text x="' + (cx - 11) + '" y="' + (cy - 16) + '" font-size="' + (r / 6) + '" class="text center-time">+00:00</text>',
+          '<text x="' + cx + '" y="' + (cy + 32) + '" font-size="' + (r / 10) + '" class="text center-reset">RESET</text>',
+        '</g>',
+    ];
+    texts.push('</g></svg>');
+    return dom.render(texts.join('')).childNodes[0];
+  };
+
+  Clock.prototype._adjustCenter = function(center) {
+    var spin = center.querySelector('.center-spin');
+    Array.prototype.slice.call(spin.childNodes).forEach(function(el) {
       if (el.nodeName !== 'text') {
         return
       }
