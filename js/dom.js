@@ -10,10 +10,24 @@
   };
 
   dom.toggleClass = function(el, className, force) {
-    if (force) {
-      el.classList.add(className);
+    if (el.classList) {
+      if (force) {
+        el.classList.add(className);
+      } else {
+        el.classList.remove(className);
+      }
     } else {
-      el.classList.remove(className);
+      var classNames = el.getAttribute('class').split(' ');
+      var index = classNames.indexOf(className);
+      if (force && index === -1) {
+        // add class
+        classNames.push(className);
+        el.setAttribute('class', classNames.join(' '));
+      } else if (!force && index !== -1) {
+        // remove class
+        classNames.splice(index, 1);
+        el.setAttribute('class', classNames.join(' '));
+      }
     }
   };
 

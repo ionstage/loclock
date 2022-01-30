@@ -1,6 +1,7 @@
 (function(app) {
   'use strict';
 
+  var dom = app.dom || require('../dom.js');
   var Draggable = app.Draggable || require('../draggable.js');
   var Events = app.Events || require('../base/events.js');
 
@@ -27,7 +28,7 @@
     event.preventDefault();
     event.stopPropagation();
     this._dragTarget = event.target;
-    this.el.classList.add('active');
+    dom.toggleClass(this.el, 'active', true);
   };
 
   Button.prototype._onend = function(event) {
@@ -35,7 +36,7 @@
       this._events.emit('click');
     }
     this._dragTarget = null;
-    this.el.classList.remove('active');
+    dom.toggleClass(this.el, 'active', false);
   };
 
   if (typeof module !== 'undefined' && module.exports) {
