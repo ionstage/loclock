@@ -13,21 +13,17 @@
   <link rel="icon" sizes="192x192" href="images/icon.png">
   <link rel="apple-touch-icon-precomposed" href="images/icon.png">
 </head>
-<body class="unselectable">
-  <div id="container">
-    <div id="list-container">
-      <div id="list"></div>
-    </div>
-    <div id="clock-container">
-      <svg id="bars">
-        <g transform="translate(13,16)">
-          <line x1="0" y1="0" x2="22" y2="0" />
-          <line x1="0" y1="8" x2="22" y2="8" />
-          <line x1="0" y1="16" x2="22" y2="16" />
-        </g>
-      </svg>
-      <svg id="clock" viewBox="0,0,720,720"></svg>
-    </div>
+<body>
+  <div class="main">
+    <div class="list"><div></div></div>
+    <svg class="menu-button">
+      <g stroke="black" stroke-linecap="round" stroke-width="3" transform="translate(13,16)">
+        <line x1="0" y1="0" x2="22" y2="0" />
+        <line x1="0" y1="8" x2="22" y2="8" />
+        <line x1="0" y1="16" x2="22" y2="16" />
+      </g>
+    </svg>
+    <svg class="clock" viewBox="0,0,720,720"></svg>
   </div>
   <script src="js/bundle.min.js"></script>
   <script src="js/app.min.js"></script>
