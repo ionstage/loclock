@@ -128,3 +128,7 @@ body {
   pointer-events: auto;
   visibility: visible;
 }
+
+.dialog {
+  display: none;
+}
