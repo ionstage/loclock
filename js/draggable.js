@@ -3,90 +3,90 @@
 
   var Draggable = function(el, props) {
     this.el = el;
-    this.onstart = props.onstart;
-    this.onmove = props.onmove;
-    this.onend = props.onend;
-    this.onmousedown = this.onmousedown.bind(this);
-    this.onmousemove = this.onmousemove.bind(this);
-    this.onmouseup = this.onmouseup.bind(this);
-    this.ontouchstart = this.ontouchstart.bind(this);
-    this.ontouchmove = this.ontouchmove.bind(this);
-    this.ontouchend = this.ontouchend.bind(this);
-    this.identifier = null;
-    this.startPageX = 0;
-    this.startPageY = 0;
+    this._onstart = props.onstart;
+    this._onmove = props.onmove;
+    this._onend = props.onend;
+    this._onmousedown = this._onmousedown.bind(this);
+    this._onmousemove = this._onmousemove.bind(this);
+    this._onmouseup = this._onmouseup.bind(this);
+    this._ontouchstart = this._ontouchstart.bind(this);
+    this._ontouchmove = this._ontouchmove.bind(this);
+    this._ontouchend = this._ontouchend.bind(this);
+    this._identifier = null;
+    this._startPageX = 0;
+    this._startPageY = 0;
   };
 
-  Draggable.supportsTouch = function() {
+  Draggable._supportsTouch = function() {
     return 'ontouchstart' in window || (typeof DocumentTouch !== 'undefined' && document instanceof DocumentTouch);
   };
 
   Draggable.prototype.enable = function() {
-    var type = (Draggable.supportsTouch() ? 'touchstart' : 'mousedown');
-    this.el.addEventListener(type, this['on' + type], { passive: false });
+    var type = (Draggable._supportsTouch() ? 'touchstart' : 'mousedown');
+    this.el.addEventListener(type, this['_on' + type], { passive: false });
   };
 
   Draggable.prototype.disable = function() {
-    var supportsTouch = Draggable.supportsTouch();
+    var supportsTouch = Draggable._supportsTouch();
     var startType = (supportsTouch ? 'touchstart' : 'mousedown');
     var moveType = (supportsTouch ? 'touchmove' : 'mousemove');
     var endType = (supportsTouch ? 'touchend' : 'mouseup');
-    this.el.removeEventListener(startType, this['on' + startType], { passive: false });
-    document.removeEventListener(moveType, this['on' + moveType]);
-    document.removeEventListener(endType, this['on' + endType]);
+    this.el.removeEventListener(startType, this['_on' + startType], { passive: false });
+    document.removeEventListener(moveType, this['_on' + moveType]);
+    document.removeEventListener(endType, this['_on' + endType]);
   };
 
-  Draggable.prototype.onmousedown = function(event) {
-    this.startPageX = event.pageX;
-    this.startPageY = event.pageY;
-    this.onstart.call(null, event);
-    document.addEventListener('mousemove', this.onmousemove);
-    document.addEventListener('mouseup', this.onmouseup);
+  Draggable.prototype._onmousedown = function(event) {
+    this._startPageX = event.pageX;
+    this._startPageY = event.pageY;
+    this._onstart.call(null, event);
+    document.addEventListener('mousemove', this._onmousemove);
+    document.addEventListener('mouseup', this._onmouseup);
   };
 
-  Draggable.prototype.onmousemove = function(event) {
-    var dx = event.pageX - this.startPageX;
-    var dy = event.pageY - this.startPageY;
-    this.onmove.call(null, dx, dy, event);
+  Draggable.prototype._onmousemove = function(event) {
+    var dx = event.pageX - this._startPageX;
+    var dy = event.pageY - this._startPageY;
+    this._onmove.call(null, dx, dy, event);
   };
 
-  Draggable.prototype.onmouseup = function(event) {
-    document.removeEventListener('mousemove', this.onmousemove);
-    document.removeEventListener('mouseup', this.onmouseup);
-    this.onend.call(null, event);
+  Draggable.prototype._onmouseup = function(event) {
+    document.removeEventListener('mousemove', this._onmousemove);
+    document.removeEventListener('mouseup', this._onmouseup);
+    this._onend.call(null, event);
   };
 
-  Draggable.prototype.ontouchstart = function(event) {
+  Draggable.prototype._ontouchstart = function(event) {
     if (event.touches.length > 1) {
       return;
     }
     var touch = event.changedTouches[0];
-    this.identifier = touch.identifier;
-    this.startPageX = touch.pageX;
-    this.startPageY = touch.pageY;
-    this.onstart.call(null, event);
-    document.addEventListener('touchmove', this.ontouchmove);
-    document.addEventListener('touchend', this.ontouchend);
+    this._identifier = touch.identifier;
+    this._startPageX = touch.pageX;
+    this._startPageY = touch.pageY;
+    this._onstart.call(null, event);
+    document.addEventListener('touchmove', this._ontouchmove);
+    document.addEventListener('touchend', this._ontouchend);
   };
 
-  Draggable.prototype.ontouchmove = function(event) {
+  Draggable.prototype._ontouchmove = function(event) {
     var touch = event.changedTouches[0];
-    if (touch.identifier !== this.identifier) {
+    if (touch.identifier !== this._identifier) {
       return;
     }
-    var dx = touch.pageX - this.startPageX;
-    var dy = touch.pageY - this.startPageY;
-    this.onmove.call(null, dx, dy, event);
+    var dx = touch.pageX - this._startPageX;
+    var dy = touch.pageY - this._startPageY;
+    this._onmove.call(null, dx, dy, event);
   };
 
-  Draggable.prototype.ontouchend = function(event) {
+  Draggable.prototype._ontouchend = function(event) {
     var touch = event.changedTouches[0];
-    if (touch.identifier !== this.identifier) {
+    if (touch.identifier !== this._identifier) {
       return;
     }
-    document.removeEventListener('touchmove', this.ontouchmove);
-    document.removeEventListener('touchend', this.ontouchend);
-    this.onend.call(null, event);
+    document.removeEventListener('touchmove', this._ontouchmove);
+    document.removeEventListener('touchend', this._ontouchend);
+    this._onend.call(null, event);
   };
 
   if (typeof module !== 'undefined' && module.exports) {
