@@ -130,6 +130,7 @@ body {
 }
 
 .dialog {
+  background-color: rgba(0, 0, 0, .6);
   display: none;
   height: 100%;
   position: fixed;
