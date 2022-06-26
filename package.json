@@ -21,6 +21,7 @@
     "city-timezones": "^1.2.0",
     "clean-css-cli": "^4.3.0",
     "eslint": "^7.12.1",
+    "font-awesome-svg-png": "^1.2.2",
     "uglify-js": "^2.4.21"
   },
   "repository": {
