@@ -129,6 +129,16 @@ body {
   visibility: visible;
 }
 
+.settings-button {
+  cursor: pointer;
+  height: 48px;
+  position: absolute;
+  right: 0;
+  touch-action: manipulation;
+  width: 48px;
+  z-index: 1;
+}
+
 .dialog {
   background-color: rgba(0, 0, 0, .6);
   display: none;
