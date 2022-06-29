@@ -139,6 +139,10 @@ body {
   z-index: 1;
 }
 
+.settings-button > * {
+  pointer-events: none;
+}
+
 .dialog {
   background-color: rgba(0, 0, 0, .6);
   display: none;
