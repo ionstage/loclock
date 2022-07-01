@@ -139,6 +139,10 @@ body {
   z-index: 1;
 }
 
+.settings-button:active path {
+  fill: lightgray;
+}
+
 .settings-button > * {
   pointer-events: none;
 }
