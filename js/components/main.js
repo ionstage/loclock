@@ -5,11 +5,13 @@
   var Attributes = app.Attributes || require('../base/attributes.js');
   var Button = app.Button || require('./button.js');
   var Clock = app.Clock || require('./clock.js');
+  var Events = app.Events || require('../base/events.js');
   var List = app.List || require('./list.js');
 
   var Main = function(el, props) {
     this.el = el;
     this._attrs = new Attributes({ listVisible: false });
+    this._events = new Events();
     this._menuButton = new Button(this.el.querySelector('.menu-button'));
     this._settingsButton = new Button(this.el.querySelector('.settings-button'));
     this._list = new List(this.el.querySelector('.list'), props);
