@@ -58,7 +58,7 @@ body {
   z-index: 1;
 }
 
-.menu-button:active g, .list-visible .menu-button g {
+.menu-button.active > g, .list-visible .menu-button > g {
   stroke: lightgray;
 }
 
@@ -139,7 +139,7 @@ body {
   z-index: 1;
 }
 
-.settings-button:active path {
+.settings-button.active > path {
   fill: lightgray;
 }
 
