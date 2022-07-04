@@ -154,3 +154,7 @@ body {
   position: fixed;
   width: 100%;
 }
+
+.dialog.visible {
+  display: block;
+}
