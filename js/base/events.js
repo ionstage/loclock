@@ -33,10 +33,6 @@
     }
   };
 
-  Events.prototype.removeAllListeners = function() {
-    this._events = {};
-  };
-
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = Events;
   } else {

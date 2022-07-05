@@ -55,10 +55,6 @@
     return Events.prototype.off.apply(this._events, arguments);
   };
 
-  Attributes.prototype.removeAllListeners = function() {
-    return Events.prototype.removeAllListeners.apply(this._events, arguments);
-  };
-
   Attributes.prototype._set = function(name, value) {
     if (this._attrs[name] === value) {
       return false;

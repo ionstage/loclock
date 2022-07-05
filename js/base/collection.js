@@ -60,10 +60,6 @@
     return Events.prototype.off.apply(this._events, arguments);
   };
 
-  Collection.prototype.removeAllListeners = function() {
-    return Events.prototype.removeAllListeners.apply(this._events, arguments);
-  };
-
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = Collection;
   } else {
