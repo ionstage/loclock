@@ -524,6 +524,10 @@
     this._timezoneOffset = NaN;
   };
 
+  Location.prototype.match = function(key) {
+    return (key === this.key || key === this._getFullKey());
+  };
+
   Location.prototype.updateTimezoneOffset = function(time) {
     this._currentTimezoneOffset = new Date(time).getTimezoneOffset();
     this._timezoneOffset = this._createTimezoneOffset(time);
@@ -545,6 +549,10 @@
       return this._currentTimezoneOffset * (-60);
     }
     return moment.tz.zone(Location._keyToTzname(this.key)).utcOffset(time) * (-60);
+  };
+
+  Location.prototype._getFullKey = function() {
+    return (this.key.indexOf('#/') === -1 ? this.key + '#/' + this.name : this.key);
   };
 
   Location.isValidKey = function(key) {

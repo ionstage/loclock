@@ -61,7 +61,7 @@
       return isUnique && Location.isValidKey(key);
     }).reduce(function(ret, key) {
       var location = this._locations.find(function(location) {
-        return (location.key === key);
+        return location.match(key);
       });
       if (location) {
         ret.push(location);
