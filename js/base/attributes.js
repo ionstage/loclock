@@ -43,10 +43,6 @@
     this._events.emit('change', changes);
   };
 
-  Attributes.prototype.has = function(name) {
-    return (name in this._attrs);
-  };
-
   Attributes.prototype.on = function() {
     return Events.prototype.on.apply(this._events, arguments);
   };
