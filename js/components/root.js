@@ -5,6 +5,7 @@
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var Collection = app.Collection || require('../base/collection.js');
+  var Dialog = app.Dialog || require('./dialog.js');
   var Main = app.Main || require('./main.js');
   var Location = app.Location || require('../models/location.js');
 
@@ -17,6 +18,7 @@
       locations: this._locations,
       selectedLocations: this._selectedLocations,
     });
+    this._dialog = new Dialog(document.querySelector('.dialog'));
   };
 
   Root.prototype.init = function() {
