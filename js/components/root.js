@@ -45,13 +45,7 @@
       if (b.key === Location.KEY_CURRENT_LOCATION) {
         return 1;
       }
-      if (a.name < b.name) {
-        return -1;
-      }
-      if (a.name > b.name) {
-        return 1;
-      }
-      return 0;
+      return a.name.localeCompare(b.name);
     });
   };
 
