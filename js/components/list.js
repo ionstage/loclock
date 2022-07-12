@@ -71,10 +71,8 @@
     el.classList.add('list-item');
     el.setAttribute('data-key', location.key);
     var textLength = location.name.length;
-    if (textLength >= 20) {
-      el.style.fontSize = '11px';
-    } else if (textLength >= 17) {
-      el.style.fontSize = '14px';
+    if (textLength >= 17) {
+      el.style.fontSize = Math.min(5 + 150 / textLength, 16) + 'px';
     }
     el.textContent = location.name;
     return el;
