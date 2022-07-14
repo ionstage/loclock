@@ -33,6 +33,10 @@
     this._clock.resize();
   };
 
+  Main.prototype.on = function() {
+    return Events.prototype.on.apply(this._events, arguments);
+  };
+
   Main.prototype._toggleList = function() {
     var visible = !this._attrs.get('listVisible');
     this._attrs.set('listVisible', visible);
