@@ -26,6 +26,7 @@
 
     this._attrs.on('change:listVisible', this._updateListVisibility.bind(this));
     this._menuButton.on('click', this._toggleList.bind(this));
+    this._settingsButton.on('click', this._events.emit.bind(this._events, 'click:settingsButton'));
     this._clock.on('pointerdown', this._hideList.bind(this));
   };
 
