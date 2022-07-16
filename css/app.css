@@ -129,6 +129,10 @@ body {
   visibility: visible;
 }
 
+.main.list-visible .clock.spin .center-spin > * {
+  pointer-events: none;
+}
+
 .settings-button {
   cursor: pointer;
   height: 48px;
