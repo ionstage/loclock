@@ -125,7 +125,6 @@ body {
 }
 
 .clock.spin .center-spin {
-  pointer-events: auto;
   visibility: visible;
 }
 
