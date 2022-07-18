@@ -95,7 +95,6 @@ body {
 
 .clock .center-spin {
   font-family: 'Courier New';
-  pointer-events: none;
   visibility: hidden;
 }
 
