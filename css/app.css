@@ -79,11 +79,6 @@ body {
   pointer-events: none;
 }
 
-.clock .center-time,
-.clock .center-reset {
-  pointer-events: auto;
-}
-
 .clock .text {
   text-anchor: middle;
 }
@@ -125,6 +120,10 @@ body {
 
 .clock.spin .center-spin {
   visibility: visible;
+}
+
+.clock.spin .center-spin > * {
+  pointer-events: auto;
 }
 
 .main.list-visible .clock.spin .center-spin > * {
