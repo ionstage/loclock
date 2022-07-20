@@ -93,20 +93,20 @@ body {
   visibility: hidden;
 }
 
-.clock .center-time {
+.clock .time-offset-button {
   fill: gray;
 }
 
-.clock .center-time.active {
+.clock .time-offset-button.active {
   fill: lightgray;
 }
 
-.clock .center-reset {
+.clock .reset-button {
   cursor: pointer;
   fill: gray;
 }
 
-.clock .center-reset.active {
+.clock .reset-button.active {
   fill: lightgray;
 }
 
