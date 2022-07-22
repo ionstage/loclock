@@ -88,7 +88,7 @@ body {
   stroke: black;
 }
 
-.clock .button-container {
+.clock .clock-button-container {
   font-family: 'Courier New';
   visibility: hidden;
 }
@@ -118,15 +118,15 @@ body {
   visibility: hidden;
 }
 
-.clock.spin .button-container {
+.clock.spin .clock-button-container {
   visibility: visible;
 }
 
-.clock.spin .button-container > * {
+.clock.spin .clock-button-container > * {
   pointer-events: auto;
 }
 
-.main.list-visible .clock.spin .button-container > * {
+.main.list-visible .clock.spin .clock-button-container > * {
   pointer-events: none;
 }
 

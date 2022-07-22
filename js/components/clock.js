@@ -141,7 +141,7 @@
     var texts = [
       '<svg><g>',
         '<circle cx="' + cx + '" cy="' + cy + '" r="' + (r / 45).toFixed(1) + '" fill="black" class="center-point"></circle>',
-        '<g class="button-container">',
+        '<g class="clock-button-container">',
           '<text x="' + (cx - 11) + '" y="' + (cy - 16) + '" font-size="' + (r / 6) + '" class="text time-offset-button">+00:00</text>',
           '<text x="' + cx + '" y="' + (cy + 32) + '" font-size="' + (r / 10) + '" class="text reset-button">RESET</text>',
         '</g>',
@@ -151,7 +151,7 @@
   };
 
   Clock.prototype._adjustCenter = function(center) {
-    var container = center.querySelector('.button-container');
+    var container = center.querySelector('.clock-button-container');
     Array.prototype.slice.call(container.childNodes).forEach(function(el) {
       if (el.nodeName !== 'text') {
         return
