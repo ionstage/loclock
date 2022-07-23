@@ -21,8 +21,8 @@
     this._boardElement = this._createBoard(this._cx, this._cy, this._r);
     this._centerElement = this._createCenter(this._cx, this._cy, this._r);
     this._pointsElement = this._createPoints(this._cx, this._cy, this._r, this._locations, this._time, this._timeOffset);
-    this._timeOffsetButton = new Button(this._centerElement.querySelector('.time-offset-button'));
-    this._resetButton = new Button(this._centerElement.querySelector('.reset-button'));
+    this._timeOffsetButton = new Button(this._centerElement.querySelector('.clock-time-offset-button'));
+    this._resetButton = new Button(this._centerElement.querySelector('.clock-reset-button'));
     this._draggable = new Draggable(this.el, {
       onstart: this._dragstart.bind(this),
       onmove: this._dragmove.bind(this),
@@ -142,8 +142,8 @@
       '<svg><g>',
         '<circle cx="' + cx + '" cy="' + cy + '" r="' + (r / 45).toFixed(1) + '" fill="black" class="center-point"></circle>',
         '<g class="clock-button-container">',
-          '<text x="' + (cx - 11) + '" y="' + (cy - 16) + '" font-size="' + (r / 6) + '" class="text time-offset-button">+00:00</text>',
-          '<text x="' + cx + '" y="' + (cy + 32) + '" font-size="' + (r / 10) + '" class="text reset-button">RESET</text>',
+          '<text x="' + (cx - 11) + '" y="' + (cy - 16) + '" font-size="' + (r / 6) + '" class="text clock-time-offset-button">+00:00</text>',
+          '<text x="' + cx + '" y="' + (cy + 32) + '" font-size="' + (r / 10) + '" class="text clock-reset-button">RESET</text>',
         '</g>',
     ];
     texts.push('</g></svg>');
