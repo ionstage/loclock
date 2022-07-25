@@ -77,7 +77,7 @@ body {
   pointer-events: none;
 }
 
-.clock .text {
+.clock .clock-text {
   text-anchor: middle;
 }
 
