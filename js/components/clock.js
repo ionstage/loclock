@@ -109,7 +109,7 @@
   Clock.prototype._createBoard = function(cx, cy, r) {
     var texts = [
       '<svg><g>',
-        '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" stroke-width="' + (r / 30).toFixed(1) + '" class="circle"></circle>',
+        '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" stroke-width="' + (r / 30).toFixed(1) + '" class="clock-circle"></circle>',
     ];
     var dif = Math.PI / 12;
     var deg = 0;
@@ -183,7 +183,7 @@
       var point = points[key];
       var text = point.text;
       var deg = point.deg;
-      texts.push('<circle cx="' + (cx + r * Math.cos(deg)).toFixed(1) + '" cy="' + (cy + r * Math.sin(deg)).toFixed(1) + '" r="' + (r / 20).toFixed(1) + '" stroke-width="' + (r / 90).toFixed(1) + '" class="circle"></circle>');
+      texts.push('<circle cx="' + (cx + r * Math.cos(deg)).toFixed(1) + '" cy="' + (cy + r * Math.sin(deg)).toFixed(1) + '" r="' + (r / 20).toFixed(1) + '" stroke-width="' + (r / 90).toFixed(1) + '" class="clock-circle"></circle>');
       texts.push('<text x="' + (cx + r * Math.cos(deg)).toFixed(1) + '" y="' + (cy + r * Math.sin(deg)).toFixed(1) + '" font-size="' + (r / 8).toFixed() + '" class="clock-text" data-deg="' + deg + '">' + text + '</text>');
     }
     texts.push('</g></svg>');

@@ -81,7 +81,7 @@ body {
   text-anchor: middle;
 }
 
-.clock .circle {
+.clock .clock-circle {
   fill: white;
   stroke: black;
 }
@@ -108,7 +108,7 @@ body {
   fill: lightgray;
 }
 
-.clock.spin .circle {
+.clock.spin .clock-circle {
   stroke: gray;
 }
 
