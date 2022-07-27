@@ -112,7 +112,7 @@ body {
   stroke: gray;
 }
 
-.clock.spin .center-point {
+.clock.spin .clock-center-point {
   visibility: hidden;
 }
 
