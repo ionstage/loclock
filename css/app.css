@@ -77,54 +77,54 @@ body {
   pointer-events: none;
 }
 
-.clock .clock-text {
+.clock-text {
   text-anchor: middle;
 }
 
-.clock .clock-circle {
+.clock-circle {
   fill: white;
   stroke: black;
 }
 
-.clock .clock-button-container {
+.clock-button-container {
   font-family: 'Courier New';
   visibility: hidden;
 }
 
-.clock .clock-time-offset-button {
+.clock-time-offset-button {
   fill: gray;
 }
 
-.clock .clock-time-offset-button.active {
+.clock-time-offset-button.active {
   fill: lightgray;
 }
 
-.clock .clock-reset-button {
+.clock-reset-button {
   cursor: pointer;
   fill: gray;
 }
 
-.clock .clock-reset-button.active {
+.clock-reset-button.active {
   fill: lightgray;
 }
 
-.clock.spin .clock-circle {
+.spin .clock-circle {
   stroke: gray;
 }
 
-.clock.spin .clock-center-point {
+.spin .clock-center-point {
   visibility: hidden;
 }
 
-.clock.spin .clock-button-container {
+.spin .clock-button-container {
   visibility: visible;
 }
 
-.clock.spin .clock-button-container > * {
+.spin .clock-button-container > * {
   pointer-events: auto;
 }
 
-.main.list-visible .clock.spin .clock-button-container > * {
+.main.list-visible .spin .clock-button-container > * {
   pointer-events: none;
 }
 
