@@ -56,7 +56,8 @@ body {
   z-index: 1;
 }
 
-.menu-button.active > g, .list-visible .menu-button > g {
+.menu-button.active > g,
+.main.list-visible .menu-button > g {
   stroke: lightgray;
 }
 
