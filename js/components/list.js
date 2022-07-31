@@ -25,17 +25,18 @@
   };
 
   List.prototype._resetLocations = function(locations) {
-    var container = document.createElement('div');
+    var content = document.createElement('div');
+    content.className = 'list-content';
 
     this._itemElements = locations.reduce(function(ret, location) {
       var el = this._createItemElement(location);
       dom.toggleClass(el, 'list-selected', this._selectedLocations.includes(location));
-      container.appendChild(el);
+      content.appendChild(el);
       ret[location.key] = el;
       return ret;
     }.bind(this), {});
 
-    this.el.replaceChild(container, this.el.firstElementChild);
+    this.el.replaceChild(content, this.el.firstElementChild);
 
     if (dom.supportsTouch()) {
       if (this._iScroll) {

@@ -35,7 +35,7 @@ body {
   width: 168px;
 }
 
-.list > * {
+.list-content {
   overflow-x: hidden;
 }
 
