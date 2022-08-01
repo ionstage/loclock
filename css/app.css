@@ -43,7 +43,7 @@ body {
   cursor: pointer;
 }
 
-.list-selected {
+.list-item.selected {
   color: black;
 }
 

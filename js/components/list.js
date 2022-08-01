@@ -30,7 +30,7 @@
 
     this._itemElements = locations.reduce(function(ret, location) {
       var el = this._createItemElement(location);
-      dom.toggleClass(el, 'list-selected', this._selectedLocations.includes(location));
+      dom.toggleClass(el, 'selected', this._selectedLocations.includes(location));
       content.appendChild(el);
       ret[location.key] = el;
       return ret;
@@ -49,21 +49,21 @@
   List.prototype._resetSelectedLocations = function(selectedLocations) {
     this._locations.forEach(function(location) {
       var el = this._itemElements[location.key];
-      dom.toggleClass(el, 'list-selected', selectedLocations.indexOf(location) !== -1);
+      dom.toggleClass(el, 'selected', selectedLocations.indexOf(location) !== -1);
     }.bind(this));
   };
 
   List.prototype._addSelectedLocation = function(location) {
     var el = this._itemElements[location.key];
     if (el) {
-      el.classList.add('list-selected');
+      el.classList.add('selected');
     }
   };
 
   List.prototype._removeSelectedLocation = function(location) {
     var el = this._itemElements[location.key];
     if (el) {
-      el.classList.remove('list-selected');
+      el.classList.remove('selected');
     }
   };
 
