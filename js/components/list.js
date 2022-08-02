@@ -69,8 +69,8 @@
 
   List.prototype._createItemElement = function(location) {
     var el = document.createElement('div');
-    el.classList.add('list-item');
-    el.setAttribute('data-key', location.key);
+    el.className = 'list-item';
+    el.dataset.key = location.key;
     var textLength = location.name.length;
     if (textLength >= 17) {
       el.style.fontSize = Math.min(5 + 150 / textLength, 16) + 'px';
@@ -94,7 +94,7 @@
     if (!target.classList.contains('list-item')) {
       return;
     }
-    var key = target.getAttribute('data-key');
+    var key = target.dataset.key;
     var location = this._locations.find(function(location) {
       return (location.key === key);
     });
