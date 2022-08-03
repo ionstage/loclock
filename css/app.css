@@ -56,13 +56,13 @@ body {
   z-index: 1;
 }
 
-.menu-button.active > g,
-.main.list-visible .menu-button > g {
-  stroke: lightgray;
+.menu-button-content {
+  pointer-events: none;
 }
 
-.menu-button > * {
-  pointer-events: none;
+.menu-button.active > .menu-button-content,
+.main.list-visible .menu-button-content {
+  stroke: lightgray;
 }
 
 .clock {
