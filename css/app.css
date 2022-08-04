@@ -139,12 +139,12 @@ body {
   z-index: 1;
 }
 
-.settings-button.active > path {
-  fill: lightgray;
+.settings-button-content {
+  pointer-events: none;
 }
 
-.settings-button > * {
-  pointer-events: none;
+.settings-button.active > .settings-button-content {
+  fill: lightgray;
 }
 
 .dialog {
