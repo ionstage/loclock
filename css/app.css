@@ -65,6 +65,24 @@ body {
   stroke: lightgray;
 }
 
+.settings-button {
+  cursor: pointer;
+  height: 48px;
+  position: absolute;
+  right: 0;
+  touch-action: manipulation;
+  width: 48px;
+  z-index: 1;
+}
+
+.settings-button-content {
+  pointer-events: none;
+}
+
+.settings-button.active > .settings-button-content {
+  fill: lightgray;
+}
+
 .clock {
   cursor: default;
   font-family: Helvetica;
@@ -127,24 +145,6 @@ body {
 
 .main.list-visible .spin .clock-button-container > * {
   pointer-events: none;
-}
-
-.settings-button {
-  cursor: pointer;
-  height: 48px;
-  position: absolute;
-  right: 0;
-  touch-action: manipulation;
-  width: 48px;
-  z-index: 1;
-}
-
-.settings-button-content {
-  pointer-events: none;
-}
-
-.settings-button.active > .settings-button-content {
-  fill: lightgray;
 }
 
 .dialog {
