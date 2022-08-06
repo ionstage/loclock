@@ -29,8 +29,7 @@
     content.className = 'list-content';
 
     this._itemElements = locations.reduce(function(ret, location) {
-      var el = this._createItemElement(location);
-      dom.toggleClass(el, 'selected', this._selectedLocations.includes(location));
+      var el = this._createItemElement(location, this._selectedLocations.includes(location));
       content.appendChild(el);
       ret[location.key] = el;
       return ret;
@@ -67,9 +66,9 @@
     }
   };
 
-  List.prototype._createItemElement = function(location) {
+  List.prototype._createItemElement = function(location, selected) {
     var el = document.createElement('div');
-    el.className = 'list-item';
+    el.className = 'list-item' + (selected ? ' selected' : '');
     el.dataset.key = location.key;
     var textLength = location.name.length;
     if (textLength >= 17) {
