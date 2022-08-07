@@ -58,6 +58,9 @@ body {
 
 .menu-button-content {
   pointer-events: none;
+  stroke: black;
+  stroke-linecap: round;
+  stroke-width: 3;
 }
 
 .menu-button.active > .menu-button-content,
