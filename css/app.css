@@ -79,6 +79,7 @@ body {
 }
 
 .settings-button-content {
+  fill: black;
   pointer-events: none;
 }
 
