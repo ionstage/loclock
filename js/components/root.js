@@ -54,7 +54,7 @@
     var keys = (fragment ? this._decodeLocationKeys(fragment) : DEFAULT_LOCATION_KEYS);
     return keys.filter(function(key, index, keys) {
       var isUnique = (keys.indexOf(key) === index);
-      return isUnique && Location.isValidKey(key);
+      return isUnique;
     }).reduce(function(ret, key) {
       var location = this._locations.find(function(location) {
         return location.match(key);

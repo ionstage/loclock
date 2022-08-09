@@ -633,14 +633,10 @@
     return (this.key.indexOf('#/') === -1 ? this.key + '#/' + this.name : this.key);
   };
 
-  Location.isValidKey = function(key) {
-    return (key === Location.KEY_CURRENT_LOCATION) || (moment.tz.zone(Location._keyToTzname(key)) !== null);
-  };
-
   Location.get = (function() {
     var cache = {};
     return function(key) {
-      if (!Location.isValidKey(key)) {
+      if (!Location._isValidKey(key)) {
         return null;
       }
       if (!cache[key]) {
@@ -649,6 +645,10 @@
       return cache[key];
     };
   })();
+
+  Location._isValidKey = function(key) {
+    return (key === Location.KEY_CURRENT_LOCATION) || (moment.tz.zone(Location._keyToTzname(key)) !== null);
+  };
 
   Location._keyToTzname = function(key) {
     return key.split('#/')[0];
