@@ -599,6 +599,31 @@
     this._timezoneOffset = NaN;
   };
 
+  Location.KEY_CURRENT_LOCATION = 'Current_Location';
+
+  Location.PRESET_KEYS = TZ_LOCATION_KEYS.concat(ADDITIONAL_LOCATION_KEYS, [Location.KEY_CURRENT_LOCATION]);
+
+  Location.get = (function() {
+    var cache = {};
+    return function(key) {
+      if (!Location._isValidKey(key)) {
+        return null;
+      }
+      if (!cache[key]) {
+        cache[key] = new Location(key);
+      }
+      return cache[key];
+    };
+  })();
+
+  Location._isValidKey = function(key) {
+    return (key === Location.KEY_CURRENT_LOCATION) || (moment.tz.zone(Location._keyToTzname(key)) !== null);
+  };
+
+  Location._keyToTzname = function(key) {
+    return key.split('#/')[0];
+  };
+
   Location.prototype.match = function(key) {
     return (key === this.key || key === this._getFullKey());
   };
@@ -632,31 +657,6 @@
   Location.prototype._getFullKey = function() {
     return (this.key.indexOf('#/') === -1 ? this.key + '#/' + this.name : this.key);
   };
-
-  Location.get = (function() {
-    var cache = {};
-    return function(key) {
-      if (!Location._isValidKey(key)) {
-        return null;
-      }
-      if (!cache[key]) {
-        cache[key] = new Location(key);
-      }
-      return cache[key];
-    };
-  })();
-
-  Location._isValidKey = function(key) {
-    return (key === Location.KEY_CURRENT_LOCATION) || (moment.tz.zone(Location._keyToTzname(key)) !== null);
-  };
-
-  Location._keyToTzname = function(key) {
-    return key.split('#/')[0];
-  };
-
-  Location.KEY_CURRENT_LOCATION = 'Current_Location';
-
-  Location.PRESET_KEYS = TZ_LOCATION_KEYS.concat(ADDITIONAL_LOCATION_KEYS, [Location.KEY_CURRENT_LOCATION]);
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = Location;
