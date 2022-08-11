@@ -96,7 +96,7 @@ body {
   width: 100%;
 }
 
-.clock > * {
+.clock-component {
   pointer-events: none;
 }
 

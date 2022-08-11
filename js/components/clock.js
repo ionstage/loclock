@@ -108,7 +108,7 @@
 
   Clock.prototype._createBoard = function(cx, cy, r) {
     var texts = [
-      '<svg><g>',
+      '<svg><g class="clock-component">',
         '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" stroke-width="' + (r / 30).toFixed(1) + '" class="clock-circle"></circle>',
     ];
     var dif = Math.PI / 12;
@@ -139,7 +139,7 @@
 
   Clock.prototype._createCenter = function(cx, cy, r) {
     var texts = [
-      '<svg><g>',
+      '<svg><g class="clock-component">',
         '<circle cx="' + cx + '" cy="' + cy + '" r="' + (r / 45).toFixed(1) + '" fill="black" class="clock-center-point"></circle>',
         '<g class="clock-button-container">',
           '<text x="' + (cx - 11) + '" y="' + (cy - 16) + '" font-size="' + (r / 6) + '" class="clock-text clock-time-offset-button">+00:00</text>',
@@ -178,7 +178,7 @@
       };
       return ret;
     }, {});
-    var texts = ['<svg><g>'];
+    var texts = ['<svg><g class="clock-component">'];
     for (var key in points) {
       var point = points[key];
       var text = point.text;
