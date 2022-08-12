@@ -109,7 +109,7 @@
   Clock.prototype._createBoard = function(cx, cy, r) {
     var texts = [
       '<svg><g class="clock-component">',
-        '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" stroke-width="' + (r / 30).toFixed(1) + '" class="clock-circle"></circle>',
+        '<circle class="clock-circle" cx="' + cx + '" cy="' + cy + '" r="' + r + '" stroke-width="' + (r / 30).toFixed(1) + '"></circle>',
     ];
     var dif = Math.PI / 12;
     var deg = 0;
@@ -119,7 +119,7 @@
       var rate = (text === '18' || text === '15' || text === '21') ? 0.04 : 0;
       var dx = r * (0.8 - Math.abs(rate * Math.cos(deg))) * Math.cos(deg);
       var dy = r * (0.8 - Math.abs(rate * Math.sin(deg))) * Math.sin(deg);
-      texts.push('<text x="' + (cx + dx).toFixed(1) + '" y="' + (cy + dy).toFixed(1) + '" font-size="' + fontSize.toFixed() + '" class="clock-text">' + text + '</text>');
+      texts.push('<text class="clock-text" x="' + (cx + dx).toFixed(1) + '" y="' + (cy + dy).toFixed(1) + '" font-size="' + fontSize.toFixed() + '">' + text + '</text>');
       deg += dif;
     }
     texts.push('</g></svg>');
@@ -140,10 +140,10 @@
   Clock.prototype._createCenter = function(cx, cy, r) {
     var texts = [
       '<svg><g class="clock-component">',
-        '<circle cx="' + cx + '" cy="' + cy + '" r="' + (r / 45).toFixed(1) + '" class="clock-center-point"></circle>',
+        '<circle class="clock-center-point" cx="' + cx + '" cy="' + cy + '" r="' + (r / 45).toFixed(1) + '"></circle>',
         '<g class="clock-button-container">',
-          '<text x="' + (cx - 11) + '" y="' + (cy - 16) + '" font-size="' + (r / 6) + '" class="clock-text clock-time-offset-button">+00:00</text>',
-          '<text x="' + cx + '" y="' + (cy + 32) + '" font-size="' + (r / 10) + '" class="clock-text clock-reset-button">RESET</text>',
+          '<text class="clock-text clock-time-offset-button" x="' + (cx - 11) + '" y="' + (cy - 16) + '" font-size="' + (r / 6) + '">+00:00</text>',
+          '<text class="clock-text clock-reset-button" x="' + cx + '" y="' + (cy + 32) + '" font-size="' + (r / 10) + '">RESET</text>',
         '</g>',
     ];
     texts.push('</g></svg>');
@@ -183,8 +183,8 @@
       var point = points[key];
       var text = point.text;
       var deg = point.deg;
-      texts.push('<circle cx="' + (cx + r * Math.cos(deg)).toFixed(1) + '" cy="' + (cy + r * Math.sin(deg)).toFixed(1) + '" r="' + (r / 20).toFixed(1) + '" stroke-width="' + (r / 90).toFixed(1) + '" class="clock-circle"></circle>');
-      texts.push('<text x="' + (cx + r * Math.cos(deg)).toFixed(1) + '" y="' + (cy + r * Math.sin(deg)).toFixed(1) + '" font-size="' + (r / 8).toFixed() + '" class="clock-text" data-deg="' + deg + '">' + text + '</text>');
+      texts.push('<circle class="clock-circle" cx="' + (cx + r * Math.cos(deg)).toFixed(1) + '" cy="' + (cy + r * Math.sin(deg)).toFixed(1) + '" r="' + (r / 20).toFixed(1) + '" stroke-width="' + (r / 90).toFixed(1) + '"></circle>');
+      texts.push('<text class="clock-text" x="' + (cx + r * Math.cos(deg)).toFixed(1) + '" y="' + (cy + r * Math.sin(deg)).toFixed(1) + '" font-size="' + (r / 8).toFixed() + '" data-deg="' + deg + '">' + text + '</text>');
     }
     texts.push('</g></svg>');
     return dom.render(texts.join('')).childNodes[0];
