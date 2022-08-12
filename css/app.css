@@ -109,6 +109,10 @@ body {
   stroke: black;
 }
 
+.clock-center-point {
+  fill: black;
+}
+
 .clock-button-container {
   font-family: 'Courier New';
   visibility: hidden;

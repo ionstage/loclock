@@ -140,7 +140,7 @@
   Clock.prototype._createCenter = function(cx, cy, r) {
     var texts = [
       '<svg><g class="clock-component">',
-        '<circle cx="' + cx + '" cy="' + cy + '" r="' + (r / 45).toFixed(1) + '" fill="black" class="clock-center-point"></circle>',
+        '<circle cx="' + cx + '" cy="' + cy + '" r="' + (r / 45).toFixed(1) + '" class="clock-center-point"></circle>',
         '<g class="clock-button-container">',
           '<text x="' + (cx - 11) + '" y="' + (cy - 16) + '" font-size="' + (r / 6) + '" class="clock-text clock-time-offset-button">+00:00</text>',
           '<text x="' + cx + '" y="' + (cy + 32) + '" font-size="' + (r / 10) + '" class="clock-text clock-reset-button">RESET</text>',
