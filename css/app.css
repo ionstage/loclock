@@ -114,25 +114,24 @@ body {
 }
 
 .clock-button-container {
-  font-family: 'Courier New';
   visibility: hidden;
 }
 
-.clock-time-offset-button {
+.clock-button {
+  font-family: 'Courier New';
+  text-anchor: middle;
+}
+
+.clock-button {
   fill: gray;
 }
 
-.clock-time-offset-button.active {
+.clock-button.active {
   fill: lightgray;
 }
 
 .clock-reset-button {
   cursor: pointer;
-  fill: gray;
-}
-
-.clock-reset-button.active {
-  fill: lightgray;
 }
 
 .spin .clock-circle {
@@ -147,11 +146,11 @@ body {
   visibility: visible;
 }
 
-.spin .clock-button-container > * {
+.spin .clock-button {
   pointer-events: auto;
 }
 
-.main.list-visible .spin .clock-button-container > * {
+.main.list-visible .spin .clock-button {
   pointer-events: none;
 }
 

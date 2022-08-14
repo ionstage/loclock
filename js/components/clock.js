@@ -142,8 +142,8 @@
       '<svg><g class="clock-component">',
         '<circle class="clock-center-point" cx="' + cx + '" cy="' + cy + '" r="' + (r / 45).toFixed(1) + '"></circle>',
         '<g class="clock-button-container">',
-          '<text class="clock-text clock-time-offset-button" x="' + (cx - 11) + '" y="' + (cy - 16) + '" font-size="' + (r / 6) + '">+00:00</text>',
-          '<text class="clock-text clock-reset-button" x="' + cx + '" y="' + (cy + 32) + '" font-size="' + (r / 10) + '">RESET</text>',
+          '<text class="clock-button clock-time-offset-button" x="' + (cx - 11) + '" y="' + (cy - 16) + '" font-size="' + (r / 6) + '">+00:00</text>',
+          '<text class="clock-button clock-reset-button" x="' + cx + '" y="' + (cy + 32) + '" font-size="' + (r / 10) + '">RESET</text>',
         '</g>',
     ];
     texts.push('</g></svg>');
@@ -151,11 +151,8 @@
   };
 
   Clock.prototype._adjustCenter = function(center) {
-    var container = center.querySelector('.clock-button-container');
-    Array.prototype.slice.call(container.childNodes).forEach(function(el) {
-      if (el.nodeName !== 'text') {
-        return
-      }
+    var buttons = center.querySelectorAll('.clock-button');
+    Array.prototype.slice.call(buttons).forEach(function(el) {
       var bb = el.getBBox();
       var dy = +el.getAttribute('y') - (bb.y + bb.height / 2);
       el.setAttribute('dy', dy.toFixed(1));
