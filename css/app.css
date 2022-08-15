@@ -134,23 +134,23 @@ body {
   cursor: pointer;
 }
 
-.spin .clock-circle {
+.clock.rotating .clock-circle {
   stroke: gray;
 }
 
-.spin .clock-center-point {
+.clock.rotating .clock-center-point {
   visibility: hidden;
 }
 
-.spin .clock-button-container {
+.clock.rotating .clock-button-container {
   visibility: visible;
 }
 
-.spin .clock-button {
+.clock.rotating .clock-button {
   pointer-events: auto;
 }
 
-.main.list-visible .spin .clock-button {
+.main.list-visible .clock.rotating .clock-button {
   pointer-events: none;
 }
 
