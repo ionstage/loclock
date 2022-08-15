@@ -109,7 +109,7 @@
   Clock.prototype._createBoard = function(cx, cy, r) {
     var texts = [
       '<svg><g class="clock-component">',
-        '<circle class="clock-circle" cx="' + cx + '" cy="' + cy + '" r="' + r + '" stroke-width="' + (r / 30).toFixed(1) + '"></circle>',
+        '<circle class="clock-bezel" cx="' + cx + '" cy="' + cy + '" r="' + r + '" stroke-width="' + (r / 30).toFixed(1) + '"></circle>',
     ];
     var dif = Math.PI / 12;
     var deg = 0;

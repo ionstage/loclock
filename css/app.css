@@ -100,6 +100,11 @@ body {
   pointer-events: none;
 }
 
+.clock-bezel {
+  fill: transparent;
+  stroke: black;
+}
+
 .clock-text {
   text-anchor: middle;
 }
@@ -132,6 +137,10 @@ body {
 
 .clock-reset-button {
   cursor: pointer;
+}
+
+.clock.rotating .clock-bezel {
+  stroke: gray;
 }
 
 .clock.rotating .clock-circle {
