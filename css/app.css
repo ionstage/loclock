@@ -89,7 +89,6 @@ body {
 
 .clock {
   cursor: default;
-  font-family: Helvetica;
   height: 100%;
   overflow: hidden;
   position: absolute;
@@ -106,6 +105,7 @@ body {
 }
 
 .clock-text {
+  font-family: Helvetica;
   text-anchor: middle;
 }
 
