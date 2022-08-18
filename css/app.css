@@ -104,6 +104,11 @@ body {
   stroke: black;
 }
 
+.clock-dial-text {
+  font-family: Helvetica;
+  text-anchor: middle;
+}
+
 .clock-text {
   font-family: Helvetica;
   text-anchor: middle;

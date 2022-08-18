@@ -119,7 +119,7 @@
       var rate = (text === '18' || text === '15' || text === '21') ? 0.04 : 0;
       var dx = r * (0.8 - Math.abs(rate * Math.cos(deg))) * Math.cos(deg);
       var dy = r * (0.8 - Math.abs(rate * Math.sin(deg))) * Math.sin(deg);
-      texts.push('<text class="clock-text" x="' + (cx + dx).toFixed(1) + '" y="' + (cy + dy).toFixed(1) + '" font-size="' + fontSize.toFixed() + '">' + text + '</text>');
+      texts.push('<text class="clock-dial-text" x="' + (cx + dx).toFixed(1) + '" y="' + (cy + dy).toFixed(1) + '" font-size="' + fontSize.toFixed() + '">' + text + '</text>');
       deg += dif;
     }
     texts.push('</g></svg>');
