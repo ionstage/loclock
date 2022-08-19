@@ -109,12 +109,12 @@ body {
   text-anchor: middle;
 }
 
-.clock-text {
+.clock-point-text {
   font-family: Helvetica;
   text-anchor: middle;
 }
 
-.clock-circle {
+.clock-point-circle {
   fill: white;
   stroke: black;
 }
@@ -148,7 +148,7 @@ body {
   stroke: gray;
 }
 
-.clock.rotating .clock-circle {
+.clock.rotating .clock-point-circle {
   stroke: gray;
 }
 

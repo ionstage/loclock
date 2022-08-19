@@ -180,8 +180,8 @@
       var point = points[key];
       var text = point.text;
       var deg = point.deg;
-      texts.push('<circle class="clock-circle" cx="' + (cx + r * Math.cos(deg)).toFixed(1) + '" cy="' + (cy + r * Math.sin(deg)).toFixed(1) + '" r="' + (r / 20).toFixed(1) + '" stroke-width="' + (r / 90).toFixed(1) + '"></circle>');
-      texts.push('<text class="clock-text" x="' + (cx + r * Math.cos(deg)).toFixed(1) + '" y="' + (cy + r * Math.sin(deg)).toFixed(1) + '" font-size="' + (r / 8).toFixed() + '" data-deg="' + deg + '">' + text + '</text>');
+      texts.push('<circle class="clock-point-circle" cx="' + (cx + r * Math.cos(deg)).toFixed(1) + '" cy="' + (cy + r * Math.sin(deg)).toFixed(1) + '" r="' + (r / 20).toFixed(1) + '" stroke-width="' + (r / 90).toFixed(1) + '"></circle>');
+      texts.push('<text class="clock-point-text" x="' + (cx + r * Math.cos(deg)).toFixed(1) + '" y="' + (cy + r * Math.sin(deg)).toFixed(1) + '" font-size="' + (r / 8).toFixed() + '" data-deg="' + deg + '">' + text + '</text>');
     }
     texts.push('</g></svg>');
     return dom.render(texts.join('')).childNodes[0];
