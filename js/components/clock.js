@@ -145,8 +145,8 @@
           '<text class="clock-button clock-time-offset-button" x="' + (cx - 11) + '" y="' + (cy - 16) + '" font-size="' + (r / 6) + '">+00:00</text>',
           '<text class="clock-button clock-reset-button" x="' + cx + '" y="' + (cy + 32) + '" font-size="' + (r / 10) + '">RESET</text>',
         '</g>',
+      '</g></svg>',
     ];
-    texts.push('</g></svg>');
     return dom.render(texts.join('')).childNodes[0];
   };
 
