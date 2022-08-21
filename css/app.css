@@ -109,16 +109,6 @@ body {
   text-anchor: middle;
 }
 
-.clock-point-text {
-  font-family: Helvetica;
-  text-anchor: middle;
-}
-
-.clock-point-circle {
-  fill: white;
-  stroke: black;
-}
-
 .clock-center-point {
   fill: black;
 }
@@ -144,11 +134,17 @@ body {
   cursor: pointer;
 }
 
-.clock.rotating .clock-bezel {
-  stroke: gray;
+.clock-point-circle {
+  fill: white;
+  stroke: black;
 }
 
-.clock.rotating .clock-point-circle {
+.clock-point-text {
+  font-family: Helvetica;
+  text-anchor: middle;
+}
+
+.clock.rotating .clock-bezel {
   stroke: gray;
 }
 
@@ -166,6 +162,10 @@ body {
 
 .main.list-visible .clock.rotating .clock-button {
   pointer-events: none;
+}
+
+.clock.rotating .clock-point-circle {
+  stroke: gray;
 }
 
 .dialog {
