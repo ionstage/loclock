@@ -167,15 +167,3 @@ body {
 .clock.rotating .clock-point-circle {
   stroke: gray;
 }
-
-.dialog {
-  background-color: rgba(0, 0, 0, .6);
-  display: none;
-  height: 100%;
-  position: fixed;
-  width: 100%;
-}
-
-.dialog.visible {
-  display: block;
-}
