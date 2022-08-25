@@ -167,3 +167,15 @@ body {
 .clock.rotating .clock-point-circle {
   stroke: gray;
 }
+
+.preferences {
+  border-left: 1px solid lightgray;
+  box-sizing: border-box;
+  font-family: Helvetica;
+  height: 100%;
+  overflow-y: auto;
+  position: absolute;
+  right: 0;
+  transform: translateX(336px);
+  width: 336px;
+}
