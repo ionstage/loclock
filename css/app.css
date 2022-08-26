@@ -20,6 +20,10 @@ body {
   transform: translateX(168px);
 }
 
+.main.preferences-visible {
+  transform: translateX(-336px);
+}
+
 .list {
   border-right: 1px solid lightgray;
   box-sizing: border-box;
