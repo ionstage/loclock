@@ -10,7 +10,10 @@
 
   var Main = function(el, props) {
     this.el = el;
-    this._attrs = new Attributes({ listVisible: false });
+    this._attrs = new Attributes({
+      listVisible: false,
+      preferencesVisible: false,
+    });
     this._events = new Events();
     this._menuButton = new Button(this.el.querySelector('.menu-button'));
     this._settingsButton = new Button(this.el.querySelector('.settings-button'));
