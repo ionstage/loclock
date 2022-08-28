@@ -28,6 +28,7 @@
     this._clock.init();
 
     this._attrs.on('change:listVisible', this._updateListVisibility.bind(this));
+    this._attrs.on('change:preferencesVisible', this._updatePreferencesVisibility.bind(this));
     this._menuButton.on('click', this._toggleList.bind(this));
     this._settingsButton.on('click', this._events.emit.bind(this._events, 'click:settingsButton'));
     this._clock.on('pointerdown', this._hideList.bind(this));
@@ -54,6 +55,10 @@
 
   Main.prototype._updateListVisibility = function(visible) {
     dom.toggleClass(this.el, 'list-visible', visible);
+  };
+
+  Main.prototype._updatePreferencesVisibility = function(visible) {
+    dom.toggleClass(this.el, 'preferences-visible', visible);
   };
 
   if (typeof module !== 'undefined' && module.exports) {
