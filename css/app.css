@@ -87,7 +87,8 @@ body {
   pointer-events: none;
 }
 
-.settings-button.active > .settings-button-content {
+.settings-button.active > .settings-button-content,
+.main.preferences-visible .settings-button-content {
   fill: lightgray;
 }
 
