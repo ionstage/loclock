@@ -35,7 +35,7 @@
       return ret;
     }.bind(this), {});
 
-    this.el.replaceChild(content, this.el.firstElementChild);
+    this.el.replaceChild(content, this.el.querySelector('.list-content'));
 
     if (dom.supportsTouch()) {
       if (this._iScroll) {
