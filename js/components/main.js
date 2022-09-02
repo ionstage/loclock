@@ -7,6 +7,7 @@
   var Clock = app.Clock || require('./clock.js');
   var Events = app.Events || require('../base/events.js');
   var List = app.List || require('./list.js');
+  var Preferences = app.Preferences || require('./preferences.js');
 
   var Main = function(el, props) {
     this.el = el;
@@ -19,6 +20,7 @@
     this._settingsButton = new Button(this.el.querySelector('.settings-button'));
     this._list = new List(this.el.querySelector('.list'), props);
     this._clock = new Clock(this.el.querySelector('.clock'), { locations: props.selectedLocations });
+    this._preferences = new Preferences(this.el.querySelector('.preferences'));
   };
 
   Main.prototype.init = function() {
