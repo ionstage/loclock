@@ -189,3 +189,7 @@ body {
 .preferences-title {
   font-size: 21px;
 }
+
+.preferences-line {
+  border: .5px solid lightgray;
+}
