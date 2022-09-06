@@ -192,4 +192,5 @@ body {
 
 .preferences-line {
   border: .5px solid lightgray;
+  margin: 0;
 }
