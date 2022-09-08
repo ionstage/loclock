@@ -187,6 +187,7 @@ body {
 }
 
 .preferences-title {
+  display: inline-block;
   font-size: 21px;
 }
 
