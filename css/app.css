@@ -186,9 +186,29 @@ body {
   width: 336px;
 }
 
+.preferences-header::after {
+  clear: both;
+  content: '.';
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
+
 .preferences-title {
   display: inline-block;
   font-size: 21px;
+  margin: .67em 0;
+}
+
+.preferences-close-button {
+  cursor: pointer;
+  float: right;
+  font-size: 21px;
+  padding: .67em;
+}
+
+.preferences-close-button::before {
+  content: '×';
 }
 
 .preferences-line {
