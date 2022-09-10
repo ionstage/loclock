@@ -207,6 +207,10 @@ body {
   padding: .67em;
 }
 
+.preferences-close-button.active {
+  color: lightgray;
+}
+
 .preferences-close-button::before {
   content: '×';
 }

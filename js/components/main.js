@@ -28,6 +28,7 @@
     this._settingsButton.init();
     this._list.init();
     this._clock.init();
+    this._preferences.init();
 
     this._attrs.on('change:listVisible', this._updateListVisibility.bind(this));
     this._attrs.on('change:preferencesVisible', this._updatePreferencesVisibility.bind(this));
@@ -35,6 +36,7 @@
     this._settingsButton.on('click', this._togglePreferences.bind(this));
     this._clock.on('pointerdown', this._hideList.bind(this));
     this._clock.on('pointerdown', this._hidePreferences.bind(this));
+    this._preferences.on('close', this._hidePreferences.bind(this));
   };
 
   Main.prototype.resize = function() {
