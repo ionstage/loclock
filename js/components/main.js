@@ -36,7 +36,7 @@
     this._settingsButton.on('click', this._togglePreferences.bind(this));
     this._clock.on('pointerdown', this._hideList.bind(this));
     this._clock.on('pointerdown', this._hidePreferences.bind(this));
-    this._preferences.on('close', this._hidePreferences.bind(this));
+    this._preferences.on('hide', this._hidePreferences.bind(this));
   };
 
   Main.prototype.resize = function() {

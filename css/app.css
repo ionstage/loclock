@@ -200,18 +200,18 @@ body {
   margin: .67em 0;
 }
 
-.preferences-close-button {
+.preferences-hide-button {
   cursor: pointer;
   float: right;
   font-size: 21px;
   padding: .67em;
 }
 
-.preferences-close-button.active {
+.preferences-hide-button.active {
   color: lightgray;
 }
 
-.preferences-close-button::before {
+.preferences-hide-button::before {
   content: '×';
 }
 

@@ -7,12 +7,12 @@
   var Preferences = function(el) {
     this.el = el;
     this._events = new Events();
-    this._closeButton = new Button(this.el.querySelector('.preferences-close-button'));
+    this._hideButton = new Button(this.el.querySelector('.preferences-hide-button'));
   };
 
   Preferences.prototype.init = function() {
-    this._closeButton.init();
-    this._closeButton.on('click', this._events.emit.bind(this._events, 'close'));
+    this._hideButton.init();
+    this._hideButton.on('click', this._events.emit.bind(this._events, 'hide'));
   };
 
   Preferences.prototype.on = function() {
