@@ -232,3 +232,7 @@ body {
   border: .5px solid lightgray;
   margin: 0;
 }
+
+.preferences-fieldset {
+  margin: 1.5em 0;
+}
