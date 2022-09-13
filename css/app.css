@@ -234,5 +234,18 @@ body {
 }
 
 .preferences-fieldset {
+  line-height: 26px;
   margin: 1.5em 0;
+}
+
+.preferences-legend {
+  font-weight: bold;
+}
+
+.preferences-inputs {
+  margin: 0 .67em;
+}
+
+.preferences-input-label {
+  display: block;
 }
