@@ -1,0 +1,8 @@
+.main.dark .list {
+  background-color: black;
+  color: gray;
+}
+
+.main.dark .list-item.selected {
+  color: white;
+}
