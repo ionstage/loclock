@@ -6,3 +6,21 @@
 .main.dark .list-item.selected {
   color: white;
 }
+
+.main.dark .menu-button-content {
+  stroke: white;
+}
+
+.main.dark .menu-button.active > .menu-button-content,
+.main.dark.list-visible .menu-button-content {
+  stroke: gray;
+}
+
+.main.dark .settings-button-content {
+  fill: white;
+}
+
+.main.dark .settings-button.active > .settings-button-content,
+.main.dark.preferences-visible .settings-button-content {
+  fill: gray;
+}
