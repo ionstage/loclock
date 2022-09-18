@@ -1,5 +1,6 @@
 .main.dark .list {
   background-color: black;
+  border-color: gray;
   color: gray;
 }
 
