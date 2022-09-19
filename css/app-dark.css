@@ -25,3 +25,44 @@
 .main.dark.preferences-visible .settings-button-content {
   fill: gray;
 }
+
+.main.dark .clock {
+  background-color: black;
+}
+
+.main.dark .clock-bezel {
+  stroke: white;
+}
+
+.main.dark .clock-dial-text {
+  fill: white;
+}
+
+.main.dark .clock-center-point {
+  fill: white;
+}
+
+.main.dark .clock-button {
+  fill: lightgray;
+}
+
+.main.dark .clock-button.active {
+  fill: gray;
+}
+
+.main.dark .clock-point-circle {
+  fill: black;
+  stroke: white;
+}
+
+.main.dark .clock-point-text {
+  fill: white;
+}
+
+.main.dark .clock.rotating .clock-bezel {
+  stroke: lightgray;
+}
+
+.main.dark .clock.rotating .clock-point-circle {
+  stroke: lightgray;
+}
