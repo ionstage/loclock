@@ -6,5 +6,5 @@
   var root = new Root();
   root.init();
 
-  app.root = root;
+  app._root = root;
 })(this.app || (this.app = {}));
