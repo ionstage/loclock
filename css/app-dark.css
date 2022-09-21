@@ -66,3 +66,17 @@
 .main.dark .clock.rotating .clock-point-circle {
   stroke: lightgray;
 }
+
+.main.dark .preferences {
+  background-color: black;
+  border-color: gray;
+  color: white;
+}
+
+.main.dark .preferences-hide-button.active {
+  color: gray;
+}
+
+.main.dark .preferences-line {
+  border-color: gray;
+}
