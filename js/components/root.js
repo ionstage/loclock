@@ -4,6 +4,7 @@
   var Base64 = require('js-base64').Base64;
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
+  var Attributes = app.Attributes || require('../base/attributes.js');
   var Collection = app.Collection || require('../base/collection.js');
   var Main = app.Main || require('./main.js');
   var Location = app.Location || require('../models/location.js');
@@ -13,6 +14,7 @@
   var Root = function() {
     this._locations = new Collection();
     this._selectedLocations = new Collection();
+    this._theme = new Attributes();
     this._main = new Main(document.querySelector('.main'), {
       locations: this._locations,
       selectedLocations: this._selectedLocations,
