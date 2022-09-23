@@ -31,11 +31,11 @@
     this._selectedLocations.on('reset', this._saveSelectedLocations.bind(this));
     this._selectedLocations.on('add', this._saveSelectedLocations.bind(this));
     this._selectedLocations.on('remove', this._saveSelectedLocations.bind(this));
-    this._theme.on('change:name', this._saveTheme.bind(this));
+    this._theme.on('change:value', this._saveTheme.bind(this));
 
     this._locations.reset(this._createLocations(Location.PRESET_KEYS));
     this._selectedLocations.reset(this._loadSelectedLocations());
-    this._theme.set('name', this._loadTheme());
+    this._theme.set('value', this._loadTheme());
   };
 
   Root.prototype._createLocations = function(keys) {
@@ -88,8 +88,8 @@
     return localStorage.getItem(THEME_KEY) || 'light';
   };
 
-  Root.prototype._saveTheme = function(name) {
-    localStorage.setItem(THEME_KEY, name);
+  Root.prototype._saveTheme = function(value) {
+    localStorage.setItem(THEME_KEY, value);
   };
 
   Root.prototype._disableTouchScrolling = function() {
