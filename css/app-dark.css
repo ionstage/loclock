@@ -1,82 +1,82 @@
-.main.dark .list {
+.main[data-theme='dark'] .list {
   background-color: black;
   border-color: gray;
   color: gray;
 }
 
-.main.dark .list-item.selected {
+.main[data-theme='dark'] .list-item.selected {
   color: white;
 }
 
-.main.dark .menu-button-content {
+.main[data-theme='dark'] .menu-button-content {
   stroke: white;
 }
 
-.main.dark .menu-button.active > .menu-button-content,
-.main.dark.list-visible .menu-button-content {
+.main[data-theme='dark'] .menu-button.active > .menu-button-content,
+.main[data-theme='dark'].list-visible .menu-button-content {
   stroke: gray;
 }
 
-.main.dark .settings-button-content {
+.main[data-theme='dark'] .settings-button-content {
   fill: white;
 }
 
-.main.dark .settings-button.active > .settings-button-content,
-.main.dark.preferences-visible .settings-button-content {
+.main[data-theme='dark'] .settings-button.active > .settings-button-content,
+.main[data-theme='dark'].preferences-visible .settings-button-content {
   fill: gray;
 }
 
-.main.dark .clock {
+.main[data-theme='dark'] .clock {
   background-color: black;
 }
 
-.main.dark .clock-bezel {
+.main[data-theme='dark'] .clock-bezel {
   stroke: white;
 }
 
-.main.dark .clock-dial-text {
+.main[data-theme='dark'] .clock-dial-text {
   fill: white;
 }
 
-.main.dark .clock-center-point {
+.main[data-theme='dark'] .clock-center-point {
   fill: white;
 }
 
-.main.dark .clock-button {
+.main[data-theme='dark'] .clock-button {
   fill: lightgray;
 }
 
-.main.dark .clock-button.active {
+.main[data-theme='dark'] .clock-button.active {
   fill: gray;
 }
 
-.main.dark .clock-point-circle {
+.main[data-theme='dark'] .clock-point-circle {
   fill: black;
   stroke: white;
 }
 
-.main.dark .clock-point-text {
+.main[data-theme='dark'] .clock-point-text {
   fill: white;
 }
 
-.main.dark .clock.rotating .clock-bezel {
+.main[data-theme='dark'] .clock.rotating .clock-bezel {
   stroke: lightgray;
 }
 
-.main.dark .clock.rotating .clock-point-circle {
+.main[data-theme='dark'] .clock.rotating .clock-point-circle {
   stroke: lightgray;
 }
 
-.main.dark .preferences {
+.main[data-theme='dark'] .preferences {
   background-color: black;
   border-color: gray;
   color: white;
 }
 
-.main.dark .preferences-hide-button.active {
+.main[data-theme='dark'] .preferences-hide-button.active {
   color: gray;
 }
 
-.main.dark .preferences-line {
+.main[data-theme='dark'] .preferences-line {
   border-color: gray;
 }

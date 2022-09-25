@@ -50,7 +50,7 @@
   };
 
   Main.prototype._changeTheme = function(value) {
-    dom.toggleClass(this.el, 'dark', value === 'dark');
+    this.el.dataset.theme = value;
   };
 
   Main.prototype._toggleList = function() {
