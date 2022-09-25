@@ -11,6 +11,7 @@
 
   var Main = function(el, props) {
     this.el = el;
+    this._theme = props.theme;
     this._attrs = new Attributes({
       listVisible: false,
       preferencesVisible: false,
@@ -30,6 +31,7 @@
     this._clock.init();
     this._preferences.init();
 
+    this._theme.on('change:value', this._changeTheme.bind(this));
     this._attrs.on('change:listVisible', this._updateListVisibility.bind(this));
     this._attrs.on('change:preferencesVisible', this._updatePreferencesVisibility.bind(this));
     this._menuButton.on('click', this._toggleList.bind(this));
@@ -45,6 +47,10 @@
 
   Main.prototype.on = function() {
     return Events.prototype.on.apply(this._events, arguments);
+  };
+
+  Main.prototype._changeTheme = function(value) {
+    dom.toggleClass(this.el, 'dark', value === 'dark');
   };
 
   Main.prototype._toggleList = function() {

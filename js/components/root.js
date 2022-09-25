@@ -19,6 +19,7 @@
     this._main = new Main(document.querySelector('.main'), {
       locations: this._locations,
       selectedLocations: this._selectedLocations,
+      theme: this._theme,
     });
   };
 
