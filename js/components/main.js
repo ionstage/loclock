@@ -21,7 +21,7 @@
     this._settingsButton = new Button(this.el.querySelector('.settings-button'));
     this._list = new List(this.el.querySelector('.list'), props);
     this._clock = new Clock(this.el.querySelector('.clock'), { locations: props.selectedLocations });
-    this._preferences = new Preferences(this.el.querySelector('.preferences'));
+    this._preferences = new Preferences(this.el.querySelector('.preferences'), { theme: this._theme });
   };
 
   Main.prototype.init = function() {
