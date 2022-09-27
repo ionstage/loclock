@@ -50,7 +50,7 @@
   };
 
   Main.prototype._changeTheme = function(value) {
-    this.el.dataset.theme = value;
+    this.el.setAttribute('data-theme', value);
   };
 
   Main.prototype._toggleList = function() {
