@@ -11,7 +11,7 @@
 
   var Main = function(el, props) {
     this.el = el;
-    this._theme = props.theme;
+    this._themeAttrs = props.themeAttrs;
     this._attrs = new Attributes({
       listVisible: false,
       preferencesVisible: false,
@@ -21,7 +21,7 @@
     this._settingsButton = new Button(this.el.querySelector('.settings-button'));
     this._list = new List(this.el.querySelector('.list'), props);
     this._clock = new Clock(this.el.querySelector('.clock'), { locations: props.selectedLocations });
-    this._preferences = new Preferences(this.el.querySelector('.preferences'), { theme: this._theme });
+    this._preferences = new Preferences(this.el.querySelector('.preferences'), { themeAttrs: this._themeAttrs });
   };
 
   Main.prototype.init = function() {
@@ -31,7 +31,7 @@
     this._clock.init();
     this._preferences.init();
 
-    this._theme.on('change:value', this._changeTheme.bind(this));
+    this._themeAttrs.on('change:value', this._changeTheme.bind(this));
     this._attrs.on('change:listVisible', this._updateListVisibility.bind(this));
     this._attrs.on('change:preferencesVisible', this._updatePreferencesVisibility.bind(this));
     this._menuButton.on('click', this._toggleList.bind(this));

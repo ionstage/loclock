@@ -15,11 +15,11 @@
   var Root = function() {
     this._locations = new Collection();
     this._selectedLocations = new Collection();
-    this._theme = new Attributes();
+    this._themeAttrs = new Attributes();
     this._main = new Main(document.querySelector('.main'), {
       locations: this._locations,
       selectedLocations: this._selectedLocations,
-      theme: this._theme,
+      themeAttrs: this._themeAttrs,
     });
   };
 
@@ -32,11 +32,11 @@
     this._selectedLocations.on('reset', this._saveSelectedLocations.bind(this));
     this._selectedLocations.on('add', this._saveSelectedLocations.bind(this));
     this._selectedLocations.on('remove', this._saveSelectedLocations.bind(this));
-    this._theme.on('change:value', this._saveTheme.bind(this));
+    this._themeAttrs.on('change:value', this._saveTheme.bind(this));
 
     this._locations.reset(this._createLocations(Location.PRESET_KEYS));
     this._selectedLocations.reset(this._loadSelectedLocations());
-    this._theme.set('value', this._loadTheme());
+    this._themeAttrs.set('value', this._loadTheme());
   };
 
   Root.prototype._createLocations = function(keys) {
