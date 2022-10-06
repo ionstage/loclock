@@ -16,7 +16,7 @@
     this._locations = new Collection();
     this._selectedLocations = new Collection();
     this._themeAttrs = new Attributes();
-    this._locationsAttrs = new Attributes();
+    this._customLocationsAttrs = new Attributes();
     this._main = new Main(document.querySelector('.main'), {
       locations: this._locations,
       selectedLocations: this._selectedLocations,
