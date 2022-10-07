@@ -5,6 +5,7 @@
     },
     "extends": "eslint:recommended",
     "globals": {
-        "DocumentTouch": false
+        "DocumentTouch": false,
+        "Promise": false
     }
 }
