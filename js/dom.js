@@ -62,6 +62,15 @@
     });
   };
 
+  dom.loadJSON = function(url) {
+    return dom.ajax({
+      type: 'GET',
+      url: url,
+    }).then(function(text) {
+      return JSON.parse(text);
+    });
+  };
+
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = dom;
   } else {
