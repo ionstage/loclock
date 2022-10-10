@@ -249,3 +249,7 @@ body {
 .preferences-input-label {
   display: block;
 }
+
+.preferences-table {
+  margin: 0 .67em;
+}
