@@ -253,3 +253,35 @@ body {
 .preferences-table {
   margin: 0 .67em;
 }
+
+.preferences-table-row {
+  white-space: nowrap;
+}
+
+.preferences-table-row::after {
+  clear: both;
+  content: '.';
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
+
+.preferences-table-data {
+  float: left;
+}
+
+.preferences-table-data:nth-child(1) {
+  width: 25%;
+}
+
+.preferences-table-data:nth-child(2) {
+  width: 30%;
+}
+
+.preferences-table-data:nth-child(3) {
+  width: 40%;
+}
+
+.preferences-table-data.hide {
+  visibility: hidden;
+}
