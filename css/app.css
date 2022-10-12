@@ -254,8 +254,16 @@ body {
   margin: 0 .67em;
 }
 
+.preferences-table-body {
+  border: .5px solid lightgray;
+}
+
 .preferences-table-row {
   white-space: nowrap;
+}
+
+.preferences-table-body > .preferences-table-row {
+  border: .5px solid lightgray;
 }
 
 .preferences-table-row::after {

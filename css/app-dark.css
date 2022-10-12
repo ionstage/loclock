@@ -80,3 +80,11 @@
 .main[data-theme='dark'] .preferences-line {
   border-color: gray;
 }
+
+.main[data-theme='dark'] .preferences-table-body {
+  border-color: gray;
+}
+
+.main[data-theme='dark'] .preferences-table-body > .preferences-table-row {
+  border-color: gray;
+}
