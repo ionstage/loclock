@@ -254,6 +254,10 @@ body {
   margin: 0 .67em;
 }
 
+.preferences-table-head {
+  font-size: 14px;
+}
+
 .preferences-table-body {
   border: .5px solid lightgray;
 }
