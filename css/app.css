@@ -254,7 +254,7 @@ body {
   margin: 0 .67em;
 }
 
-.preferences-table-head {
+.preferences-table {
   font-size: 14px;
 }
 
@@ -292,6 +292,10 @@ body {
 
 .preferences-table-data:nth-child(3) {
   width: 40%;
+}
+
+.preferences-table-data:nth-child(4) {
+  font-size: 16px;
 }
 
 .preferences-table-data.hide {
