@@ -301,3 +301,7 @@ body {
 .preferences-table-data.hide {
   visibility: hidden;
 }
+
+.preferences-table-select {
+  width: 100%;
+}
