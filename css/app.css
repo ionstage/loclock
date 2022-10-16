@@ -279,11 +279,13 @@ body {
 }
 
 .preferences-table-data {
+  box-sizing: border-box;
   float: left;
+  padding: 0 4px;
 }
 
 .preferences-table-data:nth-child(1) {
-  width: 25%;
+  width: 24%;
 }
 
 .preferences-table-data:nth-child(2) {
@@ -291,11 +293,12 @@ body {
 }
 
 .preferences-table-data:nth-child(3) {
-  width: 40%;
+  width: 38%;
 }
 
 .preferences-table-data:nth-child(4) {
   font-size: 16px;
+  max-width: 8%;
 }
 
 .preferences-table-data.hide {
