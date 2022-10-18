@@ -253,7 +253,7 @@ body {
 .preferences-table {
   cursor: default;
   font-size: 14px;
-  margin: 0 .67em;
+  margin: 0 4px;
 }
 
 .preferences-table-body {
