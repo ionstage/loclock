@@ -282,25 +282,25 @@ body {
   padding: 0 4px;
 }
 
-.preferences-table-data:nth-child(1) {
+.preferences-table-data.hide {
+  visibility: hidden;
+}
+
+.preferences-table[data-type='geonames'] .preferences-table-data:nth-child(1) {
   width: 24%;
 }
 
-.preferences-table-data:nth-child(2) {
+.preferences-table[data-type='geonames'] .preferences-table-data:nth-child(2) {
   width: 30%;
 }
 
-.preferences-table-data:nth-child(3) {
+.preferences-table[data-type='geonames'] .preferences-table-data:nth-child(3) {
   width: 38%;
 }
 
-.preferences-table-data:nth-child(4) {
+.preferences-table[data-type='geonames'] .preferences-table-data:nth-child(4) {
   font-size: 16px;
   max-width: 8%;
-}
-
-.preferences-table-data.hide {
-  visibility: hidden;
 }
 
 .preferences-table-select {
