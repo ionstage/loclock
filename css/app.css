@@ -306,3 +306,9 @@ body {
 .preferences-table-select {
   width: 100%;
 }
+
+.preferences-table-controls {
+  height: 26px;
+  margin: 4px;
+  position: relative;
+}
