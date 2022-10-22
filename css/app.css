@@ -312,3 +312,11 @@ body {
   margin: 4px;
   position: relative;
 }
+
+.preferences-table-button {
+  bottom: 0;
+  height: 21.5px;
+  margin: auto;
+  position: absolute;
+  top: 0;
+}
