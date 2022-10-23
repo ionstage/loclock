@@ -256,6 +256,11 @@ body {
   margin: 0 4px;
 }
 
+.preferences-table.disabled {
+  opacity: .3;
+  pointer-events: none;
+}
+
 .preferences-table-body {
   border: .5px solid lightgray;
 }
@@ -311,6 +316,11 @@ body {
   height: 26px;
   margin: 4px;
   position: relative;
+}
+
+.preferences-table-controls.disabled {
+  opacity: .3;
+  pointer-events: none;
 }
 
 .preferences-table-button {
