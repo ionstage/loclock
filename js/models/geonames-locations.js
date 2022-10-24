@@ -1,11 +1,11 @@
 (function(app) {
   'use strict';
 
-  var CustomLocations = function() {};
+  var GeoNamesLocations = function() {};
 
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = CustomLocations;
+    module.exports = GeoNamesLocations;
   } else {
-    app.CustomLocations = CustomLocations;
+    app.GeoNamesLocations = GeoNamesLocations;
   }
 })(this.app || (this.app = {}));
