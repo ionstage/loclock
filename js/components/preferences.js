@@ -10,6 +10,7 @@
     this._events = new Events();
     this._hideButton = new Button(this.el.querySelector('.preferences-hide-button'));
     this._themeFieldsetElement = this.el.querySelector('.preferences-fieldset-theme');
+    this._geonamesInputsElement = this.el.querySelector('.preferences-inputs-geonames');
   };
 
   Preferences.prototype.init = function() {
