@@ -22,6 +22,7 @@
       locations: this._locations,
       selectedLocations: this._selectedLocations,
       themeAttrs: this._themeAttrs,
+      geonamesLocations: this._geonamesLocations,
     });
   };
 

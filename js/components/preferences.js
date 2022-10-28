@@ -7,6 +7,7 @@
   var Preferences = function(el, props) {
     this.el = el;
     this._themeAttrs = props.themeAttrs;
+    this._geonamesLocations = props.geonamesLocations;
     this._events = new Events();
     this._hideButton = new Button(this.el.querySelector('.preferences-hide-button'));
     this._themeFieldsetElement = this.el.querySelector('.preferences-fieldset-theme');
