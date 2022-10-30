@@ -1,6 +1,7 @@
 (function(app) {
   'use strict';
 
+  var dom = app.dom || require('../dom.js');
   var Button = app.Button || require('./button.js');
   var Events = app.Events || require('../base/events.js');
 
@@ -17,7 +18,10 @@
   Preferences.prototype.init = function() {
     this._hideButton.init();
     this._themeFieldsetElement.addEventListener('change', this._changeTheme.bind(this));
+    this._geonamesInputsElement.addEventListener('change', this._changeGeoNamesLocations.bind(this));
     this._themeAttrs.on('change:value', this._updateTheme.bind(this));
+    this._geonamesLocations.on('enabled', this._updateGeoNamesLocationsEnabled.bind(this, true));
+    this._geonamesLocations.on('disabled', this._updateGeoNamesLocationsEnabled.bind(this, false));
     this._hideButton.on('click', this._events.emit.bind(this._events, 'hide'));
   };
 
@@ -33,6 +37,22 @@
   Preferences.prototype._updateTheme = function(value) {
     var el = this._themeFieldsetElement.querySelector('input[value=\'' + value + '\']');
     el.checked = true;
+  };
+
+  Preferences.prototype._changeGeoNamesLocations = function(event) {
+    var target = event.target;
+    if (target.tagName.toLowerCase() === 'input') {
+      this._geonamesLocations.setEnabled(target.checked);
+    }
+  };
+
+  Preferences.prototype._updateGeoNamesLocationsEnabled = function(enabled) {
+    var input = this._geonamesInputsElement.querySelector('input');
+    input.checked = enabled;
+    var table = this._geonamesInputsElement.querySelector('.preferences-table');
+    dom.toggleClass(table, 'disabled', !enabled);
+    var controls = this._geonamesInputsElement.querySelector('.preferences-table-controls');
+    dom.toggleClass(controls, 'disabled', !enabled);
   };
 
   if (typeof module !== 'undefined' && module.exports) {
