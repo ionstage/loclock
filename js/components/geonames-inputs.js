@@ -1,13 +1,13 @@
 (function(app) {
   'use strict';
 
-  var GeoNamesTable = function(el) {
+  var GeoNamesInputs = function(el) {
     this.el = el;
   };
 
   if (typeof module !== 'undefined' && module.exports) {
-    module.exports = GeoNamesTable;
+    module.exports = GeoNamesInputs;
   } else {
-    app.GeoNamesTable = GeoNamesTable;
+    app.GeoNamesInputs = GeoNamesInputs;
   }
 })(this.app || (this.app = {}));
