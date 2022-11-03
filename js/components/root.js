@@ -6,7 +6,6 @@
   var dom = app.dom || require('../dom.js');
   var Attributes = app.Attributes || require('../base/attributes.js');
   var Collection = app.Collection || require('../base/collection.js');
-  var GeoNamesLocations = app.GeoNamesLocations || require('../models/geonames-locations.js');
   var Main = app.Main || require('./main.js');
   var Location = app.Location || require('../models/location.js');
 
@@ -17,12 +16,12 @@
     this._locations = new Collection();
     this._selectedLocations = new Collection();
     this._themeAttrs = new Attributes();
-    this._geonamesLocations = new GeoNamesLocations();
+    this._geonamesAttrs = new Attributes();
     this._main = new Main(document.querySelector('.main'), {
       locations: this._locations,
       selectedLocations: this._selectedLocations,
       themeAttrs: this._themeAttrs,
-      geonamesLocations: this._geonamesLocations,
+      geonamesAttrs: this._geonamesAttrs,
     });
   };
 
@@ -40,6 +39,7 @@
     this._locations.reset(this._createLocations(Location.PRESET_KEYS));
     this._selectedLocations.reset(this._loadSelectedLocations());
     this._themeAttrs.set('value', this._loadTheme());
+    this._geonamesAttrs.set('enabled', false);
   };
 
   Root.prototype._createLocations = function(keys) {

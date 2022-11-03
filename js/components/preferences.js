@@ -14,7 +14,7 @@
       themeAttrs: props.themeAttrs,
     });
     this._geonamesInputs = new GeoNamesInputs(this.el.querySelector('.preferences-inputs-geonames'), {
-      geonamesLocations: props.geonamesLocations,
+      geonamesAttrs: props.geonamesAttrs,
     });
   };
 

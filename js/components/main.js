@@ -23,7 +23,7 @@
     this._clock = new Clock(this.el.querySelector('.clock'), { locations: props.selectedLocations });
     this._preferences = new Preferences(this.el.querySelector('.preferences'), {
       themeAttrs: this._themeAttrs,
-      geonamesLocations: props.geonamesLocations,
+      geonamesAttrs: props.geonamesAttrs,
     });
   };
 
