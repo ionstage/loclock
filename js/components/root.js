@@ -6,6 +6,7 @@
   var dom = app.dom || require('../dom.js');
   var Attributes = app.Attributes || require('../base/attributes.js');
   var Collection = app.Collection || require('../base/collection.js');
+  var GeoNamesData = app.GeoNamesData || require('../models/geonames-data.js');
   var Main = app.Main || require('./main.js');
   var Location = app.Location || require('../models/location.js');
 
@@ -17,6 +18,7 @@
     this._selectedLocations = new Collection();
     this._themeAttrs = new Attributes();
     this._geonamesAttrs = new Attributes();
+    this._geonamesData = new GeoNamesData();
     this._main = new Main(document.querySelector('.main'), {
       locations: this._locations,
       selectedLocations: this._selectedLocations,
