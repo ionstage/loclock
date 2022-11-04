@@ -18,7 +18,7 @@
     this._selectedLocations = new Collection();
     this._themeAttrs = new Attributes();
     this._geonamesAttrs = new Attributes();
-    this._geonamesData = new GeoNamesData();
+    this._geonamesData = new GeoNamesData('./data/geonames.json');
     this._main = new Main(document.querySelector('.main'), {
       locations: this._locations,
       selectedLocations: this._selectedLocations,
