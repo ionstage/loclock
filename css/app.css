@@ -246,6 +246,19 @@ body {
   margin: 0 .67em;
 }
 
+.preferences-inputs-geonames:not([data-state='loaded']) > * {
+  display: none;
+}
+
+.preferences-inputs-geonames[data-state='loading']::before {
+  content: 'GeoNames: Loading...';
+}
+
+.preferences-inputs-geonames[data-state='error']::before {
+  color: red;
+  content: 'GeoNames: Load Error';
+}
+
 .preferences-input-label {
   display: block;
 }
