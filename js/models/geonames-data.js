@@ -21,6 +21,9 @@
       this._loadPromise = dom.loadJSON(this._url).then(function(data) {
         this._data = data;
         this._events.emit('loaded');
+      }.bind(this)).catch(function() {
+        this._loadPromise = null;
+        this._events.emit('error');
       }.bind(this));
     }
     return this._loadPromise;
