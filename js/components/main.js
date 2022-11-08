@@ -12,6 +12,7 @@
   var Main = function(el, props) {
     this.el = el;
     this._themeAttrs = props.themeAttrs;
+    this._geonamesData = props.geonamesData;
     this._attrs = new Attributes({
       listVisible: false,
       preferencesVisible: false,
@@ -75,6 +76,9 @@
     var visible = !this._attrs.get('preferencesVisible');
     this._attrs.set('preferencesVisible', visible);
     this._clock.setDragEnabled(!visible);
+    if (visible) {
+      this._geonamesData.load();
+    }
   };
 
   Main.prototype._hidePreferences = function() {

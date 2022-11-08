@@ -24,6 +24,7 @@
       selectedLocations: this._selectedLocations,
       themeAttrs: this._themeAttrs,
       geonamesAttrs: this._geonamesAttrs,
+      geonamesData: this._geonamesData,
     });
   };
 
