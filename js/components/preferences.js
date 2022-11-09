@@ -15,6 +15,7 @@
     });
     this._geonamesInputs = new GeoNamesInputs(this.el.querySelector('.preferences-inputs-geonames'), {
       geonamesAttrs: props.geonamesAttrs,
+      geonamesData: props.geonamesData,
     });
   };
 

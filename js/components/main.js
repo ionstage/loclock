@@ -25,6 +25,7 @@
     this._preferences = new Preferences(this.el.querySelector('.preferences'), {
       themeAttrs: this._themeAttrs,
       geonamesAttrs: props.geonamesAttrs,
+      geonamesData: this._geonamesData,
     });
   };
 
