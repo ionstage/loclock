@@ -22,11 +22,7 @@
     this._settingsButton = new Button(this.el.querySelector('.settings-button'));
     this._list = new List(this.el.querySelector('.list'), props);
     this._clock = new Clock(this.el.querySelector('.clock'), { locations: props.selectedLocations });
-    this._preferences = new Preferences(this.el.querySelector('.preferences'), {
-      themeAttrs: this._themeAttrs,
-      geonamesAttrs: props.geonamesAttrs,
-      geonamesData: this._geonamesData,
-    });
+    this._preferences = new Preferences(this.el.querySelector('.preferences'), props);
   };
 
   Main.prototype.init = function() {

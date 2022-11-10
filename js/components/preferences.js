@@ -10,13 +10,8 @@
     this.el = el;
     this._events = new Events();
     this._hideButton = new Button(this.el.querySelector('.preferences-hide-button'));
-    this._themeInputs = new ThemeInputs(this.el.querySelector('.preferences-inputs-theme'), {
-      themeAttrs: props.themeAttrs,
-    });
-    this._geonamesInputs = new GeoNamesInputs(this.el.querySelector('.preferences-inputs-geonames'), {
-      geonamesAttrs: props.geonamesAttrs,
-      geonamesData: props.geonamesData,
-    });
+    this._themeInputs = new ThemeInputs(this.el.querySelector('.preferences-inputs-theme'), props);
+    this._geonamesInputs = new GeoNamesInputs(this.el.querySelector('.preferences-inputs-geonames'), props);
   };
 
   Preferences.prototype.init = function() {
