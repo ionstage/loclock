@@ -305,18 +305,14 @@ body {
 }
 
 .preferences-table[data-type='geonames'] .preferences-table-data:nth-child(1) {
-  width: 24%;
+  width: 42%;
 }
 
 .preferences-table[data-type='geonames'] .preferences-table-data:nth-child(2) {
-  width: 30%;
+  width: 50%;
 }
 
 .preferences-table[data-type='geonames'] .preferences-table-data:nth-child(3) {
-  width: 38%;
-}
-
-.preferences-table[data-type='geonames'] .preferences-table-data:nth-child(4) {
   font-size: 16px;
   max-width: 8%;
 }
