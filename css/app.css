@@ -317,14 +317,8 @@ body {
   max-width: 8%;
 }
 
-.preferences-table-select {
-  width: 100%;
-}
-
 .preferences-table-controls {
-  height: 26px;
   margin: 4px;
-  position: relative;
 }
 
 .preferences-table-controls.disabled {
@@ -332,10 +326,33 @@ body {
   pointer-events: none;
 }
 
-.preferences-table-add-button {
-  bottom: 0;
+.preferences-table-controls::after {
+  clear: both;
+  content: '.';
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
+
+.preferences-table-select {
   height: 21.5px;
-  margin: auto;
-  position: absolute;
-  top: 0;
+  width: 100%;
+}
+
+.preferences-table-controls[data-type='geonames'] .preferences-table-data:nth-child(1) {
+  width: 42%;
+}
+
+.preferences-table-controls[data-type='geonames'] .preferences-table-data:nth-child(2) {
+  width: 42%;
+}
+
+.preferences-table-controls[data-type='geonames'] .preferences-table-data:nth-child(3) {
+  padding-right: 0;
+  width: 16%;
+}
+
+.preferences-table-add-button {
+  height: 21.5px;
+  width: 100%;
 }
