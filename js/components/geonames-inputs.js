@@ -9,11 +9,12 @@
     this._geonamesData = props.geonamesData;
     this._inputElement = this.el.querySelector('input');
     this._table = new GeoNamesInputs.Table(this.el.querySelector('.preferences-table'), props);
-    this._tableControlsElement = this.el.querySelector('.preferences-table-controls');
+    this._tableControls = new GeoNamesInputs.TableControls(this.el.querySelector('.preferences-table-controls'), props);
   };
 
   GeoNamesInputs.prototype.init = function() {
     this._table.init();
+    this._tableControls.init();
     this._inputElement.addEventListener('change', this._changeEnabled.bind(this));
     this._geonamesAttrs.on('change:enabled', this._updateEnabled.bind(this));
     this._geonamesData.on('loading', this._updateState.bind(this, 'loading'));
@@ -27,7 +28,6 @@
 
   GeoNamesInputs.prototype._updateEnabled = function(enabled) {
     this._inputElement.checked = enabled;
-    dom.toggleClass(this._tableControlsElement, 'disabled', !enabled);
   };
 
   GeoNamesInputs.prototype._updateState = function(state) {
@@ -49,6 +49,23 @@
     };
 
     return Table;
+  })();
+
+  GeoNamesInputs.TableControls = (function() {
+    var TableControls = function(el, props) {
+      this.el = el;
+      this._geonamesAttrs = props.geonamesAttrs;
+    };
+
+    TableControls.prototype.init = function() {
+      this._geonamesAttrs.on('change:enabled', this._updateEnabled.bind(this));
+    };
+
+    TableControls.prototype._updateEnabled = function(enabled) {
+      dom.toggleClass(this.el, 'disabled', !enabled);
+    };
+
+    return TableControls;
   })();
 
   if (typeof module !== 'undefined' && module.exports) {
