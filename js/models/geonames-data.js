@@ -8,6 +8,7 @@
     this._url = url;
     this._loadPromise = null;
     this._data = [];
+    this._countries = null;
     this._events = new Events();
   };
 
@@ -27,6 +28,20 @@
       }.bind(this));
     }
     return this._loadPromise;
+  };
+
+  GeoNamesData.prototype.getCountries = function() {
+    if (this._loadPromise && !this._countries) {
+      this._countries = this._data.reduce(function(countries, item) {
+        if (countries.indexOf(item.country) === -1) {
+          countries.push(item.country);
+        }
+        return countries;
+      }, []).sort(function(a, b) {
+        return a.localeCompare(b);
+      });
+    }
+    return this._countries;
   };
 
   if (typeof module !== 'undefined' && module.exports) {
