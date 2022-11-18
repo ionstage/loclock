@@ -7,7 +7,7 @@
   var GeoNamesData = function(url) {
     this._url = url;
     this._loadPromise = null;
-    this._data = [];
+    this._cities = [];
     this._countries = null;
     this._events = new Events();
   };
@@ -20,7 +20,7 @@
     if (!this._loadPromise) {
       this._events.emit('loading');
       this._loadPromise = dom.loadJSON(this._url).then(function(data) {
-        this._data = data;
+        this._cities = data.map(function(props) { return new GeoNamesData.City(props); });
         this._events.emit('loaded');
       }.bind(this)).catch(function() {
         this._loadPromise = null;
@@ -32,9 +32,10 @@
 
   GeoNamesData.prototype.getCountries = function() {
     if (this._loadPromise && !this._countries) {
-      this._countries = this._data.reduce(function(countries, item) {
-        if (countries.indexOf(item.country) === -1) {
-          countries.push(item.country);
+      this._countries = this._cities.reduce(function(countries, city) {
+        var country = city.getCountry();
+        if (countries.indexOf(country) === -1) {
+          countries.push(country);
         }
         return countries;
       }, []).sort(function(a, b) {
@@ -43,6 +44,21 @@
     }
     return this._countries;
   };
+
+  GeoNamesData.City = (function() {
+    var City = function(props) {
+      this._id = props.id;
+      this._country = props.country;
+      this._name = props.name;
+      this._timezone = props.timezone;
+    };
+
+    City.prototype.getCountry = function() {
+      return this._country;
+    };
+
+    return City;
+  })();
 
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = GeoNamesData;
