@@ -55,6 +55,8 @@
     var TableControls = function(el, props) {
       this.el = el;
       this._geonamesAttrs = props.geonamesAttrs;
+      this._countrySelect = new GeoNamesInputs.TableSelect(this.el.querySelector(".preferences-table-select[name='country']"));
+      this._nameSelect = new GeoNamesInputs.TableSelect(this.el.querySelector(".preferences-table-select[name='name']"));
     };
 
     TableControls.prototype.init = function() {
@@ -66,6 +68,14 @@
     };
 
     return TableControls;
+  })();
+
+  GeoNamesInputs.TableSelect = (function() {
+    var TableSelect = function(el) {
+      this.el = el;
+    };
+
+    return TableSelect;
   })();
 
   if (typeof module !== 'undefined' && module.exports) {
