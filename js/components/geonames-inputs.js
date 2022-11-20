@@ -2,6 +2,7 @@
   'use strict';
 
   var dom = app.dom || require('../dom.js');
+  var Collection = app.Collection || require('../base/collection.js');
 
   var GeoNamesInputs = function(el, props) {
     this.el = el;
@@ -55,24 +56,53 @@
     var TableControls = function(el, props) {
       this.el = el;
       this._geonamesAttrs = props.geonamesAttrs;
-      this._countrySelect = new GeoNamesInputs.TableSelect(this.el.querySelector(".preferences-table-select[name='country']"));
-      this._nameSelect = new GeoNamesInputs.TableSelect(this.el.querySelector(".preferences-table-select[name='name']"));
+      this._geonamesData = props.geonamesData;
+      this._countryOptions = new Collection();
+      this._countrySelect = new GeoNamesInputs.TableSelect(this.el.querySelector(".preferences-table-select[name='country']"), {
+        options: this._countryOptions,
+      });
+      this._nameSelect = new GeoNamesInputs.TableSelect(this.el.querySelector(".preferences-table-select[name='name']"), { /* TODO */ });
     };
 
     TableControls.prototype.init = function() {
+      this._countrySelect.init();
       this._geonamesAttrs.on('change:enabled', this._updateEnabled.bind(this));
+      this._geonamesData.on('loaded', this._dataLoaded.bind(this));
     };
 
     TableControls.prototype._updateEnabled = function(enabled) {
       dom.toggleClass(this.el, 'disabled', !enabled);
     };
 
+    TableControls.prototype._dataLoaded = function() {
+      var options = this._geonamesData.getCountries().map(function(country) {
+        return { value: country, label: country, selected: false };
+      });
+      options.unshift({ value: '', label: '--Select--', selected: true });
+      this._countryOptions.reset(options);
+    };
+
     return TableControls;
   })();
 
   GeoNamesInputs.TableSelect = (function() {
-    var TableSelect = function(el) {
+    var TableSelect = function(el, props) {
       this.el = el;
+      this._options = props.options;
+    };
+
+    TableSelect.prototype.init = function() {
+      this._options.on('reset', this._reset.bind(this));
+    };
+
+    TableSelect.prototype._reset = function(options) {
+      var fragment = document.createDocumentFragment();
+      options.forEach(function(option) {
+        var s = "<option value='" + option.value + "'" + (option.selected ? ' selected' : '') + ">" + option.label + "</option>";
+        fragment.appendChild(dom.render(s));
+      });
+      this.el.innerHTML = '';
+      this.el.appendChild(fragment);
     };
 
     return TableSelect;
