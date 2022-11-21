@@ -17,7 +17,7 @@
   };
 
   ThemeInputs.prototype._update = function(value) {
-    var el = this.el.querySelector('input[value=\'' + value + '\']');
+    var el = this.el.querySelector("input[value='" + value + "']");
     el.checked = true;
   };
 
