@@ -46,12 +46,12 @@
     this._preferences.on('hide', this._hidePreferences.bind(this));
   };
 
-  Main.prototype.resize = function() {
-    this._clock.resize();
-  };
-
   Main.prototype.on = function() {
     return Events.prototype.on.apply(this._events, arguments);
+  };
+
+  Main.prototype.resize = function() {
+    this._clock.resize();
   };
 
   Main.prototype._changeTheme = function(value) {
