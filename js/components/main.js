@@ -18,10 +18,14 @@
       preferencesVisible: false,
     });
     this._events = new Events();
+    this._clockAttrs = new Attributes({ dragEnabled: true });
     this._menuButton = new Button(this.el.querySelector('.menu-button'));
     this._settingsButton = new Button(this.el.querySelector('.settings-button'));
     this._list = new List(this.el.querySelector('.list'), props);
-    this._clock = new Clock(this.el.querySelector('.clock'), { locations: props.selectedLocations });
+    this._clock = new Clock(this.el.querySelector('.clock'), {
+      locations: props.selectedLocations,
+      attrs: this._clockAttrs,
+    });
     this._preferences = new Preferences(this.el.querySelector('.preferences'), props);
   };
 
@@ -57,12 +61,12 @@
   Main.prototype._toggleList = function() {
     var visible = !this._attrs.get('listVisible');
     this._attrs.set('listVisible', visible);
-    this._clock.setDragEnabled(!visible);
+    this._clockAttrs.set('dragEnabled', !visible);
   };
 
   Main.prototype._hideList = function() {
     this._attrs.set('listVisible', false);
-    this._clock.setDragEnabled(true);
+    this._clockAttrs.set('dragEnabled', true);
   };
 
   Main.prototype._updateListVisibility = function(visible) {
@@ -72,7 +76,7 @@
   Main.prototype._togglePreferences = function() {
     var visible = !this._attrs.get('preferencesVisible');
     this._attrs.set('preferencesVisible', visible);
-    this._clock.setDragEnabled(!visible);
+    this._clockAttrs.set('dragEnabled', !visible);
     if (visible) {
       this._geonamesData.load();
     }
@@ -80,7 +84,7 @@
 
   Main.prototype._hidePreferences = function() {
     this._attrs.set('preferencesVisible', false);
-    this._clock.setDragEnabled(true);
+    this._clockAttrs.set('dragEnabled', true);
   };
 
   Main.prototype._updatePreferencesVisibility = function(visible) {

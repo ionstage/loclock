@@ -3,14 +3,13 @@
 
   var dom = app.dom || require('../dom.js');
   var Draggable = app.Draggable || require('../draggable.js');
-  var Attributes = app.Attributes || require('../base/attributes.js');
   var Button = app.Button || require('./button.js');
   var Events = app.Events || require('../base/events.js');
 
   var Clock = function(el, props) {
     this.el = el;
     this._locations = props.locations;
-    this._attrs = new Attributes({ dragEnabled: false });
+    this._attrs = props.attrs;
     this._events = new Events();
     this._cx = this.el.viewBox.baseVal.width / 2;
     this._cy = this.el.viewBox.baseVal.height / 2;
@@ -51,7 +50,8 @@
     this.el.appendChild(this._centerElement);
     this._adjustCenter(this._centerElement);
     this.el.appendChild(this._pointsElement);
-    this._attrs.set('dragEnabled', true);
+
+    this._updateDragEnabled(this._attrs.get('dragEnabled'));
   };
 
   Clock.prototype.on = function() {
@@ -60,10 +60,6 @@
 
   Clock.prototype.resize = function() {
     this._updatePoints();
-  };
-
-  Clock.prototype.setDragEnabled = function(dragEnabled) {
-    this._attrs.set('dragEnabled', dragEnabled);
   };
 
   Clock.prototype._updateDragEnabled = function(dragEnabled) {
