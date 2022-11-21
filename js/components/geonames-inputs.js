@@ -3,6 +3,7 @@
 
   var dom = app.dom || require('../dom.js');
   var Collection = app.Collection || require('../base/collection.js');
+  var Events = app.Events || require('../base/events.js');
 
   var GeoNamesInputs = function(el, props) {
     this.el = el;
@@ -89,10 +90,16 @@
     var TableSelect = function(el, props) {
       this.el = el;
       this._options = props.options;
+      this._events = new Events();
     };
 
     TableSelect.prototype.init = function() {
+      this.el.addEventListener('change', this._onchange.bind(this));
       this._options.on('reset', this._reset.bind(this));
+    };
+
+    TableSelect.prototype.on = function() {
+      return Events.prototype.on.apply(this._events, arguments);
     };
 
     TableSelect.prototype._reset = function(options) {
@@ -103,6 +110,11 @@
       });
       this.el.innerHTML = '';
       this.el.appendChild(fragment);
+    };
+
+    TableSelect.prototype._onchange = function() {
+      var value = this.el.options[this.el.selectedIndex].value;
+      this._events.emit('change', value);
     };
 
     return TableSelect;
