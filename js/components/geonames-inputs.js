@@ -58,9 +58,9 @@
       this.el = el;
       this._geonamesAttrs = props.geonamesAttrs;
       this._geonamesData = props.geonamesData;
-      this._countryOptions = new Collection();
+      this._countrySelectOptions = new Collection();
       this._countrySelect = new GeoNamesInputs.TableSelect(this.el.querySelector(".preferences-table-select[name='country']"), {
-        options: this._countryOptions,
+        options: this._countrySelectOptions,
       });
       this._nameSelect = new GeoNamesInputs.TableSelect(this.el.querySelector(".preferences-table-select[name='name']"), { /* TODO */ });
     };
@@ -80,7 +80,7 @@
         return { value: country, label: country, selected: false };
       });
       options.unshift({ value: '', label: '--Select--', selected: true });
-      this._countryOptions.reset(options);
+      this._countrySelectOptions.reset(options);
     };
 
     return TableControls;
