@@ -56,7 +56,7 @@
     if (key in LocationData.TZ_LOCATION_NAME_MAP) {
       return LocationData.TZ_LOCATION_NAME_MAP[key];
     }
-    return key.substring(key.lastIndexOf('/') + 1).replace(/_/g, ' ');
+    return key.split('#!')[0].substring(key.lastIndexOf('/') + 1).replace(/_/g, ' ');
   };
 
   Location.prototype._createTimezoneOffset = function(time) {
