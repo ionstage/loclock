@@ -45,6 +45,12 @@
     return this._countries;
   };
 
+  GeoNamesData.prototype.findCities = function(country) {
+    return this._cities.filter(function(city) {
+      return (city.getCountry() === country);
+    });
+  };
+
   GeoNamesData.City = (function() {
     var City = function(props) {
       this._id = props.id;
