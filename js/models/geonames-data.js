@@ -63,6 +63,10 @@
       return this._country;
     };
 
+    City.prototype.getName = function() {
+      return this._name;
+    };
+
     return City;
   })();
 
