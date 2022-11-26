@@ -59,16 +59,21 @@
       this._geonamesAttrs = props.geonamesAttrs;
       this._geonamesData = props.geonamesData;
       this._countrySelectOptions = new Collection();
+      this._nameSelectOptions = new Collection();
       this._countrySelect = new GeoNamesInputs.TableSelect(this.el.querySelector(".preferences-table-select[name='country']"), {
         options: this._countrySelectOptions,
       });
-      this._nameSelect = new GeoNamesInputs.TableSelect(this.el.querySelector(".preferences-table-select[name='name']"), { /* TODO */ });
+      this._nameSelect = new GeoNamesInputs.TableSelect(this.el.querySelector(".preferences-table-select[name='name']"), {
+        options: this._nameSelectOptions,
+      });
     };
 
     TableControls.prototype.init = function() {
       this._countrySelect.init();
+      this._nameSelect.init();
       this._geonamesAttrs.on('change:enabled', this._updateEnabled.bind(this));
       this._geonamesData.on('loaded', this._dataLoaded.bind(this));
+      this._countrySelect.on('change', this._countrySelected.bind(this));
     };
 
     TableControls.prototype._updateEnabled = function(enabled) {
@@ -81,6 +86,21 @@
       });
       options.unshift({ value: '', label: '--Select--', selected: true });
       this._countrySelectOptions.reset(options);
+    };
+
+    TableControls.prototype._countrySelected = function(country) {
+      var cities = this._geonamesData.findCities(country);
+      if (cities.length === 0) {
+        this._nameSelectOptions.reset([]);
+        return;
+      }
+      var options = cities.map(function(city) {
+        return { value: city.generateKey(), label: city.getName(), selected: false };
+      }).sort(function(a, b) {
+        return a.label.localeCompare(b.label);
+      });
+      options.unshift({ value: '', label: '--Select--', selected: true });
+      this._nameSelectOptions.reset(options);
     };
 
     return TableControls;
@@ -105,7 +125,7 @@
     TableSelect.prototype._reset = function(options) {
       var fragment = document.createDocumentFragment();
       options.forEach(function(option) {
-        var s = "<option value='" + option.value + "'" + (option.selected ? ' selected' : '') + ">" + option.label + "</option>";
+        var s = '<option value="' + option.value + '"' + (option.selected ? ' selected' : '') + '>' + option.label + '</option>';
         fragment.appendChild(dom.render(s));
       });
       this.el.innerHTML = '';

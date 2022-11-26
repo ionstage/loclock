@@ -67,6 +67,10 @@
       return this._name;
     };
 
+    City.prototype.generateKey = function() {
+      return this._timezone + '#/' + this._name + '#!gn' + this._id;
+    };
+
     return City;
   })();
 
