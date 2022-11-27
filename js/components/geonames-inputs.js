@@ -72,15 +72,15 @@
       this._countrySelect.init();
       this._nameSelect.init();
       this._geonamesAttrs.on('change:enabled', this._updateEnabled.bind(this));
-      this._geonamesData.on('loaded', this._dataLoaded.bind(this));
-      this._countrySelect.on('change', this._countrySelected.bind(this));
+      this._geonamesData.on('loaded', this._resetCountrySelect.bind(this));
+      this._countrySelect.on('change', this._resetNameSelect.bind(this));
     };
 
     TableControls.prototype._updateEnabled = function(enabled) {
       dom.toggleClass(this.el, 'disabled', !enabled);
     };
 
-    TableControls.prototype._dataLoaded = function() {
+    TableControls.prototype._resetCountrySelect = function() {
       var options = this._geonamesData.getCountries().map(function(country) {
         return { value: country, label: country, selected: false };
       });
@@ -88,7 +88,7 @@
       this._countrySelectOptions.reset(options);
     };
 
-    TableControls.prototype._countrySelected = function(country) {
+    TableControls.prototype._resetNameSelect = function(country) {
       var cities = this._geonamesData.findCities(country);
       if (cities.length === 0) {
         this._nameSelectOptions.reset([]);
