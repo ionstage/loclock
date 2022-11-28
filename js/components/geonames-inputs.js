@@ -2,6 +2,7 @@
   'use strict';
 
   var dom = app.dom || require('../dom.js');
+  var Attributes = app.Attributes || require('../base/attributes.js');
   var Collection = app.Collection || require('../base/collection.js');
   var Events = app.Events || require('../base/events.js');
 
@@ -60,11 +61,14 @@
       this._geonamesData = props.geonamesData;
       this._countrySelectOptions = new Collection();
       this._nameSelectOptions = new Collection();
+      this._nameSelectAttrs = new Attributes({ disabled: true });
       this._countrySelect = new GeoNamesInputs.TableSelect(this.el.querySelector(".preferences-table-select[name='country']"), {
         options: this._countrySelectOptions,
+        attrs: new Attributes({ disabled: false }),
       });
       this._nameSelect = new GeoNamesInputs.TableSelect(this.el.querySelector(".preferences-table-select[name='name']"), {
         options: this._nameSelectOptions,
+        attrs: this._nameSelectAttrs,
       });
     };
 
@@ -86,12 +90,14 @@
       });
       options.unshift({ value: '', label: '--Select--', selected: true });
       this._countrySelectOptions.reset(options);
+      this._nameSelectAttrs.set('disabled', true);
     };
 
     TableControls.prototype._resetNameSelect = function(country) {
       var cities = this._geonamesData.findCities(country);
       if (cities.length === 0) {
         this._nameSelectOptions.reset([]);
+        this._nameSelectAttrs.set('disabled', true);
         return;
       }
       var options = cities.map(function(city) {
@@ -101,6 +107,7 @@
       });
       options.unshift({ value: '', label: '--Select--', selected: true });
       this._nameSelectOptions.reset(options);
+      this._nameSelectAttrs.set('disabled', false);
     };
 
     return TableControls;
@@ -110,12 +117,15 @@
     var TableSelect = function(el, props) {
       this.el = el;
       this._options = props.options;
+      this._attrs = props.attrs;
       this._events = new Events();
     };
 
     TableSelect.prototype.init = function() {
       this.el.addEventListener('change', this._onchange.bind(this));
       this._options.on('reset', this._reset.bind(this));
+      this._attrs.on('change:disabled', this._updateDisabled.bind(this));
+      this._updateDisabled(this._attrs.get('disabled'));
     };
 
     TableSelect.prototype.on = function() {
@@ -130,6 +140,10 @@
       });
       this.el.innerHTML = '';
       this.el.appendChild(fragment);
+    };
+
+    TableSelect.prototype._updateDisabled = function(disabled) {
+      this.el.disabled = disabled;
     };
 
     TableSelect.prototype._onchange = function() {
