@@ -218,6 +218,7 @@ body {
   float: right;
   font-size: 21px;
   padding: .67em;
+  touch-action: manipulation;
 }
 
 .preferences-hide-button.active {
