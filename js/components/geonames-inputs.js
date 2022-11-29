@@ -70,6 +70,7 @@
         options: this._nameSelectOptions,
         attrs: this._nameSelectAttrs,
       });
+      this._addButton = new GeoNamesInputs.TableButton(this.el.querySelector('.preferences-table-add-button'));
     };
 
     TableControls.prototype.init = function() {
@@ -152,6 +153,14 @@
     };
 
     return TableSelect;
+  })();
+
+  GeoNamesInputs.TableButton = (function() {
+    var TableButton = function(el) {
+      this.el = el;
+    };
+
+    return TableButton;
   })();
 
   if (typeof module !== 'undefined' && module.exports) {
