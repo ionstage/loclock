@@ -337,6 +337,7 @@ body {
 
 .preferences-table-select {
   height: 21.5px;
+  vertical-align: middle;
   width: 100%;
 }
 
@@ -355,5 +356,7 @@ body {
 
 .preferences-table-add-button {
   height: 21.5px;
+  line-height: normal;
+  vertical-align: middle;
   width: 100%;
 }
