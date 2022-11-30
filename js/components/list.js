@@ -25,23 +25,27 @@
   };
 
   List.prototype._resetLocations = function(locations) {
-    var content = document.createElement('div');
-    content.className = 'list-content';
+    var fragment = document.createDocumentFragment();
 
     this._itemElements = locations.reduce(function(ret, location) {
       var el = this._createItemElement(location, this._selectedLocations.includes(location));
-      content.appendChild(el);
+      fragment.appendChild(el);
       ret[location.key] = el;
       return ret;
     }.bind(this), {});
 
-    this.el.replaceChild(content, this.el.querySelector('.list-content'));
+    var content = this.el.querySelector('.list-content');
+    content.innerHTML = '';
+    content.appendChild(fragment);
 
     if (dom.supportsTouch()) {
       if (this._iScroll) {
-        this._iScroll.destroy();
+        setTimeout(function() {
+          this._iScroll.refresh();
+        }.bind(this), 0);
+      } else {
+        this._iScroll = this._createIScroll();
       }
-      this._iScroll = this._createIScroll();
     }
   };
 
