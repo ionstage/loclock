@@ -62,6 +62,7 @@
       this._countrySelectOptions = new Collection();
       this._nameSelectOptions = new Collection();
       this._nameSelectAttrs = new Attributes({ disabled: true });
+      this._addButtonAttrs = new Attributes({ disabled: true });
       this._countrySelect = new GeoNamesInputs.TableSelect(this.el.querySelector(".preferences-table-select[name='country']"), {
         options: this._countrySelectOptions,
         attrs: new Attributes({ disabled: false }),
@@ -70,12 +71,15 @@
         options: this._nameSelectOptions,
         attrs: this._nameSelectAttrs,
       });
-      this._addButton = new GeoNamesInputs.TableButton(this.el.querySelector('.preferences-table-add-button'));
+      this._addButton = new GeoNamesInputs.TableButton(this.el.querySelector('.preferences-table-add-button'), {
+        attrs: this._addButtonAttrs,
+      });
     };
 
     TableControls.prototype.init = function() {
       this._countrySelect.init();
       this._nameSelect.init();
+      this._addButton.init();
       this._geonamesAttrs.on('change:enabled', this._updateEnabled.bind(this));
       this._geonamesData.on('loaded', this._resetCountrySelect.bind(this));
       this._countrySelect.on('change', this._resetNameSelect.bind(this));
@@ -156,8 +160,18 @@
   })();
 
   GeoNamesInputs.TableButton = (function() {
-    var TableButton = function(el) {
+    var TableButton = function(el, props) {
       this.el = el;
+      this._attrs = props.attrs;
+    };
+
+    TableButton.prototype.init = function() {
+      this._attrs.on('change:disabled', this._updateDisabled.bind(this));
+      this._updateDisabled(this._attrs.get('disabled'));
+    };
+
+    TableButton.prototype._updateDisabled = function(disabled) {
+      this.el.disabled = disabled;
     };
 
     return TableButton;
