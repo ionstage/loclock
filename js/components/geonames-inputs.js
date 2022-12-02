@@ -83,6 +83,7 @@
       this._geonamesAttrs.on('change:enabled', this._updateEnabled.bind(this));
       this._geonamesData.on('loaded', this._resetCountrySelect.bind(this));
       this._countrySelect.on('change', this._resetNameSelect.bind(this));
+      this._nameSelect.on('change', this._selectName.bind(this));
     };
 
     TableControls.prototype._updateEnabled = function(enabled) {
@@ -96,6 +97,7 @@
       options.unshift({ value: '', label: '--Select--', selected: true });
       this._countrySelectOptions.reset(options);
       this._nameSelectAttrs.set('disabled', true);
+      this._addButtonAttrs.set('disabled', true);
     };
 
     TableControls.prototype._resetNameSelect = function(country) {
@@ -103,6 +105,7 @@
       if (cities.length === 0) {
         this._nameSelectOptions.reset([]);
         this._nameSelectAttrs.set('disabled', true);
+        this._addButtonAttrs.set('disabled', true);
         return;
       }
       var options = cities.map(function(city) {
@@ -113,6 +116,11 @@
       options.unshift({ value: '', label: '--Select--', selected: true });
       this._nameSelectOptions.reset(options);
       this._nameSelectAttrs.set('disabled', false);
+      this._addButtonAttrs.set('disabled', true);
+    };
+
+    TableControls.prototype._selectName = function(key) {
+      this._addButtonAttrs.set('disabled', !key);
     };
 
     return TableControls;
