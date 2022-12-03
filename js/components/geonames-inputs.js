@@ -59,6 +59,8 @@
       this.el = el;
       this._geonamesAttrs = props.geonamesAttrs;
       this._geonamesData = props.geonamesData;
+      this._events = new Events();
+      this._selectedKey = '';
       this._countrySelectOptions = new Collection();
       this._nameSelectOptions = new Collection();
       this._nameSelectAttrs = new Attributes({ disabled: true });
@@ -84,6 +86,7 @@
       this._geonamesData.on('loaded', this._resetCountrySelect.bind(this));
       this._countrySelect.on('change', this._resetNameSelect.bind(this));
       this._nameSelect.on('change', this._selectName.bind(this));
+      this._addButton.on('click', this._addButtonClicked.bind(this));
     };
 
     TableControls.prototype._updateEnabled = function(enabled) {
@@ -98,6 +101,7 @@
       this._countrySelectOptions.reset(options);
       this._nameSelectAttrs.set('disabled', true);
       this._addButtonAttrs.set('disabled', true);
+      this._selectedKey = '';
     };
 
     TableControls.prototype._resetNameSelect = function(country) {
@@ -106,6 +110,7 @@
         this._nameSelectOptions.reset([]);
         this._nameSelectAttrs.set('disabled', true);
         this._addButtonAttrs.set('disabled', true);
+        this._selectedKey = '';
         return;
       }
       var options = cities.map(function(city) {
@@ -117,10 +122,16 @@
       this._nameSelectOptions.reset(options);
       this._nameSelectAttrs.set('disabled', false);
       this._addButtonAttrs.set('disabled', true);
+      this._selectedKey = '';
     };
 
     TableControls.prototype._selectName = function(key) {
       this._addButtonAttrs.set('disabled', !key);
+      this._selectedKey = key;
+    };
+
+    TableControls.prototype._addButtonClicked = function() {
+      this._events.emit('add', this._selectedKey);
     };
 
     return TableControls;
@@ -171,11 +182,17 @@
     var TableButton = function(el, props) {
       this.el = el;
       this._attrs = props.attrs;
+      this._events = new Events();
     };
 
     TableButton.prototype.init = function() {
+      this.el.addEventListener('click', this._events.emit.bind(this._events, 'click'));
       this._attrs.on('change:disabled', this._updateDisabled.bind(this));
       this._updateDisabled(this._attrs.get('disabled'));
+    };
+
+    TableButton.prototype.on = function() {
+      return Events.prototype.on.apply(this._events, arguments);
     };
 
     TableButton.prototype._updateDisabled = function(disabled) {
