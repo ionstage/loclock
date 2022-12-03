@@ -1,6 +1,7 @@
 (function(app) {
   'use strict';
 
+  var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var Events = app.Events || require('../base/events.js');
 
@@ -51,12 +52,22 @@
     });
   };
 
+  GeoNamesData.prototype.findCity = function(id) {
+    return helper.find(this._cities, function(city) {
+      return (city.getID() === id);
+    });
+  };
+
   GeoNamesData.City = (function() {
     var City = function(props) {
       this._id = props.id;
       this._country = props.country;
       this._name = props.name;
       this._timezone = props.timezone;
+    };
+
+    City.prototype.getID = function() {
+      return this._id;
     };
 
     City.prototype.getCountry = function() {

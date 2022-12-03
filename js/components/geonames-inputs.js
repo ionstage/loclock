@@ -60,7 +60,7 @@
       this._geonamesAttrs = props.geonamesAttrs;
       this._geonamesData = props.geonamesData;
       this._events = new Events();
-      this._selectedKey = '';
+      this._selectedCityID = null;
       this._countrySelectOptions = new Collection();
       this._nameSelectOptions = new Collection();
       this._nameSelectAttrs = new Attributes({ disabled: true });
@@ -101,7 +101,7 @@
       this._countrySelectOptions.reset(options);
       this._nameSelectAttrs.set('disabled', true);
       this._addButtonAttrs.set('disabled', true);
-      this._selectedKey = '';
+      this._selectedCityID = null;
     };
 
     TableControls.prototype._resetNameSelect = function(country) {
@@ -110,11 +110,11 @@
         this._nameSelectOptions.reset([]);
         this._nameSelectAttrs.set('disabled', true);
         this._addButtonAttrs.set('disabled', true);
-        this._selectedKey = '';
+        this._selectedCityID = null;
         return;
       }
       var options = cities.map(function(city) {
-        return { value: city.generateKey(), label: city.getName(), selected: false };
+        return { value: city.getID(), label: city.getName(), selected: false };
       }).sort(function(a, b) {
         return a.label.localeCompare(b.label);
       });
@@ -122,16 +122,22 @@
       this._nameSelectOptions.reset(options);
       this._nameSelectAttrs.set('disabled', false);
       this._addButtonAttrs.set('disabled', true);
-      this._selectedKey = '';
+      this._selectedCityID = null;
     };
 
-    TableControls.prototype._selectName = function(key) {
-      this._addButtonAttrs.set('disabled', !key);
-      this._selectedKey = key;
+    TableControls.prototype._selectName = function(id) {
+      this._addButtonAttrs.set('disabled', !id);
+      this._selectedCityID = id;
     };
 
     TableControls.prototype._addButtonClicked = function() {
-      this._events.emit('add', this._selectedKey);
+      if (!this._selectedCityID) {
+        return;
+      }
+      var city = this._geonamesData.findCity(this._selectedCityID);
+      if (city) {
+        this._events.emit('add', city);
+      }
     };
 
     return TableControls;
