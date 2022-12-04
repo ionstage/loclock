@@ -134,10 +134,7 @@
       if (!this._selectedCityID) {
         return;
       }
-      var city = this._geonamesData.findCity(this._selectedCityID);
-      if (city) {
-        this._events.emit('add', city);
-      }
+      this._events.emit('add', this._selectedCityID);
     };
 
     return TableControls;
