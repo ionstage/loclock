@@ -10,6 +10,7 @@
     this.el = el;
     this._geonamesAttrs = props.geonamesAttrs;
     this._geonamesData = props.geonamesData;
+    this._geonamesLocations = props.geonamesLocations;
     this._inputElement = this.el.querySelector('input');
     this._table = new GeoNamesInputs.Table(this.el.querySelector('.preferences-table'), props);
     this._tableControls = new GeoNamesInputs.TableControls(this.el.querySelector('.preferences-table-controls'), props);

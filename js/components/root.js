@@ -19,12 +19,14 @@
     this._themeAttrs = new Attributes();
     this._geonamesAttrs = new Attributes();
     this._geonamesData = new GeoNamesData('./data/geonames.json');
+    this._geonamesLocations = new Collection();
     this._main = new Main(document.querySelector('.main'), {
       locations: this._locations,
       selectedLocations: this._selectedLocations,
       themeAttrs: this._themeAttrs,
       geonamesAttrs: this._geonamesAttrs,
       geonamesData: this._geonamesData,
+      geonamesLocations: this._geonamesLocations,
     });
   };
 
