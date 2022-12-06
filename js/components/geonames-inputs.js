@@ -5,12 +5,12 @@
   var Attributes = app.Attributes || require('../base/attributes.js');
   var Collection = app.Collection || require('../base/collection.js');
   var Events = app.Events || require('../base/events.js');
+  var Location = app.Location || require('../models/location.js');
 
   var GeoNamesInputs = function(el, props) {
     this.el = el;
     this._geonamesAttrs = props.geonamesAttrs;
     this._geonamesData = props.geonamesData;
-    this._geonamesLocations = props.geonamesLocations;
     this._inputElement = this.el.querySelector('input');
     this._table = new GeoNamesInputs.Table(this.el.querySelector('.preferences-table'), props);
     this._tableControls = new GeoNamesInputs.TableControls(this.el.querySelector('.preferences-table-controls'), props);
@@ -60,7 +60,7 @@
       this.el = el;
       this._geonamesAttrs = props.geonamesAttrs;
       this._geonamesData = props.geonamesData;
-      this._events = new Events();
+      this._geonamesLocations = props.geonamesLocations;
       this._selectedCityID = null;
       this._countrySelectOptions = new Collection();
       this._nameSelectOptions = new Collection();
@@ -135,7 +135,15 @@
       if (!this._selectedCityID) {
         return;
       }
-      this._events.emit('add', this._selectedCityID);
+      var city = this._geonamesData.findCity(this._selectedCityID);
+      if (!city) {
+        return;
+      }
+      var location = Location.get(city.generateKey());
+      if (!location) {
+        return;
+      }
+      this._geonamesLocations.add(location);
     };
 
     return TableControls;
