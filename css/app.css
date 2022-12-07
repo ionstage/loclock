@@ -298,7 +298,9 @@ body {
 .preferences-table-data {
   box-sizing: border-box;
   float: left;
+  overflow: hidden;
   padding: 0 4px;
+  text-overflow: ellipsis;
 }
 
 .preferences-table-data.hide {
