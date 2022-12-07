@@ -344,10 +344,12 @@ body {
 }
 
 .preferences-table-controls[data-type='geonames'] .preferences-table-data:nth-child(1) {
+  padding-left: 0;
   width: 42%;
 }
 
 .preferences-table-controls[data-type='geonames'] .preferences-table-data:nth-child(2) {
+  padding: 0 2px;
   width: 42%;
 }
 
