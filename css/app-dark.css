@@ -81,6 +81,10 @@
   border-color: gray;
 }
 
+.main[data-theme='dark'] .preferences-table-head {
+  background-color: gray;
+}
+
 .main[data-theme='dark'] .preferences-table-body {
   border-color: gray;
 }

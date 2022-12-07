@@ -275,6 +275,10 @@ body {
   pointer-events: none;
 }
 
+.preferences-table-head {
+  background-color: lightgray;
+}
+
 .preferences-table-body {
   border: .5px solid lightgray;
 }
