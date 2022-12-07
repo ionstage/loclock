@@ -41,15 +41,42 @@
   GeoNamesInputs.Table = (function() {
     var Table = function(el, props) {
       this.el = el;
+      this._bodyElement = this.el.querySelector('.preferences-table-body');
       this._geonamesAttrs = props.geonamesAttrs;
+      this._geonamesData = props.geonamesData;
+      this._geonamesLocations = props.geonamesLocations;
     };
 
     Table.prototype.init = function() {
       this._geonamesAttrs.on('change:enabled', this._updateEnabled.bind(this));
+      this._geonamesLocations.on('add', this._addLocation.bind(this));
     };
 
     Table.prototype._updateEnabled = function(enabled) {
       dom.toggleClass(this.el, 'disabled', !enabled);
+    };
+
+    Table.prototype._addLocation = function(location) {
+      var cityID = location.key.split('#!gn')[1];
+      if (!cityID) {
+        return;
+      }
+      var city = this._geonamesData.findCity(cityID);
+      if (!city) {
+        return;
+      }
+      this._bodyElement.appendChild(this._createRowElement(city));
+    };
+
+    Table.prototype._createRowElement = function(city) {
+      var texts = [
+        '<div class="preferences-table-row" data-city-id="' + city.getID() + '">',
+          '<div class="preferences-table-data">' + city.getCountry() + '</div>',
+          '<div class="preferences-table-data">' + city.getName() + '</div>',
+          '<div class="preferences-table-data">×</div>',
+        '</div>',
+      ];
+      return dom.render(texts.join(''));
     };
 
     return Table;
