@@ -49,14 +49,14 @@
 
     Table.prototype.init = function() {
       this._geonamesAttrs.on('change:enabled', this._updateEnabled.bind(this));
-      this._geonamesLocations.on('add', this._addLocation.bind(this));
+      this._geonamesLocations.on('add', this._addRow.bind(this));
     };
 
     Table.prototype._updateEnabled = function(enabled) {
       dom.toggleClass(this.el, 'disabled', !enabled);
     };
 
-    Table.prototype._addLocation = function(location) {
+    Table.prototype._addRow = function(location) {
       var cityID = location.key.split('#!gn')[1];
       if (!cityID) {
         return;
@@ -65,12 +65,22 @@
       if (!city) {
         return;
       }
-      this._bodyElement.appendChild(this._createRowElement(city));
+      var row = new GeoNamesInputs.TableRow({ city: city, key: location.key });
+      this._bodyElement.appendChild(row.el);
     };
 
-    Table.prototype._createRowElement = function(city) {
+    return Table;
+  })();
+
+  GeoNamesInputs.TableRow = (function() {
+    var TableRow = function(props) {
+      this.el = this._createElement(props.city);
+      this._key = props.key;
+    };
+
+    TableRow.prototype._createElement = function(city) {
       var texts = [
-        '<div class="preferences-table-row" data-city-id="' + city.getID() + '">',
+        '<div class="preferences-table-row">',
           '<div class="preferences-table-data">' + city.getCountry() + '</div>',
           '<div class="preferences-table-data">' + city.getName() + '</div>',
           '<div class="preferences-table-data">×</div>',
@@ -79,7 +89,7 @@
       return dom.render(texts.join(''));
     };
 
-    return Table;
+    return TableRow;
   })();
 
   GeoNamesInputs.TableControls = (function() {
