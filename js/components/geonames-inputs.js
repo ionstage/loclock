@@ -163,9 +163,9 @@
       this._selectedCityID = null;
     };
 
-    TableControls.prototype._selectName = function(id) {
-      this._addButtonAttrs.set('disabled', !id);
-      this._selectedCityID = id;
+    TableControls.prototype._selectName = function(cityID) {
+      this._addButtonAttrs.set('disabled', !cityID);
+      this._selectedCityID = cityID;
     };
 
     TableControls.prototype._addButtonClicked = function() {
