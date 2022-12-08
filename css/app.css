@@ -343,6 +343,7 @@ body {
 
 .preferences-table-select {
   height: 21.5px;
+  text-overflow: ellipsis;
   vertical-align: middle;
   width: 100%;
 }
