@@ -365,6 +365,8 @@ body {
 .preferences-table-add-button {
   height: 21.5px;
   line-height: normal;
+  padding-left: 0;
+  padding-right: 0;
   vertical-align: middle;
   width: 100%;
 }
