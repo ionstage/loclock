@@ -116,12 +116,16 @@
       });
     };
 
+    TableControls._MAX_LOCATION_SIZE = 30;
+
     TableControls.prototype.init = function() {
       this._countrySelect.init();
       this._nameSelect.init();
       this._addButton.init();
       this._geonamesAttrs.on('change:enabled', this._updateEnabled.bind(this));
       this._geonamesData.on('loaded', this._resetCountrySelect.bind(this));
+      this._geonamesLocations.on('add', this._updateAddButtonEnabled.bind(this));
+      this._geonamesLocations.on('remove', this._updateAddButtonEnabled.bind(this));
       this._countrySelect.on('change', this._resetNameSelect.bind(this));
       this._nameSelect.on('change', this._selectName.bind(this));
       this._addButton.on('click', this._addButtonClicked.bind(this));
@@ -164,8 +168,8 @@
     };
 
     TableControls.prototype._selectName = function(cityID) {
-      this._addButtonAttrs.set('disabled', !cityID);
       this._selectedCityID = cityID;
+      this._updateAddButtonEnabled();
     };
 
     TableControls.prototype._addButtonClicked = function() {
@@ -181,6 +185,14 @@
         return;
       }
       this._geonamesLocations.add(location);
+    };
+
+    TableControls.prototype._shouldAddButtonEnabled = function() {
+      return (this._selectedCityID && this._geonamesLocations.length < TableControls._MAX_LOCATION_SIZE);
+    };
+
+    TableControls.prototype._updateAddButtonEnabled = function() {
+      this._addButtonAttrs.set('disabled', !this._shouldAddButtonEnabled());
     };
 
     return TableControls;

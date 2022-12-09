@@ -8,6 +8,12 @@
     this._events = new Events();
   };
 
+  Object.defineProperty(Collection.prototype, 'length', {
+    get: function() {
+      return this._items.length;
+    },
+  });
+
   Collection.prototype.add = function(item) {
     this._items.push(item);
     this._events.emit('add', item);
