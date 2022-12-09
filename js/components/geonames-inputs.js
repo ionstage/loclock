@@ -141,6 +141,7 @@
       });
       options.unshift({ value: '', label: '--Select--', selected: true });
       this._countrySelectOptions.reset(options);
+      this._nameSelectOptions.reset([]);
       this._nameSelectAttrs.set('disabled', true);
       this._addButtonAttrs.set('disabled', true);
       this._selectedCityID = null;
@@ -199,6 +200,7 @@
         return;
       }
       this._geonamesLocations.add(location);
+      this._resetCountrySelect();
     };
 
     TableControls.prototype._updateAddButtonEnabled = function() {
