@@ -172,8 +172,22 @@
       this._updateAddButtonEnabled();
     };
 
-    TableControls.prototype._addButtonClicked = function() {
+    TableControls.prototype._canAddLocation = function() {
       if (!this._selectedCityID) {
+        return false;
+      }
+      if (this._geonamesLocations.length >= TableControls._MAX_LOCATION_SIZE) {
+        return false;
+      }
+      var isIncluded = (this._geonamesLocations.find(function(location) {
+        var cityID = location.key.split('#!gn')[1];
+        return (cityID === this._selectedCityID);
+      }.bind(this)) !== null);
+      return !isIncluded;
+    };
+
+    TableControls.prototype._addButtonClicked = function() {
+      if (!this._canAddLocation()) {
         return;
       }
       var city = this._geonamesData.findCity(this._selectedCityID);
@@ -187,12 +201,8 @@
       this._geonamesLocations.add(location);
     };
 
-    TableControls.prototype._shouldAddButtonEnabled = function() {
-      return (this._selectedCityID && this._geonamesLocations.length < TableControls._MAX_LOCATION_SIZE);
-    };
-
     TableControls.prototype._updateAddButtonEnabled = function() {
-      this._addButtonAttrs.set('disabled', !this._shouldAddButtonEnabled());
+      this._addButtonAttrs.set('disabled', !this._canAddLocation());
     };
 
     return TableControls;
