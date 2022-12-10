@@ -41,10 +41,10 @@
   GeoNamesInputs.Table = (function() {
     var Table = function(el, props) {
       this.el = el;
-      this._bodyElement = this.el.querySelector('.preferences-table-body');
       this._geonamesAttrs = props.geonamesAttrs;
       this._geonamesData = props.geonamesData;
       this._geonamesLocations = props.geonamesLocations;
+      this._bodyElement = this.el.querySelector('.preferences-table-body');
     };
 
     Table.prototype.init = function() {
