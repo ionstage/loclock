@@ -9,6 +9,7 @@
   ThemeInputs.prototype.init = function() {
     this.el.addEventListener('change', this._change.bind(this));
     this._themeAttrs.on('change:value', this._update.bind(this));
+    this._update(this._themeAttrs.get('value'));
   };
 
   ThemeInputs.prototype._change = function() {

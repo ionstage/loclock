@@ -44,6 +44,8 @@
     this._clock.on('pointerdown', this._hideList.bind(this));
     this._clock.on('pointerdown', this._hidePreferences.bind(this));
     this._preferences.on('hide', this._hidePreferences.bind(this));
+
+    this._changeTheme(this._themeAttrs.get('value'));
   };
 
   Main.prototype.on = function() {
