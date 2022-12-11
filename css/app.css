@@ -316,12 +316,15 @@ body {
 }
 
 .preferences-table[data-type='geonames'] .preferences-table-data:nth-child(2) {
-  width: 50%;
+  padding-right: 0;
+  width: 49%;
 }
 
 .preferences-table[data-type='geonames'] .preferences-table-data:nth-child(3) {
   font-size: 16px;
-  max-width: 8%;
+  max-width: 9%;
+  text-align: center;
+  width: 100%;
 }
 
 .preferences-table-controls {
