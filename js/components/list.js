@@ -14,10 +14,12 @@
 
   List.prototype.init = function() {
     this.el.addEventListener(dom.supportsTouch() ? 'tap' : 'click', this._onclick.bind(this));
+
     this._locations.on('reset', this._resetLocations.bind(this));
     this._selectedLocations.on('reset', this._resetSelectedLocations.bind(this));
     this._selectedLocations.on('add', this._addSelectedLocation.bind(this));
     this._selectedLocations.on('remove', this._removeSelectedLocation.bind(this));
+
     if (dom.supportsTouch()) {
       this._disableNativeScroll();
       this._disableDoubleTapZoom();

@@ -36,13 +36,16 @@
   Clock.prototype.init = function() {
     this._timeOffsetButton.init();
     this._resetButton.init();
+
     this.el.addEventListener((dom.supportsTouch() ? 'touchstart' : 'mousedown'), this._events.emit.bind(this._events, 'pointerdown'));
+
     this._attrs.on('change:dragEnabled', this._updateDragEnabled.bind(this));
     this._locations.on('reset', this._resetLocations.bind(this));
     this._locations.on('add', this._addLocation.bind(this));
     this._locations.on('remove', this._removeLocation.bind(this));
     this._timeOffsetButton.on('click', this._toggleTimeOffset.bind(this));
     this._resetButton.on('click', this._reset.bind(this));
+
     setInterval(this._updateTime.bind(this), 30000);
 
     this.el.appendChild(this._boardElement);

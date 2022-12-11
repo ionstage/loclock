@@ -19,11 +19,14 @@
   GeoNamesInputs.prototype.init = function() {
     this._table.init();
     this._tableControls.init();
+
     this._inputElement.addEventListener('change', this._changeEnabled.bind(this));
+
     this._geonamesAttrs.on('change:enabled', this._updateEnabled.bind(this));
     this._geonamesData.on('loading', this._updateState.bind(this, 'loading'));
     this._geonamesData.on('loaded', this._updateState.bind(this, 'loaded'));
     this._geonamesData.on('error', this._updateState.bind(this, 'error'));
+
     this._updateEnabled(this._geonamesAttrs.get('enabled'));
   };
 
@@ -124,6 +127,7 @@
       this._countrySelect.init();
       this._nameSelect.init();
       this._addButton.init();
+
       this._geonamesAttrs.on('change:enabled', this._updateEnabled.bind(this));
       this._geonamesData.on('loaded', this._resetCountrySelect.bind(this));
       this._geonamesLocations.on('add', this._updateAddButtonEnabled.bind(this));
@@ -131,6 +135,7 @@
       this._countrySelect.on('change', this._resetNameSelect.bind(this));
       this._nameSelect.on('change', this._selectName.bind(this));
       this._addButton.on('click', this._addButtonClicked.bind(this));
+
       this._updateEnabled(this._geonamesAttrs.get('enabled'));
     };
 
