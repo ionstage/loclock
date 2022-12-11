@@ -277,6 +277,7 @@ body {
 
 .preferences-table-head {
   background-color: lightgray;
+  border-radius: 2px 2px 0 0;
 }
 
 .preferences-table-body {
