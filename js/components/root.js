@@ -17,7 +17,7 @@
     this._locations = new Collection();
     this._selectedLocations = new Collection();
     this._themeAttrs = new Attributes({ value: this._loadTheme() });
-    this._geonamesAttrs = new Attributes();
+    this._geonamesAttrs = new Attributes({ enabled: false });
     this._geonamesData = new GeoNamesData('./data/geonames.json');
     this._geonamesLocations = new Collection();
     this._main = new Main(document.querySelector('.main'), {
@@ -43,7 +43,6 @@
 
     this._locations.reset(this._createLocations(Location.PRESET_KEYS));
     this._selectedLocations.reset(this._loadSelectedLocations());
-    this._geonamesAttrs.set('enabled', false);
   };
 
   Root.prototype._createLocations = function(keys) {

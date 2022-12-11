@@ -24,6 +24,7 @@
     this._geonamesData.on('loading', this._updateState.bind(this, 'loading'));
     this._geonamesData.on('loaded', this._updateState.bind(this, 'loaded'));
     this._geonamesData.on('error', this._updateState.bind(this, 'error'));
+    this._updateEnabled(this._geonamesAttrs.get('enabled'));
   };
 
   GeoNamesInputs.prototype._changeEnabled = function(event) {
@@ -50,6 +51,7 @@
     Table.prototype.init = function() {
       this._geonamesAttrs.on('change:enabled', this._updateEnabled.bind(this));
       this._geonamesLocations.on('add', this._addRow.bind(this));
+      this._updateEnabled(this._geonamesAttrs.get('enabled'));
     };
 
     Table.prototype._updateEnabled = function(enabled) {
@@ -129,6 +131,7 @@
       this._countrySelect.on('change', this._resetNameSelect.bind(this));
       this._nameSelect.on('change', this._selectName.bind(this));
       this._addButton.on('click', this._addButtonClicked.bind(this));
+      this._updateEnabled(this._geonamesAttrs.get('enabled'));
     };
 
     TableControls.prototype._updateEnabled = function(enabled) {
