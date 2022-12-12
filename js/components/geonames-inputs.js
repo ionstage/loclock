@@ -48,6 +48,7 @@
       this._geonamesAttrs = props.geonamesAttrs;
       this._geonamesData = props.geonamesData;
       this._geonamesLocations = props.geonamesLocations;
+      this._rows = [];
       this._bodyElement = this.el.querySelector('.preferences-table-body');
     };
 
@@ -71,6 +72,7 @@
         return;
       }
       var row = new GeoNamesInputs.TableRow({ city: city, key: location.key });
+      this._rows.push(row);
       this._bodyElement.appendChild(row.el);
     };
 
