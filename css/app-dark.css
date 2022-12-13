@@ -92,3 +92,7 @@
 .main[data-theme='dark'] .preferences-table-body > .preferences-table-row {
   border-color: gray;
 }
+
+.main[data-theme='dark'] .preferences-table-delete-button.active {
+  color: gray;
+}

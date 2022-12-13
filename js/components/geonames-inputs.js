@@ -3,6 +3,7 @@
 
   var dom = app.dom || require('../dom.js');
   var Attributes = app.Attributes || require('../base/attributes.js');
+  var Button = app.Button || require('./button.js');
   var Collection = app.Collection || require('../base/collection.js');
   var Events = app.Events || require('../base/events.js');
   var Location = app.Location || require('../models/location.js');
@@ -72,6 +73,7 @@
         return;
       }
       var row = new GeoNamesInputs.TableRow({ city: city, key: location.key });
+      row.init();
       this._rows.push(row);
       this._bodyElement.appendChild(row.el);
     };
@@ -83,6 +85,17 @@
     var TableRow = function(props) {
       this.el = this._createElement(props.city);
       this._key = props.key;
+      this._events = new Events();
+      this._deleteButton = new Button(this.el.querySelector('.preferences-table-delete-button'));
+    };
+
+    TableRow.prototype.init = function() {
+      this._deleteButton.init();
+      this._deleteButton.on('click', this._deleteButtonClicked.bind(this));
+    };
+
+    TableRow.prototype.on = function() {
+      return Events.prototype.on.apply(this._events, arguments);
     };
 
     TableRow.prototype._createElement = function(city) {
@@ -90,10 +103,14 @@
         '<div class="preferences-table-row">',
           '<div class="preferences-table-data">' + city.getCountry() + '</div>',
           '<div class="preferences-table-data">' + city.getName() + '</div>',
-          '<div class="preferences-table-data">×</div>',
+          '<div class="preferences-table-data preferences-table-delete-button">×</div>',
         '</div>',
       ];
       return dom.render(texts.join(''));
+    };
+
+    TableRow.prototype._deleteButtonClicked = function() {
+      this._events.emit('delete', this);
     };
 
     return TableRow;

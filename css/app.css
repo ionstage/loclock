@@ -328,6 +328,10 @@ body {
   width: 100%;
 }
 
+.preferences-table-delete-button.active {
+  color: lightgray;
+}
+
 .preferences-table-controls {
   margin: 4px;
 }
