@@ -1,6 +1,7 @@
 (function(app) {
   'use strict';
 
+  var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var Attributes = app.Attributes || require('../base/attributes.js');
   var Button = app.Button || require('./button.js');
@@ -51,11 +52,13 @@
       this._geonamesLocations = props.geonamesLocations;
       this._rows = [];
       this._bodyElement = this.el.querySelector('.preferences-table-body');
+      this._removeLocation = this._removeLocation.bind(this);
     };
 
     Table.prototype.init = function() {
       this._geonamesAttrs.on('change:enabled', this._updateEnabled.bind(this));
       this._geonamesLocations.on('add', this._addRow.bind(this));
+      this._geonamesLocations.on('remove', this._removeRow.bind(this));
       this._updateEnabled(this._geonamesAttrs.get('enabled'));
     };
 
@@ -74,8 +77,29 @@
       }
       var row = new GeoNamesInputs.TableRow({ city: city, key: location.key });
       row.init();
+      row.on('delete', this._removeLocation);
       this._rows.push(row);
       this._bodyElement.appendChild(row.el);
+    };
+
+    Table.prototype._removeRow = function(location) {
+      var row = helper.find(this._rows, function(row) {
+        return (row.key === location.key);
+      });
+      if (!row) {
+        return;
+      }
+      this._bodyElement.removeChild(row.el);
+      helper.remove(this._rows, row);
+      row.off('delete', this._removeLocation);
+      row.deinit();
+    };
+
+    Table.prototype._removeLocation = function(key) {
+      var location = Location.get(key);
+      if (location) {
+        this._geonamesLocations.remove(location);
+      }
     };
 
     return Table;
@@ -84,18 +108,28 @@
   GeoNamesInputs.TableRow = (function() {
     var TableRow = function(props) {
       this.el = this._createElement(props.city);
-      this._key = props.key;
+      this.key = props.key;
       this._events = new Events();
       this._deleteButton = new Button(this.el.querySelector('.preferences-table-delete-button'));
+      this._deleteButtonClicked = this._deleteButtonClicked.bind(this);
     };
 
     TableRow.prototype.init = function() {
       this._deleteButton.init();
-      this._deleteButton.on('click', this._deleteButtonClicked.bind(this));
+      this._deleteButton.on('click', this._deleteButtonClicked);
+    };
+
+    TableRow.prototype.deinit = function() {
+      this._deleteButton.off('click', this._deleteButtonClicked);
+      this._deleteButton.deinit();
     };
 
     TableRow.prototype.on = function() {
       return Events.prototype.on.apply(this._events, arguments);
+    };
+
+    TableRow.prototype.off = function() {
+      return Events.prototype.off.apply(this._events, arguments);
     };
 
     TableRow.prototype._createElement = function(city) {
@@ -110,7 +144,7 @@
     };
 
     TableRow.prototype._deleteButtonClicked = function() {
-      this._events.emit('delete', this);
+      this._events.emit('delete', this.key);
     };
 
     return TableRow;

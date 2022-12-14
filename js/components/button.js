@@ -20,8 +20,16 @@
     this._draggable.enable();
   };
 
+  Button.prototype.deinit = function() {
+    this._draggable.disable();
+  };
+
   Button.prototype.on = function() {
     return Events.prototype.on.apply(this._events, arguments);
+  };
+
+  Button.prototype.off = function() {
+    return Events.prototype.off.apply(this._events, arguments);
   };
 
   Button.prototype._onstart = function(event) {

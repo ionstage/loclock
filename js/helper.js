@@ -3,6 +3,13 @@
 
   var helper = {};
 
+  helper.remove = function(array, item) {
+    var index = array.indexOf(item);
+    if (index !== -1) {
+      array.splice(index, 1);
+    }
+  };
+
   helper.find = function(array, callback) {
     for (var i = 0, len = array.length; i < len; i++) {
       if (callback(array[i], i, array)) {
