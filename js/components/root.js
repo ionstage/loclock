@@ -60,7 +60,7 @@
   };
 
   Root.prototype._loadSelectedLocations = function() {
-    var fragment = location.hash.substring(1);
+    var fragment = window.location.hash.substring(1);
     var keys = (fragment ? this._decodeLocationKeys(fragment) : DEFAULT_LOCATION_KEYS);
     return keys.filter(function(key, index, keys) {
       var isUnique = (keys.indexOf(key) === index);
@@ -80,7 +80,7 @@
     var keys = this._selectedLocations.map(function(location) {
       return location.key;
     });
-    location.replace('#' + this._encodeLocationKeys(keys));
+    window.location.replace('#' + this._encodeLocationKeys(keys));
   };
 
   Root.prototype._encodeLocationKeys = function(keys) {
