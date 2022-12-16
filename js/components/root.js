@@ -17,7 +17,7 @@
     this._locations = new Collection();
     this._selectedLocations = new Collection();
     this._themeAttrs = new Attributes({ value: this._loadTheme() });
-    this._geonamesAttrs = new Attributes({ enabled: false });
+    this._geonamesAttrs = new Attributes({ enabled: this._loadGeoNamesEnabled() });
     this._geonamesData = new GeoNamesData('./data/geonames.json');
     this._geonamesLocations = new Collection();
     this._main = new Main(document.querySelector('.main'), {
@@ -97,6 +97,10 @@
 
   Root.prototype._saveTheme = function(value) {
     localStorage.setItem(THEME_KEY, value);
+  };
+
+  Root.prototype._loadGeoNamesEnabled = function() {
+    return (dom.getURLSearchParam('geonamesEnabled') !== null);
   };
 
   Root.prototype._disableTouchScrolling = function() {

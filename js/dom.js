@@ -71,6 +71,17 @@
     });
   };
 
+  dom.getURLSearchParam = function(key) {
+    var params = window.location.search.substring(1).split('&');
+    for (var i = 0, len = params.length; i < len; i++) {
+      var items = params[i].split('=');
+      if (decodeURIComponent(items[0] || '') === key) {
+        return decodeURIComponent(items[1] || '');
+      }
+    }
+    return null;
+  };
+
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = dom;
   } else {
