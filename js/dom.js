@@ -100,6 +100,27 @@
     window.history.replaceState(null, '', url);
   };
 
+  dom.deleteURLSearchParam = function(key) {
+    var search = window.location.search;
+    if (search.length < 2) {
+      return;
+    }
+    var params = search.substring(1).split('&');
+    for (var i = 0, len = params.length; i < len; i++) {
+      var items = params[i].split('=');
+      if (decodeURIComponent(items[0] || '') === key) {
+        break;
+      }
+    }
+    if (i === len) {
+      return;
+    }
+    params.splice(i, 1);
+    var newSearch = (params.length > 0 ? '?' + params.join('&') : '');
+    var url = window.location.origin + window.location.pathname + newSearch + window.location.hash;
+    window.history.replaceState(null, '', url);
+  };
+
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = dom;
   } else {
