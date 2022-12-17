@@ -82,6 +82,24 @@
     return null;
   };
 
+  dom.setURLSearchParam = function(key, value) {
+    var search = window.location.search;
+    var params = (search.length >= 2 ? search.substring(1).split('&') : []);
+    for (var i = 0, len = params.length; i < len; i++) {
+      var items = params[i].split('=');
+      if (decodeURIComponent(items[0] || '') === key) {
+        params[i] = items[0] + (value ? '=' + encodeURIComponent(value) : '');
+        break;
+      }
+    }
+    if (i === len) {
+      params.push(encodeURIComponent(key) + (value ? '=' + encodeURIComponent(value) : ''));
+    }
+    var newSearch = '?' + params.join('&');
+    var url = window.location.origin + window.location.pathname + newSearch + window.location.hash;
+    window.history.replaceState(null, '', url);
+  };
+
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = dom;
   } else {
