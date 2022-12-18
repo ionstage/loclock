@@ -40,6 +40,7 @@
     this._selectedLocations.on('add', this._saveSelectedLocations.bind(this));
     this._selectedLocations.on('remove', this._saveSelectedLocations.bind(this));
     this._themeAttrs.on('change:value', this._saveTheme.bind(this));
+    this._geonamesAttrs.on('change:enabled', this._saveGeoNamesEnabled.bind(this));
 
     this._locations.reset(this._createLocations(Location.PRESET_KEYS));
     this._selectedLocations.reset(this._loadSelectedLocations());
@@ -101,6 +102,14 @@
 
   Root.prototype._loadGeoNamesEnabled = function() {
     return (dom.getURLSearchParam('geonamesEnabled') !== null);
+  };
+
+  Root.prototype._saveGeoNamesEnabled = function(enabled) {
+    if (enabled) {
+      dom.setURLSearchParam('geonamesEnabled', '');
+    } else {
+      dom.deleteURLSearchParam('geonamesEnabled');
+    }
   };
 
   Root.prototype._disableTouchScrolling = function() {
