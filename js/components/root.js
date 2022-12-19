@@ -41,6 +41,8 @@
     this._selectedLocations.on('remove', this._saveSelectedLocations.bind(this));
     this._themeAttrs.on('change:value', this._saveTheme.bind(this));
     this._geonamesAttrs.on('change:enabled', this._saveGeoNamesEnabled.bind(this));
+    this._geonamesLocations.on('add', this._saveGeoNamesLocations.bind(this));
+    this._geonamesLocations.on('remove', this._saveGeoNamesLocations.bind(this));
 
     this._locations.reset(this._createLocations(Location.PRESET_KEYS));
     this._selectedLocations.reset(this._loadSelectedLocations());
@@ -110,6 +112,17 @@
     } else {
       dom.deleteURLSearchParam('geonamesEnabled');
     }
+  };
+
+  Root.prototype._saveGeoNamesLocations = function() {
+    if (this._geonamesLocations.length === 0) {
+      dom.deleteURLSearchParam('geonamesLocations');
+      return;
+    }
+    var keys = this._geonamesLocations.map(function(location) {
+      return location.key;
+    });
+    dom.setURLSearchParam('geonamesLocations', this._encodeLocationKeys(keys));
   };
 
   Root.prototype._disableTouchScrolling = function() {
