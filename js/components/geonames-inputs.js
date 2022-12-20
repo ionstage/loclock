@@ -57,6 +57,7 @@
 
     Table.prototype.init = function() {
       this._geonamesAttrs.on('change:enabled', this._updateEnabled.bind(this));
+      this._geonamesLocations.on('reset', this._resetRows.bind(this));
       this._geonamesLocations.on('add', this._addRow.bind(this));
       this._geonamesLocations.on('remove', this._removeRow.bind(this));
       this._updateEnabled(this._geonamesAttrs.get('enabled'));
@@ -64,6 +65,26 @@
 
     Table.prototype._updateEnabled = function(enabled) {
       dom.toggleClass(this.el, 'disabled', !enabled);
+    };
+
+    Table.prototype._resetRows = function(locations) {
+      this._clearRows();
+      this._addRows(locations);
+    };
+
+    Table.prototype._clearRows = function() {
+      this._rows.forEach(function(row) {
+        this._bodyElement.removeChild(row.el);
+        row.off('delete', this._removeLocation);
+        row.deinit();
+      }.bind(this));
+      this._rows = [];
+    };
+
+    Table.prototype._addRows = function(locations) {
+      locations.forEach(function(location) {
+        this._addRow(location);
+      }.bind(this));
     };
 
     Table.prototype._addRow = function(location) {
@@ -183,6 +204,7 @@
 
       this._geonamesAttrs.on('change:enabled', this._updateEnabled.bind(this));
       this._geonamesData.on('loaded', this._resetCountrySelect.bind(this));
+      this._geonamesLocations.on('reset', this._updateAddButtonEnabled.bind(this));
       this._geonamesLocations.on('add', this._updateAddButtonEnabled.bind(this));
       this._geonamesLocations.on('remove', this._updateAddButtonEnabled.bind(this));
       this._countrySelect.on('change', this._resetNameSelect.bind(this));
