@@ -46,6 +46,8 @@
 
     this._locations.reset(this._createLocations(Location.PRESET_KEYS));
     this._selectedLocations.reset(this._loadSelectedLocations());
+
+    this._resetGeoNamesLocations();
   };
 
   Root.prototype._createLocations = function(keys) {
@@ -112,6 +114,28 @@
     } else {
       dom.deleteURLSearchParam('geonamesEnabled');
     }
+  };
+
+  Root.prototype._resetGeoNamesLocations = function() {
+    var param = dom.getURLSearchParam('geonamesLocations');
+    if (!param) {
+      return;
+    }
+    this._geonamesData.load().then(function() {
+      var keys = this._decodeLocationKeys(param);
+      var locations = keys.reduce(function(locations, key) {
+        var cityID = key.split('#!gn')[1];
+        if (!cityID || !this._geonamesData.findCity(cityID)) {
+          return locations;
+        }
+        var location = Location.get(key);
+        if (location) {
+          locations.push(location);
+        }
+        return locations;
+      }.bind(this), []);
+      this._geonamesLocations.reset(locations);
+    }.bind(this));
   };
 
   Root.prototype._saveGeoNamesLocations = function() {
