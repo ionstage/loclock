@@ -159,20 +159,20 @@
   };
 
   Clock.prototype._createPoints = function(cx, cy, r, locations, time, timeOffset) {
-    var points = locations.reduce(function(ret, location) {
+    var points = locations.reduce(function(points, location) {
       var text = location.name;
       var date = new Date(location.getLocalTime(time));
       var key = date.getTime() % (24 * 60 * 60 * 1000);
-      var point = ret[key];
+      var point = points[key];
       if (point) {
         point.text +=  ', ' + text;
-        return ret;
+        return points;
       }
-      ret[key] = {
+      points[key] = {
         text: text,
         deg: (date.getHours() + (date.getMinutes() + timeOffset) / 60) / 24 * (Math.PI * 2) + Math.PI / 2,
       };
-      return ret;
+      return points;
     }, {});
     var texts = ['<svg><g class="clock-component">'];
     for (var key in points) {
@@ -225,9 +225,9 @@
   };
 
   Clock.prototype._adjustPointTexts = function(points, cx, cy, r, width, height) {
-    var items = Array.prototype.slice.call(points.childNodes).reduce(function(ret, el) {
+    var items = Array.prototype.slice.call(points.childNodes).reduce(function(items, el) {
       if (el.nodeName !== 'text') {
-        return ret;
+        return items;
       }
       var bb = el.getBBox();
       var deg = +el.getAttribute('data-deg');
@@ -241,9 +241,9 @@
       el.setAttribute('dy', dy.toFixed(1));
       this._shrinkElement(el, width, height);
       bb = el.getBBox();
-      var array = (bb.y + bb.height / 2 < cy ? ret.upper : ret.down);
+      var array = (bb.y + bb.height / 2 < cy ? items.upper : items.down);
       array.push({ el: el, bb: bb });
-      return ret;
+      return items;
     }.bind(this), { upper: [], down: [] });
 
     items.upper.sort(function(a, b) {

@@ -29,11 +29,11 @@
   List.prototype._resetLocations = function(locations) {
     var fragment = document.createDocumentFragment();
 
-    this._itemElements = locations.reduce(function(ret, location) {
+    this._itemElements = locations.reduce(function(elements, location) {
       var el = this._createItemElement(location, this._selectedLocations.includes(location));
       fragment.appendChild(el);
-      ret[location.key] = el;
-      return ret;
+      elements[location.key] = el;
+      return elements;
     }.bind(this), {});
 
     var content = this.el.querySelector('.list-content');

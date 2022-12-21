@@ -75,14 +75,14 @@
     return keys.filter(function(key, index, keys) {
       var isUnique = (keys.indexOf(key) === index);
       return isUnique;
-    }).reduce(function(ret, key) {
+    }).reduce(function(locations, key) {
       var location = this._locations.find(function(location) {
         return location.match(key);
       });
       if (location) {
-        ret.push(location);
+        locations.push(location);
       }
-      return ret;
+      return locations;
     }.bind(this), []);
   };
 
