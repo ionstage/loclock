@@ -50,6 +50,11 @@
     this._resetGeoNamesLocations();
   };
 
+  Root.prototype._getDefaultLocationKeys = function() {
+    var isGeoNamesUsed = (dom.getURLSearchParam('geonamesEnabled') !== null) || (dom.getURLSearchParam('geonamesLocations') !== null);
+    return (isGeoNamesUsed ? [] : DEFAULT_LOCATION_KEYS);
+  };
+
   Root.prototype._createLocations = function(keys) {
     return keys.map(function(key) {
       return Location.get(key);
@@ -66,7 +71,7 @@
 
   Root.prototype._loadSelectedLocations = function() {
     var fragment = window.location.hash.substring(1);
-    var keys = (fragment ? this._decodeLocationKeys(fragment) : DEFAULT_LOCATION_KEYS);
+    var keys = (fragment ? this._decodeLocationKeys(fragment) : this._getDefaultLocationKeys());
     return keys.filter(function(key, index, keys) {
       var isUnique = (keys.indexOf(key) === index);
       return isUnique;
