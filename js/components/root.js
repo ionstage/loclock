@@ -88,14 +88,6 @@
     window.location.replace('#' + this._encodeLocationKeys(keys));
   };
 
-  Root.prototype._encodeLocationKeys = function(keys) {
-    return Base64.encodeURI(keys.join(','))
-  };
-
-  Root.prototype._decodeLocationKeys = function(s) {
-    return Base64.decode(s).split(',');
-  };
-
   Root.prototype._loadTheme = function() {
     return localStorage.getItem(THEME_KEY) || 'light';
   };
@@ -147,6 +139,14 @@
       return location.key;
     });
     dom.setURLSearchParam('geonamesLocations', this._encodeLocationKeys(keys));
+  };
+
+  Root.prototype._encodeLocationKeys = function(keys) {
+    return Base64.encodeURI(keys.join(','))
+  };
+
+  Root.prototype._decodeLocationKeys = function(s) {
+    return Base64.decode(s).split(',');
   };
 
   Root.prototype._disableTouchScrolling = function() {
