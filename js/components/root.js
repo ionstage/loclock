@@ -5,6 +5,7 @@
   var helper = app.helper || require('../helper.js');
   var dom = app.dom || require('../dom.js');
   var Attributes = app.Attributes || require('../base/attributes.js');
+  var ClockLocations = app.ClockLocations || require('../models/clock-locations.js');
   var Collection = app.Collection || require('../base/collection.js');
   var GeoNamesData = app.GeoNamesData || require('../models/geonames-data.js');
   var Main = app.Main || require('./main.js');
@@ -20,6 +21,7 @@
     this._geonamesAttrs = new Attributes({ enabled: this._loadGeoNamesEnabled() });
     this._geonamesData = new GeoNamesData('./data/geonames.json');
     this._geonamesLocations = new Collection();
+    this._clockLocations = new ClockLocations(this._selectedLocations, this._geonamesLocations);
     this._main = new Main(document.querySelector('.main'), {
       locations: this._locations,
       selectedLocations: this._selectedLocations,
