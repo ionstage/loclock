@@ -21,7 +21,7 @@
     this._geonamesAttrs = new Attributes({ enabled: this._loadGeoNamesEnabled() });
     this._geonamesData = new GeoNamesData('./data/geonames.json');
     this._geonamesLocations = new Collection();
-    this._clockLocations = new ClockLocations(this._selectedLocations, this._geonamesLocations);
+    this._clockLocations = new ClockLocations(this._selectedLocations, this._geonamesLocations, this._geonamesAttrs);
     this._main = new Main(document.querySelector('.main'), {
       locations: this._locations,
       selectedLocations: this._selectedLocations,
@@ -29,10 +29,12 @@
       geonamesAttrs: this._geonamesAttrs,
       geonamesData: this._geonamesData,
       geonamesLocations: this._geonamesLocations,
+      clockLocations: this._clockLocations,
     });
   };
 
   Root.prototype.init = function() {
+    this._clockLocations.init();
     this._main.init();
 
     window.addEventListener('resize', helper.debounce(this._main.resize.bind(this._main), 100));

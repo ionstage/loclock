@@ -23,7 +23,7 @@
     this._settingsButton = new Button(this.el.querySelector('.settings-button'));
     this._list = new List(this.el.querySelector('.list'), props);
     this._clock = new Clock(this.el.querySelector('.clock'), {
-      locations: props.selectedLocations,
+      locations: props.clockLocations,
       attrs: this._clockAttrs,
     });
     this._preferences = new Preferences(this.el.querySelector('.preferences'), props);

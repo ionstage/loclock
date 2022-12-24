@@ -66,6 +66,10 @@
     return Events.prototype.off.apply(this._events, arguments);
   };
 
+  Collection.prototype.toArray = function() {
+    return this._items.slice();
+  };
+
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = Collection;
   } else {
