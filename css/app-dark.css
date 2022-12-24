@@ -81,6 +81,14 @@
   border-color: gray;
 }
 
+.main[data-theme='dark'] .preferences-input-license {
+  color: lightgray;
+}
+
+.main[data-theme='dark'] .preferences-input-license > a {
+  color: lightgray;
+}
+
 .main[data-theme='dark'] .preferences-table-head {
   background-color: gray;
 }

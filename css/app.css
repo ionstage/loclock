@@ -264,6 +264,19 @@ body {
   display: block;
 }
 
+.preferences-input-license {
+  color: gray;
+  font-size: 9px;
+  line-height: 10.5px;
+  padding-bottom: 10.5px;
+  padding-left: 20px;
+  white-space: nowrap;
+}
+
+.preferences-input-license > a {
+  color: gray;
+}
+
 .preferences-table {
   cursor: default;
   font-size: 14px;
