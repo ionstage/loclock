@@ -1,7 +1,7 @@
 (function(app) {
   'use strict';
 
-  var Events = app.Events || require('./events.js');
+  var Events = app.Events || require('../base/events.js');
 
   var ClockLocations = function(presetLocations, geonamesLocations, geonamesAttrs) {
     this._presetLocations = presetLocations;
