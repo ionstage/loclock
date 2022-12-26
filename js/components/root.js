@@ -159,12 +159,7 @@
   };
 
   Root.prototype._disableTouchScrolling = function() {
-    if (!dom.supportsTouch()) {
-      return;
-    }
-    window.addEventListener('touchmove', function(event) {
-      event.preventDefault();
-    }, { passive: false });
+    this._main.disableTouchScrolling();
   };
 
   if (typeof module !== 'undefined' && module.exports) {

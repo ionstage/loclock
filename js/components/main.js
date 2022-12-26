@@ -56,6 +56,25 @@
     this._clock.resize();
   };
 
+  Main.prototype.disableTouchScrolling = function() {
+    if (!dom.supportsTouch()) {
+      return;
+    }
+    window.addEventListener('touchmove', function(event) {
+      if (event.touches.length === 1) {
+        var target = event.changedTouches[0].target;
+        while (target) {
+          // enable scrolling on preferences
+          if (target === this._preferences.el) {
+            return;
+          }
+          target = target.parentElement;
+        }
+      }
+      event.preventDefault();
+    }.bind(this), { passive: false });
+  };
+
   Main.prototype._changeTheme = function(value) {
     this.el.setAttribute('data-theme', value);
   };

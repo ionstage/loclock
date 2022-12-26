@@ -180,6 +180,7 @@ body {
 }
 
 .preferences {
+  -webkit-overflow-scrolling: touch;
   border-left: 1px solid lightgray;
   box-sizing: border-box;
   font-family: Helvetica;
