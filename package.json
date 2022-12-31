@@ -1,6 +1,6 @@
 {
   "name": "loclock",
-  "version": "0.1.19",
+  "version": "0.1.20",
   "description": "World time clock",
   "scripts": {
     "build": "npm run build:bundle && npm run build:js && npm run build:css",
