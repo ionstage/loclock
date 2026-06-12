@@ -25,6 +25,12 @@ npm start
 Works on IE11, Firefox, Safari, Chrome.
 
 
+## Credits
+
+Settings icon ("fa-cog") from [Font Awesome 4](https://fontawesome.com) by Dave Gandy,
+licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/),
+used as an inline SVG path.
+
 ## License
 Copyright &copy; 2015 iOnStage
 Licensed under the [MIT License][mit].
