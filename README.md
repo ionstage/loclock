@@ -31,6 +31,9 @@ Settings icon ("fa-cog") from [Font Awesome 4](https://fontawesome.com) by Dave 
 licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/),
 used as an inline SVG path.
 
+City and timezone data from [GeoNames](https://public.opendatasoft.com/explore/assets/geonames-all-cities-with-a-population-1000/),
+licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+
 ## License
 Copyright &copy; 2015 iOnStage
 Licensed under the [MIT License][mit].
