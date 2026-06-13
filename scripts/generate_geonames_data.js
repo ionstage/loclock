@@ -1,7 +1,8 @@
 const fs = require('fs');
+const path = require('path');
 const zlib = require('zlib');
 
-const data = JSON.parse(zlib.gunzipSync(fs.readFileSync('../data/geonames-all-cities-with-a-population-1000.json.gz')));
+const data = JSON.parse(zlib.gunzipSync(fs.readFileSync(path.join(__dirname, '../data/geonames-all-cities-with-a-population-1000.json.gz'))));
 
 const cities = data
   .filter(({ fields: f }) =>

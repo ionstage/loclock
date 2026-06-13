@@ -8,6 +8,7 @@
     "build:css": "cat css/*.css | cleancss -o build/app.min.css",
     "build:js": "browserify js/app.js --no-bundle-external | uglifyjs -o build/app.min.js -c -m",
     "bundle": "browserify -r es6-promise -r iscroll -r js-base64 -i buffer -r moment-timezone -o js/bundle.js",
+    "generate": "node scripts/generate_geonames_data.js > data/geonames.json",
     "start": "browser-sync start --files='index.html, css/*.css, js/*.js' --server"
   },
   "dependencies": {
